@@ -1,0 +1,74 @@
+doctype5
+html
+	head
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		meta(property="og:image", content="http://fitztrev.github.io/img/shuttle-logo.png")
+		link(rel="stylesheet", type="text/css", href="css/shuttle.css") 
+		link(rel="stylesheet", type="text/css", href="http://fonts.googleapis.com/css?family=Francois+One") 
+		title Shuttle | {{ site.tagline }}
+	body
+		div.container
+			div.row
+				div.col-lg-6.col-sm-6
+					h1 Shuttle
+					p.lead
+						| {{ site.tagline }}
+					br
+					br
+					div.text-center
+						p
+							a.btn.btn-block.btn-success.btn-large(href="#")
+								i.glyphicon.glyphicon-arrow-down
+								| &nbsp; Download Shuttle
+						p.text-muted
+							em
+								| &mdash; or &mdash;
+						p
+							a(href="https://github.com/fitztrev/shuttle")
+								| View on Github
+				div.col-lg-6.col-sm-6
+					img.pull-right.img-responsive.hidden-sm(src="img/shuttle-logo.png", alt="Shuttle")
+
+			hr
+
+			div.animation
+				img.img-responsive(src="http://placehold.it/600x400", alt="How it works")
+
+			hr
+
+			div.row
+				div.col-lg-6.col-sm-6
+					h3 Configuration
+					ol
+						li Open the app
+						li
+							| Edit the contents of 
+							code ~/.shuttle-hosts.json
+						li Define the menu items and the actions that are run when clicked
+
+					hr
+
+					h3 About
+					p
+						| Shuttle was created by 
+						a(href="http://trevorfitzgerald.com") Trevor Fitzgerald
+						| .
+					p It does exactly what you see above and nothing more.
+
+					hr.visible-sm
+
+				div.col-lg-6.col-sm-6
+
+					h3 FAQs
+					hr
+
+					h4 What terminal programs are supported?
+					p
+						| By default, it uses Terminal.app. To switch it to iTerm2, edit 
+						code ~/.shuttle.plist
+						|  and change the terminal application value.
+					hr
+
+					h4 Why is the config a JSON file?
+					p Keep your config in Dropbox or under version control (preferrably private) and you can have it synced across multiple computers.
+					p Also, it makes it easy to generate a dynamic list of hosts from your hosting provider (if they have an API), so you're always up-to-date.
