@@ -1,5 +1,3 @@
-tagline: A simple SSH shortcut menu for OS X
-
 exclude: [
     "*.jade",
     "*.less",
