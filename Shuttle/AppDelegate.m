@@ -15,10 +15,11 @@
     // [self loadMenu];
 
     // Create the status bar item
-    statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
     [statusItem setMenu:menu];
     [statusItem setHighlightMode:YES];
-    [statusItem setTitle:@"SSH"];
+    [statusItem setImage:[NSImage imageNamed:@"StatusIcon"]];
+    [statusItem setAlternateImage:[NSImage imageNamed:@"StatusIconAlt"]];
     
     // Needed to trigger the menuWillOpen event
     [menu setDelegate:self];
