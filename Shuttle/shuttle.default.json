@@ -1,6 +1,7 @@
 {
 	"_comment": "Valid terminals include: 'Terminal.app' or 'iTerm'",
 	"terminal": "Terminal.app",
+	"launch_at_login": false,
 	"hosts": [
 		{
 			"name": "My Dev Server",
