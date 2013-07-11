@@ -1,0 +1,42 @@
+{
+	"_comment": "Valid terminals include: 'Terminal.app' or 'iTerm'",
+	"terminal": "Terminal.app",
+	"hosts": [
+		{
+			"name": "My Dev Server",
+			"cmd": "ssh username@dev.example.com"
+		},
+		{
+			"Personal": [
+				 {
+					 "name": "My blog",
+					 "cmd": "ssh username@blog.example.com"
+				 }
+			 ]
+		},
+		{
+			"Work": [
+				{
+					"name": "dev.example.net",
+					"cmd": "ssh username@dev.example.net -p 3000"
+				},
+				{
+					"name": "staging.example.net",
+					"cmd": "ssh username@staging.example.net -p 3000"
+				},
+				{
+					"name": "production.example.net",
+					"cmd": "ssh username@example.net -p 3000"
+				}
+			]
+		},
+		{
+			"Vagrant": [
+				{
+					"name": "precise32",
+					"cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
+				}
+			]
+		}
+	]
+}

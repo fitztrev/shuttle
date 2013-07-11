@@ -1,0 +1,315 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */; };
+		C149EBFE15D5214600B1F558 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C149EBFD15D5214600B1F558 /* Cocoa.framework */; };
+		C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C149EC0615D5214600B1F558 /* InfoPlist.strings */; };
+		C149EC0A15D5214600B1F558 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C149EC0915D5214600B1F558 /* main.m */; };
+		C149EC0E15D5214600B1F558 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = C149EC0C15D5214600B1F558 /* Credits.rtf */; };
+		C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C149EC1015D5214600B1F558 /* AppDelegate.m */; };
+		C149EC1415D5214600B1F558 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C149EC1215D5214600B1F558 /* MainMenu.xib */; };
+		C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */ = {isa = PBXBuildFile; fileRef = C159DC2715D5DE7F00F5DE24 /* shuttle.icns */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7E72D21E178003ED00A6389C /* Shuttle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Shuttle.entitlements; sourceTree = "<group>"; };
+		7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shuttle.default.json; sourceTree = "<group>"; };
+		C149EBF915D5214600B1F558 /* Shuttle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuttle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C149EBFD15D5214600B1F558 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		C149EC0015D5214600B1F558 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		C149EC0115D5214600B1F558 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		C149EC0215D5214600B1F558 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C149EC0515D5214600B1F558 /* Shuttle-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Shuttle-Info.plist"; sourceTree = "<group>"; };
+		C149EC0715D5214600B1F558 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C149EC0915D5214600B1F558 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C149EC0B15D5214600B1F558 /* Shuttle-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shuttle-Prefix.pch"; sourceTree = "<group>"; };
+		C149EC0D15D5214600B1F558 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		C149EC0F15D5214600B1F558 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C149EC1015D5214600B1F558 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C149EC1315D5214600B1F558 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		C159DC2715D5DE7F00F5DE24 /* shuttle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = shuttle.icns; path = ../shuttle.icns; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C149EBF615D5214600B1F558 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C149EBFE15D5214600B1F558 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C149EBEE15D5214600B1F558 = {
+			isa = PBXGroup;
+			children = (
+				C149EC0315D5214600B1F558 /* Shuttle */,
+				C149EBFC15D5214600B1F558 /* Frameworks */,
+				C149EBFA15D5214600B1F558 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C149EBFA15D5214600B1F558 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C149EBF915D5214600B1F558 /* Shuttle.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C149EBFC15D5214600B1F558 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C149EBFD15D5214600B1F558 /* Cocoa.framework */,
+				C149EBFF15D5214600B1F558 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C149EBFF15D5214600B1F558 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C149EC0015D5214600B1F558 /* AppKit.framework */,
+				C149EC0115D5214600B1F558 /* CoreData.framework */,
+				C149EC0215D5214600B1F558 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		C149EC0315D5214600B1F558 /* Shuttle */ = {
+			isa = PBXGroup;
+			children = (
+				7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */,
+				7E72D21E178003ED00A6389C /* Shuttle.entitlements */,
+				C159DC2715D5DE7F00F5DE24 /* shuttle.icns */,
+				C149EC0F15D5214600B1F558 /* AppDelegate.h */,
+				C149EC1015D5214600B1F558 /* AppDelegate.m */,
+				C149EC1215D5214600B1F558 /* MainMenu.xib */,
+				C149EC0415D5214600B1F558 /* Supporting Files */,
+			);
+			path = Shuttle;
+			sourceTree = "<group>";
+		};
+		C149EC0415D5214600B1F558 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C149EC0515D5214600B1F558 /* Shuttle-Info.plist */,
+				C149EC0615D5214600B1F558 /* InfoPlist.strings */,
+				C149EC0915D5214600B1F558 /* main.m */,
+				C149EC0B15D5214600B1F558 /* Shuttle-Prefix.pch */,
+				C149EC0C15D5214600B1F558 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C149EBF815D5214600B1F558 /* Shuttle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C149EC1715D5214600B1F558 /* Build configuration list for PBXNativeTarget "Shuttle" */;
+			buildPhases = (
+				C149EBF515D5214600B1F558 /* Sources */,
+				C149EBF615D5214600B1F558 /* Frameworks */,
+				C149EBF715D5214600B1F558 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Shuttle;
+			productName = Shuttle;
+			productReference = C149EBF915D5214600B1F558 /* Shuttle.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C149EBF015D5214600B1F558 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = scturtle;
+			};
+			buildConfigurationList = C149EBF315D5214600B1F558 /* Build configuration list for PBXProject "Shuttle" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C149EBEE15D5214600B1F558;
+			productRefGroup = C149EBFA15D5214600B1F558 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C149EBF815D5214600B1F558 /* Shuttle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C149EBF715D5214600B1F558 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */,
+				C149EC0E15D5214600B1F558 /* Credits.rtf in Resources */,
+				C149EC1415D5214600B1F558 /* MainMenu.xib in Resources */,
+				C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */,
+				7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C149EBF515D5214600B1F558 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C149EC0A15D5214600B1F558 /* main.m in Sources */,
+				C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C149EC0615D5214600B1F558 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C149EC0715D5214600B1F558 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C149EC0C15D5214600B1F558 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C149EC0D15D5214600B1F558 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		C149EC1215D5214600B1F558 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C149EC1315D5214600B1F558 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C149EC1515D5214600B1F558 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C149EC1615D5214600B1F558 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C149EC1815D5214600B1F558 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Shuttle/Shuttle.entitlements;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Shuttle/Shuttle-Prefix.pch";
+				INFOPLIST_FILE = "Shuttle/Shuttle-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C149EC1915D5214600B1F558 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Shuttle/Shuttle.entitlements;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Shuttle/Shuttle-Prefix.pch";
+				INFOPLIST_FILE = "Shuttle/Shuttle-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C149EBF315D5214600B1F558 /* Build configuration list for PBXProject "Shuttle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C149EC1515D5214600B1F558 /* Debug */,
+				C149EC1615D5214600B1F558 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C149EC1715D5214600B1F558 /* Build configuration list for PBXNativeTarget "Shuttle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C149EC1815D5214600B1F558 /* Debug */,
+				C149EC1915D5214600B1F558 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C149EBF015D5214600B1F558 /* Project object */;
+}
