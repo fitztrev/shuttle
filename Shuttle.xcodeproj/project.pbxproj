@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0ADB3B0C178EF8DB004E9BB9 /* StatusIconAlt.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B08178EF8DB004E9BB9 /* StatusIconAlt.png */; };
+		0ADB3B0D178EF8DB004E9BB9 /* StatusIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B09178EF8DB004E9BB9 /* StatusIcon.png */; };
+		0ADB3B0E178EF8DB004E9BB9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0A178EF8DB004E9BB9 /* StatusIcon@2x.png */; };
+		0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */; };
 		7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */; };
 		C149EBFE15D5214600B1F558 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C149EBFD15D5214600B1F558 /* Cocoa.framework */; };
 		C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C149EC0615D5214600B1F558 /* InfoPlist.strings */; };
@@ -18,6 +22,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0ADB3B08178EF8DB004E9BB9 /* StatusIconAlt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StatusIconAlt.png; sourceTree = "<group>"; };
+		0ADB3B09178EF8DB004E9BB9 /* StatusIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StatusIcon.png; sourceTree = "<group>"; };
+		0ADB3B0A178EF8DB004E9BB9 /* StatusIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StatusIcon@2x.png"; sourceTree = "<group>"; };
+		0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StatusIconAlt@2x.png"; sourceTree = "<group>"; };
 		7E72D21E178003ED00A6389C /* Shuttle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Shuttle.entitlements; sourceTree = "<group>"; };
 		7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shuttle.default.json; sourceTree = "<group>"; };
 		C149EBF915D5214600B1F558 /* Shuttle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuttle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +56,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0ADB3B10178EF8E2004E9BB9 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				0ADB3B09178EF8DB004E9BB9 /* StatusIcon.png */,
+				0ADB3B0A178EF8DB004E9BB9 /* StatusIcon@2x.png */,
+				0ADB3B08178EF8DB004E9BB9 /* StatusIconAlt.png */,
+				0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		C149EBEE15D5214600B1F558 = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +112,7 @@
 				C149EC0F15D5214600B1F558 /* AppDelegate.h */,
 				C149EC1015D5214600B1F558 /* AppDelegate.m */,
 				C149EC1215D5214600B1F558 /* MainMenu.xib */,
+				0ADB3B10178EF8E2004E9BB9 /* Images */,
 				C149EC0415D5214600B1F558 /* Supporting Files */,
 			);
 			path = Shuttle;
@@ -161,7 +181,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0ADB3B0D178EF8DB004E9BB9 /* StatusIcon.png in Resources */,
+				0ADB3B0C178EF8DB004E9BB9 /* StatusIconAlt.png in Resources */,
 				C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */,
+				0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */,
+				0ADB3B0E178EF8DB004E9BB9 /* StatusIcon@2x.png in Resources */,
 				C149EC0E15D5214600B1F558 /* Credits.rtf in Resources */,
 				C149EC1415D5214600B1F558 /* MainMenu.xib in Resources */,
 				C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */,
