@@ -4,6 +4,8 @@ A simple SSH shortcut menu for OS X
 
 [http://fitztrev.github.io/shuttle/](http://fitztrev.github.io/shuttle/)
 
+![How Shuttle works](https://raw.github.com/fitztrev/shuttle/gh-pages/img/how-shuttle-works.gif)
+
 ## Installation
 
 1. Download [Shuttle](http://fitztrev.github.io/shuttle/)
