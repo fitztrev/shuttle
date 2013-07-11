@@ -18,7 +18,8 @@
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     [statusItem setMenu:menu];
     [statusItem setHighlightMode:YES];
-    [statusItem setTitle:@"SSH"];
+    [statusItem setImage:[[NSBundle mainBundle] imageForResource:@"normal"]];
+    [statusItem setAlternateImage:[[NSBundle mainBundle] imageForResource:@"alternate"]];
     
     // Needed to trigger the menuWillOpen event
     [menu setDelegate:self];
