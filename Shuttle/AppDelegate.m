@@ -20,6 +20,8 @@
     [statusItem setHighlightMode:YES];
     [statusItem setImage:[NSImage imageNamed:@"StatusIcon"]];
     [statusItem setAlternateImage:[NSImage imageNamed:@"StatusIconAlt"]];
+
+    launchAtLoginController = [[LaunchAtLoginController alloc] init];
     
     // Needed to trigger the menuWillOpen event
     [menu setDelegate:self];
@@ -71,6 +73,8 @@
     
     terminalPref = [json[@"terminal"] lowercaseString];
     shuttleHosts = json[@"hosts"];
+    
+    launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
 
     // Rebuild the menu
     int i = 0;
