@@ -52,7 +52,7 @@
         [self needUpdateFor: @"~/.ssh/config" with:sshConfigUser]) {
         
         configModified = [self getMTimeFor:shuttleConfigFile];
-        sshConfigSystem = [self getMTimeFor: @"/etc/ssh/ssh_conifg"];
+        sshConfigSystem = [self getMTimeFor: @"/etc/ssh_conifg"];
         sshConfigUser = [self getMTimeFor: @"~/.ssh/config"];
         
         [self loadMenu];
@@ -67,8 +67,8 @@
     NSFileManager *fileMgr = [[NSFileManager alloc] init];
     
     // First check the system level configuration
-    if ([fileMgr fileExistsAtPath: @"/etc/ssh/ssh_config"]) {
-        configFile = @"/etc/ssh/ssh_config";
+    if ([fileMgr fileExistsAtPath: @"/etc/ssh_config"]) {
+        configFile = @"/etc/ssh_config";
     }
     
     // Fallback to check if actually someone used /etc/ssh/ssh_config
