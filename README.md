@@ -18,6 +18,9 @@ A simple SSH shortcut menu for OS X
   * Using their APIs, automatically add all of your machines to the menu
 * Preferences panel for easier configuration
 * Update notifications
+* Keyboard hotkeys
+  * Open menu
+  * Select host option within menu
 
 ## Credits
 
