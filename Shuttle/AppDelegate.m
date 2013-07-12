@@ -27,22 +27,114 @@
     [menu setDelegate:self];
 }
 
+- (BOOL) needUpdateFor: (NSString*) file with: (NSDate*) old {
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[file stringByExpandingTildeInPath]])
+        return false;
+    
+    if (old == NULL)
+        return true;
+    
+    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[file stringByExpandingTildeInPath]
+                                                                                error:nil];
+    NSDate *date = [attributes fileModificationDate];
+    return [date compare: old] == NSOrderedDescending;
+}
+
+- (NSDate*) getMTimeFor: (NSString*) file {
+    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[file stringByExpandingTildeInPath]
+                                                                                error:nil];
+    return [attributes fileModificationDate];
+}
+
 - (void)menuWillOpen:(NSMenu *)menu {
     // Check when the config was last modified
-    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:shuttleConfigFile error:nil];
-    NSDate *date = [attributes fileModificationDate];
-    
-    // If it has been updated, refresh the menu
-    NSComparisonResult result;
-    result = [date compare:configModified];
-    
-    if ( configModified == NULL || result == NSOrderedDescending ) {
-        configModified = date;
+    if ( [self needUpdateFor:shuttleConfigFile with:configModified] ||
+        [self needUpdateFor: @"/etc/ssh/ssh_conifg" with:sshConfigSystem] ||
+        [self needUpdateFor: @"~/.ssh/config" with:sshConfigUser]) {
+        
+        configModified = [self getMTimeFor:shuttleConfigFile];
+        sshConfigSystem = [self getMTimeFor: @"/etc/ssh_conifg"];
+        sshConfigUser = [self getMTimeFor: @"~/.ssh/config"];
+        
         [self loadMenu];
     }
 }
 
+// Parsing of the SSH Config File
+// Courtesy of https://gist.github.com/geeksunny/3376694
+- (NSDictionary*) parseSSHConfigFile {
+    
+    NSString *configFile = nil;
+    NSFileManager *fileMgr = [[NSFileManager alloc] init];
+    
+    // First check the system level configuration
+    if ([fileMgr fileExistsAtPath: @"/etc/ssh_config"]) {
+        configFile = @"/etc/ssh_config";
+    }
+    
+    // Fallback to check if actually someone used /etc/ssh/ssh_config
+    if ([fileMgr fileExistsAtPath: [@"~/.ssh/config" stringByExpandingTildeInPath]]) {
+        configFile = [@"~/.ssh/config" stringByExpandingTildeInPath];
+    }
+    
+    if (configFile == nil) {
+        // We did not find any config file so we gracefully die
+        return nil;
+    }
+    
+    
+    // Get file contents into fh.
+    NSString *fh = [NSString stringWithContentsOfFile:configFile encoding:NSUTF8StringEncoding error:nil];
+    // Initialize our server list as an empty dictionary variable.
+    NSMutableDictionary *servers = [NSMutableDictionary dictionaryWithObjects:nil forKeys:nil];
+    
+    // Loop through each line and parse the file.
+    for (NSString *line in [fh componentsSeparatedByString:@"\n"]) {
+        
+        // Strip line
+        NSString *cleanedLine = [line stringByTrimmingCharactersInSet:[ NSCharacterSet whitespaceCharacterSet]];
+        
+        // Empty lines and lines starting with `#' are comments.
+        if ([cleanedLine length] == 0 || [line characterAtIndex:0] == '#')
+            continue;
+        
+        // Since there might be the possibility that someone thought it might be useful to use = for separating properties
+        // we have to check that. And of course for now, we are only looking into the host
+        // section and gently ignore the rest
+        NSError* error = NULL;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^Host\\b" options:0 error: &error];
+        NSUInteger num = [regex numberOfMatchesInString:cleanedLine options:0 range:NSMakeRange(0, [cleanedLine length])];
+        if (num == 1) {
+            
+            // Somebody really used =
+            NSArray* components = nil;
+            if ([cleanedLine rangeOfString:@"="].length != 0) {
+                components = [cleanedLine componentsSeparatedByString:@"="];
+                
+            } else {
+                components = [cleanedLine componentsSeparatedByCharactersInSet:
+                                        [NSCharacterSet whitespaceCharacterSet]];
+            }
+            NSString* host = [[components objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            
+            [servers setObject:[NSDictionary dictionaryWithObject: host forKey:@"Host"] forKey:host] ;
+        }
+    }
+    
+    return servers;    
+}
+
+// Replaces Underscores with Spaces for better readable names
+- (NSString*) humanize: (NSString*) val{
+    return [val stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+}
+
 - (void) loadMenu {
+    
+    // System configuration
+    NSDictionary* servers = [self parseSSHConfigFile];
+    
     // Clear out the hosts so we can start over
     NSUInteger n = [[menu itemArray] count];
     for (int i=0;i<n-4;i++) {
@@ -79,45 +171,95 @@
     // Rebuild the menu
     int i = 0;
     
+    NSMutableDictionary* fullMenu = [NSMutableDictionary dictionary];
+    
+    // First add all the system serves we know
+    for (id key in servers) {
+        NSDictionary* data = [servers objectForKey:key];
+
+        // Ignore entrys that contain wildcard characters
+        NSString* host= [data valueForKey:@"Host"];
+        if ([host rangeOfString:@"*"].length != 0)
+            continue;
+        
+        // Parse hosts...
+        NSRange ns = [host rangeOfString:@"/"];
+        if (ns.length == 0) {
+            [fullMenu setObject:[NSString stringWithFormat:@"ssh %@", host] forKey:[self humanize:host]];
+            
+        } else {
+            NSString *part = [host substringToIndex: ns.location];
+            host = [host substringFromIndex:ns.location + 1];
+
+            if ([fullMenu objectForKey:part] == nil) {
+                NSMutableDictionary *tmp = [NSMutableDictionary dictionary];
+                [fullMenu setObject:tmp forKey:part];
+            }
+
+            [[fullMenu objectForKey:part] setObject:[NSString stringWithFormat:@"ssh %@", [data valueForKey:@"Host"]] forKey:host];
+        }
+    }
+    
+    
+    // Now add the JSON Configured Hosts
     for (id key in shuttleHosts) {
         // If it has a `cmd`, it's a top-level item
         // otherwise, create a submenu for it
         if ( [key valueForKey:@"cmd"] ) {
-            NSMenuItem *menuItem = [menu insertItemWithTitle:[key valueForKey:@"name"]
-                                                      action:@selector(openHost:)
-                                               keyEquivalent:@""
-                                                     atIndex:i
-            ];
-            // Save that item's SSH command as its represented object
-            // so we can call it when it's clicked
-            [menuItem setRepresentedObject:[key valueForKey:@"cmd"]];
+            [fullMenu setObject:[key valueForKey:@"cmd"] forKey: [key valueForKey:@"name"]];
         } else {
             for ( id group in key ) {
-                //Create a group as the main item
-                NSMenuItem *mainItem = [[NSMenuItem alloc] init];
-                [mainItem setTitle:group];
+                if ([fullMenu valueForKey:group] == nil)
+                    [fullMenu setObject:[NSMutableDictionary dictionary] forKey:group];
                 
-                // Build a submenu under that group
-                NSMenu *submenu = [[NSMenu alloc] init];
+                // Get the subpart
+                NSMutableDictionary* submenu = [fullMenu objectForKey:group];
                 for ( id subKey in [key valueForKey:group]) {
-                    NSMenuItem *menuItem = [submenu addItemWithTitle:[subKey valueForKey:@"name"]
-                                                              action:@selector(openHost:)
-                                                       keyEquivalent:@""
-                     ];
-                    // Save that item's SSH command as its represented object
-                    // so we can call it when it's clicked
-                    [menuItem setRepresentedObject:[subKey valueForKey:@"cmd"]];
+                    [submenu setObject:[subKey valueForKey:@"cmd"] forKey:[subKey valueForKey:@"name"]];
                 }
-                // Attach the submenu
-                [mainItem setSubmenu:submenu];
-                
-                [menu insertItem:mainItem atIndex:i];
             }
             
         }
 
+    }
+    
+    // Finally add everything
+    NSArray* keys = [[fullMenu allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    
+    for(id key in keys) {
+        id object = [fullMenu valueForKey:key];
+        
+        // We have a submenu
+        if ([object isKindOfClass: [NSDictionary class]]) {
+            NSMenuItem *mainItem = [[NSMenuItem alloc] init];
+            [mainItem setTitle:key];
+            
+            NSMenu *submenu = [[NSMenu alloc] init];
+            NSArray* subkeys = [[object allKeys]  sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+            for (id sub in subkeys) {
+                NSMenuItem *menuItem = [submenu addItemWithTitle:sub
+                                                          action:@selector   (openHost:)
+                                                   keyEquivalent:@""];
+                [menuItem setRepresentedObject:[object valueForKey:sub]];
+            }
+            [mainItem setSubmenu:submenu];
+            [menu insertItem:mainItem atIndex:i];
+            
+        } else {
+            NSMenuItem *menuItem = [menu insertItemWithTitle:key
+                                                      action:@selector(openHost:)
+                                               keyEquivalent:@""
+                                                     atIndex:i
+                                    ];
+            // Save that item's SSH command as its represented object
+            // so we can call it when it's clicked
+            [menuItem setRepresentedObject:object];
+        }
         i++;
     }
+    
+    
 }
 
 - (void) openHost:(NSMenuItem *) sender {

@@ -12,7 +12,11 @@
 
     NSStatusItem *statusItem;
     NSString *shuttleConfigFile;
+    
+    // This is for the JSON File
     NSDate *configModified;
+    NSDate *sshConfigUser;
+    NSDate *sshConfigSystem;
     
     NSString *terminalPref;
     NSMutableArray* shuttleHosts;
