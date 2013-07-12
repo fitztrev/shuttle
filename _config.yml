@@ -1,6 +1,7 @@
-exclude: [
-    "*.jade",
-    "*.less",
-    "bootstrap",
-    "bootstrap-glyphicons",
-]
+tagline: A simple SSH shortcut menu for OS X
+
+exclude:
+  - "*.jade"
+  - "*.less"
+  - "bootstrap"
+  - "bootstrap-glyphicons"
