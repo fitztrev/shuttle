@@ -4,6 +4,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "LaunchAtLoginController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate>{
     IBOutlet NSMenu *menu;
@@ -15,6 +16,9 @@
     
     NSString *terminalPref;
     NSMutableArray* shuttleHosts;
+    
+    LaunchAtLoginController *launchAtLoginController;
+    
 }
 
 - (void)menuWillOpen:(NSMenu *)menu;
