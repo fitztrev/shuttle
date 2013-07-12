@@ -14,7 +14,7 @@ A simple SSH shortcut menu for OS X
 ## Roadmap
 
 * Cloud hosting integration
-  * AWS, Digital Ocean, etc
+  * AWS, Rackspace, Digital Ocean, etc
   * Using their APIs, automatically add all of your machines to the menu
 * Preferences panel for easier configuration
 * Update notifications
