@@ -27,7 +27,7 @@
 
 - (BOOL) needUpdateFor: (NSString*) file with: (NSDate*) old {
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:file])
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[file stringByExpandingTildeInPath]])
         return false;
     
     if (old == NULL)
