@@ -4,15 +4,19 @@
 //
 
 #import "AppDelegate.h"
+#include <Carbon/Carbon.h>
 
 @implementation AppDelegate
 
 - (void) awakeFromNib {
     // The path for the configuration file (by default: ~/.shuttle.json)
     shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json"];
-    
+
+    hotKeyCenter = [[DDHotKeyCenter alloc] init];
+    keycodeTransformer = [[SRKeyCodeTransformer alloc] init];
+
     // Load the menu content
-    // [self loadMenu];
+    [self loadMenu];
 
     // Create the status bar item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
@@ -20,11 +24,16 @@
     [statusItem setHighlightMode:YES];
     [statusItem setImage:[NSImage imageNamed:@"StatusIcon"]];
     [statusItem setAlternateImage:[NSImage imageNamed:@"StatusIconAlt"]];
-
+    
     launchAtLoginController = [[LaunchAtLoginController alloc] init];
     
     // Needed to trigger the menuWillOpen event
     [menu setDelegate:self];
+}
+
+
+- (void) hotkeyWithEvent:(NSEvent *)hkEvent {
+    [statusItem popUpStatusItemMenu: menu];
 }
 
 - (BOOL) needUpdateFor: (NSString*) file with: (NSDate*) old {
@@ -165,6 +174,29 @@
     
     terminalPref = [json[@"terminal"] lowercaseString];
     shuttleHosts = json[@"hosts"];
+    
+    [hotKeyCenter unregisterAllHotKeys];
+    
+    NSArray *shortCut = [json[@"shortcut"] componentsSeparatedByString: @"+"];
+    NSUInteger modifiers = 0;
+    unsigned short keyCode = 0;
+    
+    for(NSString *s in shortCut) {
+        if ([@"ctrl" isEqualToString: [s lowercaseString]]) {
+            modifiers |= NSControlKeyMask;
+        } else if ([@"alt" isEqualToString: [s lowercaseString]]) {
+            modifiers |= NSAlternateKeyMask;
+        } else if ([@"cmd" isEqualToString: [s lowercaseString]]) {
+            modifiers |= NSCommandKeyMask;
+        } else {
+            keyCode = [[keycodeTransformer reverseTransformedValue: s] unsignedShortValue];
+        }
+    }
+
+    if (keyCode > 0) {
+        [hotKeyCenter registerHotKeyWithKeyCode: keyCode  modifierFlags:  modifiers target:self action:@selector(hotkeyWithEvent:) object: nil];
+    }
+
     
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
 
