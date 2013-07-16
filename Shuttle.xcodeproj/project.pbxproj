@@ -162,7 +162,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0440;
-				ORGANIZATIONNAME = scturtle;
+				ORGANIZATIONNAME = fitztrev;
 			};
 			buildConfigurationList = C149EBF315D5214600B1F558 /* Build configuration list for PBXProject "Shuttle" */;
 			compatibilityVersion = "Xcode 3.2";
