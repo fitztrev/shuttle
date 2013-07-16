@@ -5,3 +5,4 @@ exclude:
   - "*.less"
   - "bootstrap"
   - "bootstrap-glyphicons"
+  - "build.sh"
