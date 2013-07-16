@@ -50,11 +50,11 @@
 - (void)menuWillOpen:(NSMenu *)menu {
     // Check when the config was last modified
     if ( [self needUpdateFor:shuttleConfigFile with:configModified] ||
-        [self needUpdateFor: @"/etc/ssh/ssh_conifg" with:sshConfigSystem] ||
+        [self needUpdateFor: @"/etc/ssh/ssh_config" with:sshConfigSystem] ||
         [self needUpdateFor: @"~/.ssh/config" with:sshConfigUser]) {
         
         configModified = [self getMTimeFor:shuttleConfigFile];
-        sshConfigSystem = [self getMTimeFor: @"/etc/ssh_conifg"];
+        sshConfigSystem = [self getMTimeFor: @"/etc/ssh_config"];
         sshConfigUser = [self getMTimeFor: @"~/.ssh/config"];
         
         [self loadMenu];
