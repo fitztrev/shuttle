@@ -213,7 +213,7 @@
         // If it has a `cmd`, it's a top-level item
         // otherwise, create a submenu & call buildMenu recursive
         if ( [key valueForKey:@"cmd"] ) {
-            [tempMenu setObject:[key valueForKey:@"cmd"] forKey: [key valueForKey:@"name"]];
+            [tempMenu setObject:key forKey: [key valueForKey:@"name"]];
         } else {
             for ( id group in key ) {
                 if ([tempMenu valueForKey:group] == nil)
@@ -239,7 +239,7 @@
         id object = [items valueForKey:key];
         
         // We have a submenu
-        if ([object isKindOfClass: [NSDictionary class]]) {
+        if ([object isKindOfClass: [NSDictionary class]] && ![object valueForKey:@"cmd"]) {
             NSMenuItem *mainItem = [[NSMenuItem alloc] init];
             [mainItem setTitle:key];
             
@@ -256,7 +256,17 @@
             
             // Save that item's SSH command as its represented object
             // so we can call it when it's clicked
-            [menuItem setRepresentedObject:object];
+            NSString* command = [object valueForKey:@"cmd"];
+            NSString* imagePath = [object valueForKey:@"icon"];
+            
+            if(imagePath && [[NSFileManager defaultManager] fileExistsAtPath:imagePath])
+            {
+                NSImage* image = [[NSImage alloc] initWithContentsOfFile:imagePath];
+                [image setSize:NSMakeSize(15, 15)];
+                [menuItem setImage:image];
+            }
+            
+            [menuItem setRepresentedObject:command];
         }
         
         i++;
