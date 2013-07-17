@@ -13,14 +13,14 @@
     
     // Load the menu content
     // [self loadMenu];
-
+    
     // Create the status bar item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
     [statusItem setMenu:menu];
     [statusItem setHighlightMode:YES];
     [statusItem setImage:[NSImage imageNamed:@"StatusIcon"]];
     [statusItem setAlternateImage:[NSImage imageNamed:@"StatusIconAlt"]];
-
+    
     launchAtLoginController = [[LaunchAtLoginController alloc] init];
     
     // Needed to trigger the menuWillOpen event
@@ -114,7 +114,7 @@
                 
             } else {
                 components = [cleanedLine componentsSeparatedByCharactersInSet:
-                                        [NSCharacterSet whitespaceCharacterSet]];
+                              [NSCharacterSet whitespaceCharacterSet]];
             }
             NSString* host = [[components objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             
@@ -122,7 +122,7 @@
         }
     }
     
-    return servers;    
+    return servers;
 }
 
 // Replaces Underscores with Spaces for better readable names
@@ -140,7 +140,7 @@
     for (int i=0;i<n-4;i++) {
         [menu removeItemAtIndex:0];
     }
-
+    
     // if the config file does not exist, create a default one
     if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
         NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
@@ -152,13 +152,14 @@
     id json = [NSJSONSerialization JSONObjectWithData:data
                                               options:kNilOptions
                                                 error:nil];
+    
     // Check valid JSON syntax
     if ( !json ) {
         NSMenuItem *menuItem = [menu insertItemWithTitle:@"Error parsing config"
-                           action:false
-                   keyEquivalent:@""
-                         atIndex:0
-        ];
+                                                  action:false
+                                           keyEquivalent:@""
+                                                 atIndex:0
+                                ];
         [menuItem setEnabled:false];
         return;
     }
@@ -167,7 +168,7 @@
     shuttleHosts = json[@"hosts"];
     
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
-
+    
     // Rebuild the menu
     int i = 0;
     
@@ -176,7 +177,7 @@
     // First add all the system serves we know
     for (id key in servers) {
         NSDictionary* data = [servers objectForKey:key];
-
+        
         // Ignore entrys that contain wildcard characters
         NSString* host= [data valueForKey:@"Host"];
         if ([host rangeOfString:@"*"].length != 0)
@@ -190,12 +191,12 @@
         } else {
             NSString *part = [host substringToIndex: ns.location];
             host = [host substringFromIndex:ns.location + 1];
-
+            
             if ([fullMenu objectForKey:part] == nil) {
                 NSMutableDictionary *tmp = [NSMutableDictionary dictionary];
                 [fullMenu setObject:tmp forKey:part];
             }
-
+            
             [[fullMenu objectForKey:part] setObject:[NSString stringWithFormat:@"ssh %@", [data valueForKey:@"Host"]] forKey:host];
         }
     }
@@ -220,7 +221,7 @@
             }
             
         }
-
+        
     }
     
     // Finally add everything
@@ -262,38 +263,41 @@
     
 }
 
-- (void) openHost:(NSMenuItem *) sender {
-    //NSLog(@"sender: %@", sender);
-    //NSLog(@"Command: %@",[sender representedObject]);
+- (void) openHost:(NSMenuItem *) sender
+{
+    
+    NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    
+    NSLog(@"%@", escapedObject);
     
     if ( [terminalPref isEqualToString: @"iterm"] ) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
-                                   [NSString stringWithFormat:
-                                    @"on ApplicationIsRunning(appName) \n"
-                                    @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
-                                    @"  return appNameIsRunning \n"
-                                    @"end ApplicationIsRunning \n"
-                                    @" \n"
-                                    @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
-                                    @" \n"
-                                    @"tell application \"iTerm\" \n"
-                                    @"  tell the current terminal \n"
-                                    @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
-                                    @"          tell newSession \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"          end tell \n"
-                                    @"      else \n"
-                                    @"          tell the current session \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"              activate \n"
-                                    @"          end tell \n"
-                                    @"      end if \n"
-                                    @"  end tell \n"
-                                    @"end tell \n"
-                                    , [sender representedObject]]];
+                                 [NSString stringWithFormat:
+                                  @"on ApplicationIsRunning(appName) \n"
+                                  @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
+                                  @"  return appNameIsRunning \n"
+                                  @"end ApplicationIsRunning \n"
+                                  @" \n"
+                                  @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
+                                  @" \n"
+                                  @"tell application \"iTerm\" \n"
+                                  @"  tell the current terminal \n"
+                                  @"      if isRunning then \n"
+                                  @"          set newSession to (launch session \"Default Session\") \n"
+                                  @"          tell newSession \n"
+                                  @"              write text \"clear\" \n"
+                                  @"              write text \"%1$@\" \n"
+                                  @"          end tell \n"
+                                  @"      else \n"
+                                  @"          tell the current session \n"
+                                  @"              write text \"clear\" \n"
+                                  @"              write text \"%1$@\" \n"
+                                  @"              activate \n"
+                                  @"          end tell \n"
+                                  @"      end if \n"
+                                  @"  end tell \n"
+                                  @"end tell \n"
+                                  , escapedObject]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
@@ -317,7 +321,7 @@
                                        @"      activate \n"
                                        @"  end if \n"
                                        @"end tell \n"
-                                       , [sender representedObject]]];
+                                       , escapedObject]];
         [terminalapp executeAndReturnError:nil];
     }
 }
