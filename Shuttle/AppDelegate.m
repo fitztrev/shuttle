@@ -13,6 +13,11 @@
     
     // Load the menu content
     // [self loadMenu];
+    // if the config file does not exist, create a default one
+    if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
+        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
+        [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
+    }
 
     // Create the status bar item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
@@ -140,12 +145,6 @@
     for (int i=0;i<n-4;i++) {
         [menu removeItemAtIndex:0];
     }
-
-    // if the config file does not exist, create a default one
-    if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
-        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
-        [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
-    }
     
     // Parse the config file
     NSData *data = [NSData dataWithContentsOfFile:shuttleConfigFile];
@@ -168,9 +167,6 @@
     
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
 
-    // Rebuild the menu
-    int i = 0;
-    
     NSMutableDictionary* fullMenu = [NSMutableDictionary dictionary];
     
     // First add all the system serves we know
@@ -202,64 +198,68 @@
     
     
     // Now add the JSON Configured Hosts
-    for (id key in shuttleHosts) {
+    [fullMenu addEntriesFromDictionary:[self buildMenu:shuttleHosts]];
+
+    // Add everything
+    [self buildMenuItems:fullMenu forMenu:menu];
+}
+
+- (NSDictionary*) buildMenu:(NSArray*)hosts {
+
+    NSMutableDictionary* tempMenu = [NSMutableDictionary dictionary];
+    
+    for (id key in hosts) {
         // If it has a `cmd`, it's a top-level item
-        // otherwise, create a submenu for it
+        // otherwise, create a submenu & call buildMenu recursive
         if ( [key valueForKey:@"cmd"] ) {
-            [fullMenu setObject:[key valueForKey:@"cmd"] forKey: [key valueForKey:@"name"]];
+            [tempMenu setObject:[key valueForKey:@"cmd"] forKey: [key valueForKey:@"name"]];
         } else {
             for ( id group in key ) {
-                if ([fullMenu valueForKey:group] == nil)
-                    [fullMenu setObject:[NSMutableDictionary dictionary] forKey:group];
-                
-                // Get the subpart
-                NSMutableDictionary* submenu = [fullMenu objectForKey:group];
-                for ( id subKey in [key valueForKey:group]) {
-                    [submenu setObject:[subKey valueForKey:@"cmd"] forKey:[subKey valueForKey:@"name"]];
+                if ([tempMenu valueForKey:group] == nil)
+                {
+                    tempMenu[group] = [self buildMenu:key[group]];
                 }
             }
-            
         }
-
+        
     }
     
-    // Finally add everything
-    NSArray* keys = [[fullMenu allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    return tempMenu;
+}
+
+- (void) buildMenuItems:(NSDictionary*)items forMenu:(NSMenu*)tempMenu {
     
+    int i = 0;
+    
+    // Finally add everything
+    NSArray* keys = [[items allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     for(id key in keys) {
-        id object = [fullMenu valueForKey:key];
+        id object = [items valueForKey:key];
         
         // We have a submenu
         if ([object isKindOfClass: [NSDictionary class]]) {
             NSMenuItem *mainItem = [[NSMenuItem alloc] init];
             [mainItem setTitle:key];
+
             
-            NSMenu *submenu = [[NSMenu alloc] init];
-            NSArray* subkeys = [[object allKeys]  sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            for (id sub in subkeys) {
-                NSMenuItem *menuItem = [submenu addItemWithTitle:sub
-                                                          action:@selector   (openHost:)
-                                                   keyEquivalent:@""];
-                [menuItem setRepresentedObject:[object valueForKey:sub]];
-            }
-            [mainItem setSubmenu:submenu];
-            [menu insertItem:mainItem atIndex:i];
+            NSMenu *subMenu = [[NSMenu alloc] init];
+            [self buildMenuItems:object forMenu:subMenu];
+            [mainItem setSubmenu:subMenu];
+            [tempMenu insertItem:mainItem atIndex:i];
             
         } else {
-            NSMenuItem *menuItem = [menu insertItemWithTitle:key
+            NSMenuItem *menuItem = [tempMenu insertItemWithTitle:key
                                                       action:@selector(openHost:)
-                                               keyEquivalent:@""
-                                                     atIndex:i
-                                    ];
+                                            keyEquivalent:@"" atIndex:i];
+            
             // Save that item's SSH command as its represented object
             // so we can call it when it's clicked
             [menuItem setRepresentedObject:object];
         }
+        
         i++;
     }
-    
-    
 }
 
 - (void) openHost:(NSMenuItem *) sender {
