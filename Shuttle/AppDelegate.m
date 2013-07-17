@@ -13,6 +13,11 @@
     
     // Load the menu content
     // [self loadMenu];
+    // if the config file does not exist, create a default one
+    if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
+        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
+        [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
+    }
 
     // Create the status bar item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
@@ -139,12 +144,6 @@
     NSUInteger n = [[menu itemArray] count];
     for (int i=0;i<n-4;i++) {
         [menu removeItemAtIndex:0];
-    }
-
-    // if the config file does not exist, create a default one
-    if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
-        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
-        [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
     }
     
     // Parse the config file
