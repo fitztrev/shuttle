@@ -265,8 +265,14 @@
 - (void) openHost:(NSMenuItem *) sender {
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
-    
-    if ( [terminalPref isEqualToString: @"iterm"] ) {
+
+    // Check if Url
+    NSURL* url = [NSURL URLWithString:[sender representedObject]];
+    if(url)
+    {
+        [[NSWorkspace sharedWorkspace] openURL:url];
+    }
+    else if ( [terminalPref isEqualToString: @"iterm"] ) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
                                     @"on ApplicationIsRunning(appName) \n"
