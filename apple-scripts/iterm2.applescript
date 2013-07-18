@@ -9,7 +9,7 @@ tell application "iTerm"
 	tell the current terminal
 		if isRunning then
 			set newSession to (launch session "Default Session")
-			tell newSession
+			tell the last session
 				write text "clear"
 				write text "%1$@"
 			end tell
