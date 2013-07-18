@@ -265,10 +265,7 @@
 
 - (void) openHost:(NSMenuItem *) sender
 {
-    
     NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    
-    NSLog(@"%@", escapedObject);
     
     if ( [terminalPref isEqualToString: @"iterm"] ) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
@@ -299,7 +296,8 @@
                                   @"end tell \n"
                                   , escapedObject]];
         [iTerm2 executeAndReturnError:nil];
-    } else {
+    }
+    else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
                                       [NSString stringWithFormat:
                                        @"on ApplicationIsRunning(appName) \n"
