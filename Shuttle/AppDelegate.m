@@ -178,7 +178,7 @@
         NSDictionary* data = [servers objectForKey:key];
 
         // Ignore entrys that contain wildcard characters
-        NSString* host= [data valueForKey:@"Host"];
+        NSString* host = [data valueForKey:@"Host"];
         if ([host rangeOfString:@"*"].length != 0)
             continue;
         
