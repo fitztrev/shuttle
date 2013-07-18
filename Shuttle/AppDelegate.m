@@ -277,6 +277,7 @@
                                     @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
                                     @" \n"
                                     @"tell application \"iTerm\" \n"
+                                    @"  activate \n"
                                     @"  tell the current terminal \n"
                                     @"      if isRunning then \n"
                                     @"          set newSession to (launch session \"Default Session\") \n"
