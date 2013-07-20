@@ -1,42 +1,47 @@
 {
-	"_comment": "Valid terminals include: 'Terminal.app' or 'iTerm'",
-	"_comment": "Hosts will also be read from your ~/.ssh/config or /etc/ssh_config file, if available",
-	"_comment": "For more information on how to configure, please see http://fitztrev.github.io/shuttle/",
 	"terminal": "Terminal.app",
 	"launch_at_login": false,
 	"hosts": [
 		{
-			"name": "My Dev Server",
+			"name": "Test escaping characters",
+			"cmd": "echo \"Hello\"; echo 'world'; "
+		},
+		{
+			"name": "Test opening URL",
+			"cmd": "http://fitztrev.github.io/shuttle"
+		},
+		{
+			"name": "Main Item",
 			"cmd": "ssh username@dev.example.com"
 		},
 		{
-			"Personal": [
+			"Submenu 1": [
 				 {
-					 "name": "My blog",
+					 "name": "Submenu Item #1.1",
 					 "cmd": "ssh username@blog.example.com"
 				 }
 			 ]
 		},
 		{
-			"Work": [
+			"Submenu 2": [
 				{
-					"name": "dev.example.net",
+					"name": "Submenu Item #2.1",
 					"cmd": "ssh username@dev.example.net -p 3000"
 				},
 				{
-					"name": "staging.example.net",
+					"name": "Submenu Item #2.2",
 					"cmd": "ssh username@staging.example.net -p 3000"
 				},
 				{
-					"name": "production.example.net",
+					"name": "Submenu Item #2.3",
 					"cmd": "ssh username@example.net -p 3000"
 				}
 			]
 		},
 		{
-			"Vagrant": [
+			"Submenu 3": [
 				{
-					"name": "precise32",
+					"name": "Submenu Item #3.1",
 					"cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
 				}
 			]
