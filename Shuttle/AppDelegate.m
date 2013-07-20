@@ -11,6 +11,12 @@
     // The path for the configuration file (by default: ~/.shuttle.json)
     shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json"];
     
+    // if the config file does not exist, create a default one
+    if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
+        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
+        [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
+    }
+
     // Load the menu content
     // [self loadMenu];
     
@@ -131,12 +137,6 @@
 }
 
 - (void) loadMenu {
-
-    // if the config file does not exist, create a default one
-    if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
-        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
-        [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
-    }
     
     // System configuration
     NSDictionary* servers = [self parseSSHConfigFile];
