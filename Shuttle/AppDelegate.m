@@ -257,7 +257,7 @@
             // Save that item's SSH command as its represented object
             // so we can call it when it's clicked
             NSString* command = [object valueForKey:@"cmd"];
-            NSString* imagePath = [object valueForKey:@"icon"];
+            NSString* imagePath = [[object valueForKey:@"icon"] stringByExpandingTildeInPath];
             
             if(imagePath && [[NSFileManager defaultManager] fileExistsAtPath:imagePath])
             {

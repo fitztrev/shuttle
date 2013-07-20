@@ -35,7 +35,8 @@
                      "Vagrant": [
                                  {
                                  "name": "precise32",
-                                 "cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
+                                 "cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key",
+                                 "icon": "~/Pictures/iChat Icons/Feng Shui/Gunsen (Fan) .gif"
                         }
                      ]
                 }
