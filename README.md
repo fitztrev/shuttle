@@ -33,6 +33,7 @@ This project was created by Trevor Fitzgerald. I owe many thanks to the followin
 * Martin Grund
 * Ryan Cohen
 * Thomas Rosenstein
+* Tibor Bödecs
 
 ## Credits
 
