@@ -1,0 +1,43 @@
+#
+# A couple of Github accounts
+# Prefixed with `.` so they are ignored from the Shuttle menu
+#
+Host .github.com-user1.global
+	User user1
+	Hostname github.com
+	IdentityFile ~/.ssh/github-1.key
+
+Host .github.com-user2.global
+	User user2
+	Hostname github.com
+	IdentityFile ~/.ssh/github-2.key
+
+#
+# Main menu items
+#
+Host global-blog.example.com
+	User username
+	Hostname blog.example.com
+
+#
+# Grouped menu items
+#
+Host Global-Group1/web01.example.com
+	User username
+	Hostname web01.example.com
+
+Host Global-Group1/web02.example.com
+	User username
+	Hostname web02.example.com
+
+Host Global-Group1/web03.example.com
+	User username
+	Hostname web03.example.com
+
+Host Global-Group2/mysql01.example.com
+	User username
+	Hostname mysql01.example.com
+
+Host Global-Group2/mysql02.example.com
+	User username
+	Hostname mysql02.example.com
