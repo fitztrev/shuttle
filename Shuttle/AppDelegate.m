@@ -176,12 +176,16 @@
     // First add all the system serves we know
     for (id key in servers) {
         NSDictionary* data = [servers objectForKey:key];
-
-        // Ignore entrys that contain wildcard characters
         NSString* host = [data valueForKey:@"Host"];
+
+        // Ignore entries that contain wildcard characters
         if ([host rangeOfString:@"*"].length != 0)
             continue;
         
+        // Ignore entries that start with `.`
+        if ([host hasPrefix:@"."])
+            continue;
+
         // Parse hosts...
         NSRange ns = [host rangeOfString:@"/"];
         if (ns.length == 0) {
