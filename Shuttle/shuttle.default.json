@@ -30,7 +30,15 @@
 				{
 					"name": "production.example.net",
 					"cmd": "ssh username@example.net -p 3000"
-				}
+				},
+                {
+                     "Vagrant": [
+                                 {
+                                 "name": "precise32",
+                                 "cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
+                        }
+                     ]
+                }
 			]
 		},
 		{
