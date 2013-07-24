@@ -4,6 +4,7 @@
 	"_comment3": "For more information on how to configure, please see http://fitztrev.github.io/shuttle/",
 	"terminal": "Terminal.app",
 	"launch_at_login": false,
+    "disable_ssh_config_file": false,
 	"hosts": [
 		{
 			"name": "My Dev Server",

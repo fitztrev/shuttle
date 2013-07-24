@@ -19,6 +19,7 @@
     NSDate *sshConfigSystem;
     
     NSString *terminalPref;
+    BOOL disableSSHConfigFile;
     NSMutableArray* shuttleHosts;
     
     LaunchAtLoginController *launchAtLoginController;
