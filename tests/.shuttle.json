@@ -1,6 +1,7 @@
 {
 	"terminal": "Terminal.app",
 	"launch_at_login": false,
+	"show_ssh_config_hosts": true,
 	"hosts": [
 		{
 			"name": "Test escaping characters",
