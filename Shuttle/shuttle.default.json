@@ -4,6 +4,7 @@
 	"_comment": "For more information on how to configure, please see http://fitztrev.github.io/shuttle/",
 	"terminal": "Terminal.app",
 	"launch_at_login": false,
+    "sort_alphabetical": true,
 	"hosts": [
 		{
 			"name": "My Dev Server",

@@ -20,6 +20,8 @@
 		C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C149EC1015D5214600B1F558 /* AppDelegate.m */; };
 		C149EC1415D5214600B1F558 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C149EC1215D5214600B1F558 /* MainMenu.xib */; };
 		C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */ = {isa = PBXBuildFile; fileRef = C159DC2715D5DE7F00F5DE24 /* shuttle.icns */; };
+		E94EDE1A17A0F98C0032EA59 /* SHMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = E94EDE1717A0F1680032EA59 /* SHMenu.m */; };
+		E94EDE1B17A0F9920032EA59 /* SHMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E94EDE1917A0F1720032EA59 /* SHMenuItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,10 @@
 		C149EC1015D5214600B1F558 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C149EC1315D5214600B1F558 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		C159DC2715D5DE7F00F5DE24 /* shuttle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = shuttle.icns; path = ../shuttle.icns; sourceTree = "<group>"; };
+		E94EDE1617A0F1680032EA59 /* SHMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMenu.h; sourceTree = "<group>"; };
+		E94EDE1717A0F1680032EA59 /* SHMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMenu.m; sourceTree = "<group>"; };
+		E94EDE1817A0F1720032EA59 /* SHMenuItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMenuItem.h; sourceTree = "<group>"; };
+		E94EDE1917A0F1720032EA59 /* SHMenuItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMenuItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,10 @@
 				C149EC1215D5214600B1F558 /* MainMenu.xib */,
 				0ADB3B10178EF8E2004E9BB9 /* Images */,
 				C149EC0415D5214600B1F558 /* Supporting Files */,
+				E94EDE1617A0F1680032EA59 /* SHMenu.h */,
+				E94EDE1717A0F1680032EA59 /* SHMenu.m */,
+				E94EDE1817A0F1720032EA59 /* SHMenuItem.h */,
+				E94EDE1917A0F1720032EA59 /* SHMenuItem.m */,
 			);
 			path = Shuttle;
 			sourceTree = "<group>";
@@ -205,6 +215,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E94EDE1B17A0F9920032EA59 /* SHMenuItem.m in Sources */,
+				E94EDE1A17A0F98C0032EA59 /* SHMenu.m in Sources */,
 				0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */,
 				C149EC0A15D5214600B1F558 /* main.m in Sources */,
 				C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */,

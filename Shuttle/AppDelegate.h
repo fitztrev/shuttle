@@ -5,6 +5,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "LaunchAtLoginController.h"
+#import "SHMenu.h"
+#import "SHMenuItem.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate>{
     IBOutlet NSMenu *menu;
@@ -20,6 +22,7 @@
     
     NSString *terminalPref;
     NSMutableArray* shuttleHosts;
+    BOOL sortAlphabetical;
     
     LaunchAtLoginController *launchAtLoginController;
     

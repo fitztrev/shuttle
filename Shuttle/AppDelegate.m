@@ -63,7 +63,7 @@
 
 // Parsing of the SSH Config File
 // Courtesy of https://gist.github.com/geeksunny/3376694
-- (NSDictionary*) parseSSHConfigFile {
+- (NSArray*) parseSSHConfigFile {
     
     NSString *configFile = nil;
     NSFileManager *fileMgr = [[NSFileManager alloc] init];
@@ -83,11 +83,10 @@
         return nil;
     }
     
-    
     // Get file contents into fh.
     NSString *fh = [NSString stringWithContentsOfFile:configFile encoding:NSUTF8StringEncoding error:nil];
     // Initialize our server list as an empty dictionary variable.
-    NSMutableDictionary *servers = [NSMutableDictionary dictionaryWithObjects:nil forKeys:nil];
+    NSMutableArray *servers = [NSMutableArray array];
     
     // Loop through each line and parse the file.
     for (NSString *line in [fh componentsSeparatedByString:@"\n"]) {
@@ -105,8 +104,8 @@
         NSError* error = NULL;
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^Host\\b" options:0 error: &error];
         NSUInteger num = [regex numberOfMatchesInString:cleanedLine options:0 range:NSMakeRange(0, [cleanedLine length])];
+
         if (num == 1) {
-            
             // Somebody really used =
             NSArray* components = nil;
             if ([cleanedLine rangeOfString:@"="].length != 0) {
@@ -118,11 +117,52 @@
             }
             NSString* host = [[components objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             
-            [servers setObject:[NSDictionary dictionaryWithObject: host forKey:@"Host"] forKey:host] ;
+            [self addHost:host withComponents:[host componentsSeparatedByString:@"/"] toArray:servers];
         }
     }
     
-    return servers;    
+    return servers;
+}
+
+// Build a Host Table equivalent to the JSON representation
+- (void) addHost:(NSString*)host withComponents:(NSArray*)comps toArray:(NSMutableArray*)servers
+{
+    // Ignore entrys that contain wildcard characters or begin with a dot
+    if ([host rangeOfString:@"*"].length != 0 || [host hasPrefix:@"."])
+        return;
+    
+    if([comps count] == 1)
+    {
+        // Create ahost entry
+        NSString* cmd = [NSString stringWithFormat:@"ssh %@", host];
+        NSString* name = [self humanize:[comps firstObject]];
+        
+        [servers addObject:@{ @"Host" : host, @"cmd" : cmd, @"name" : name }];
+    }
+    else
+    {
+        // Create a submenu
+        NSMutableArray *ar = [comps mutableCopy];
+        [ar removeObjectAtIndex:0];
+        NSString *groupName = [comps firstObject];
+        
+        // Check for existing submenus
+        NSArray *existing = [servers filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"%@ != nil", groupName]]];
+        
+        NSMutableArray *groupArray;
+        
+        if([existing count])
+        {
+            groupArray = [[existing firstObject] valueForKey:groupName];
+        }
+        else
+        {
+            groupArray = [NSMutableArray array];
+            [servers addObject:@{groupName: groupArray}];
+        }
+        
+        [self addHost:host withComponents:ar toArray:groupArray];
+    }
 }
 
 // Replaces Underscores with Spaces for better readable names
@@ -133,7 +173,7 @@
 - (void) loadMenu {
     
     // System configuration
-    NSDictionary* servers = [self parseSSHConfigFile];
+    NSArray* servers = [self parseSSHConfigFile];
     
     // Clear out the hosts so we can start over
     NSUInteger n = [[menu itemArray] count];
@@ -163,110 +203,106 @@
         return;
     }
     
+    // Read global config keys
     terminalPref = [json[@"terminal"] lowercaseString];
-    shuttleHosts = json[@"hosts"];
-    
+    shuttleHosts = [json[@"hosts"] mutableCopy];
+
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
-    
-    NSMutableDictionary* fullMenu = [NSMutableDictionary dictionary];
-    
-    // First add all the system serves we know
-    for (id key in servers) {
-        NSDictionary* data = [servers objectForKey:key];
-        
-        // Ignore entrys that contain wildcard characters
-        NSString* host= [data valueForKey:@"Host"];
-        if ([host rangeOfString:@"*"].length != 0)
-            continue;
-        
-        // Parse hosts...
-        NSRange ns = [host rangeOfString:@"/"];
-        if (ns.length == 0) {
-            [fullMenu setObject:[NSString stringWithFormat:@"ssh %@", host] forKey:[self humanize:host]];
-            
-        } else {
-            NSString *part = [host substringToIndex: ns.location];
-            host = [host substringFromIndex:ns.location + 1];
-            
-            if ([fullMenu objectForKey:part] == nil) {
-                NSMutableDictionary *tmp = [NSMutableDictionary dictionary];
-                [fullMenu setObject:tmp forKey:part];
-            }
-            
-            [[fullMenu objectForKey:part] setObject:[NSString stringWithFormat:@"ssh %@", [data valueForKey:@"Host"]] forKey:host];
-        }
+
+    if([json valueForKey:@"sort_alphabetical"])
+    {
+        sortAlphabetical = [json[@"sort_alphabetical"] boolValue];
     }
+    else
+    {
+        sortAlphabetical = YES;
+    }
+
+    // Add SSH Config Servers
+    [shuttleHosts addObjectsFromArray:servers];
     
+    // Build your local menu representation
+    SHMenu *mainMenu = [[SHMenu alloc] init];
     
-    // Now add the JSON Configured Hosts
-    [fullMenu addEntriesFromDictionary:[self buildMenu:shuttleHosts]];
+    mainMenu.items = [self buildMenu:shuttleHosts];
     
     // Add everything
-    [self buildMenuItems:fullMenu forMenu:menu];
+    [self buildMenuItems:mainMenu forMenu:menu];
 }
 
-- (NSDictionary*) buildMenu:(NSArray*)hosts {
+// Build a SHMenu definition out of JSON
+- (NSArray*) buildMenu:(NSArray*)hosts {
     
-    NSMutableDictionary* tempMenu = [NSMutableDictionary dictionary];
+    NSMutableArray* tempMenu = [NSMutableArray array];
     
     for (id key in hosts) {
         // If it has a `cmd`, it's a top-level item
         // otherwise, create a submenu & call buildMenu recursive
         if ( [key valueForKey:@"cmd"] ) {
-            [tempMenu setObject:key forKey: [key valueForKey:@"name"]];
-        } else {
+            SHMenuItem *item = [[SHMenuItem alloc] init];
+            item.name = [key valueForKey:@"name"];
+            item.command = [key valueForKey:@"cmd"];
+            item.iconPath = [key valueForKey:@"icon"];
+            [tempMenu addObject:item];
+        } else  {
             for ( id group in key ) {
-                if ([tempMenu valueForKey:group] == nil)
-                {
-                    tempMenu[group] = [self buildMenu:key[group]];
-                }
+                SHMenu *submenu = [[SHMenu alloc] init];
+                submenu.name = group;
+                submenu.items = [self buildMenu:key[group]];
+                [tempMenu addObject:submenu];
             }
         }
-        
     }
     
     return tempMenu;
 }
 
-- (void) buildMenuItems:(NSDictionary*)items forMenu:(NSMenu*)tempMenu {
+// Build a NSMenu from the SHMenu definition
+- (void) buildMenuItems:(SHMenu*)mainMenu forMenu:(NSMenu*)tempMenu {
     
     int i = 0;
     
-    // Finally add everything
-    NSArray* keys = [[items allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    NSArray *items = [mainMenu items];
     
-    for(id key in keys) {
-        id object = [items valueForKey:key];
+    if(sortAlphabetical)
+    {
+        items = [items sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSString* name1 = [obj1 valueForKey:@"name"];
+            NSString* name2 = [obj2 valueForKey:@"name"];
+            
+            return [name1 compare:name2 options:NSCaseInsensitiveSearch];
+        }];
+    }
+    
+    for(id m in items) {
         
         // We have a submenu
-        if ([object isKindOfClass: [NSDictionary class]] && ![object valueForKey:@"cmd"]) {
-            NSMenuItem *mainItem = [[NSMenuItem alloc] init];
-            [mainItem setTitle:key];
+        
+        if([m isKindOfClass:[SHMenu class]])
+        {
+            SHMenu *m1 = (SHMenu*)m;
+            NSMenuItem *item = [[NSMenuItem alloc] init];
+            item.title = m1.name;
+            item.representedObject = m1;
             
+            NSMenu *submenu = [[NSMenu alloc] init];
+            [self buildMenuItems:m1 forMenu:submenu];
+            [item setSubmenu:submenu];
             
-            NSMenu *subMenu = [[NSMenu alloc] init];
-            [self buildMenuItems:object forMenu:subMenu];
-            [mainItem setSubmenu:subMenu];
-            [tempMenu insertItem:mainItem atIndex:i];
+            [tempMenu insertItem:item atIndex:i];
+        }
+        else if([m isKindOfClass:[SHMenuItem class]])
+        {
+            SHMenuItem *m2 = (SHMenuItem*)m;
+            NSMenuItem *item = [tempMenu insertItemWithTitle:m2.name action:@selector(openHost:) keyEquivalent:@"" atIndex:i];
+            item.representedObject = m2;
             
-        } else {
-            NSMenuItem *menuItem = [tempMenu insertItemWithTitle:key
-                                                          action:@selector(openHost:)
-                                                   keyEquivalent:@"" atIndex:i];
-            
-            // Save that item's SSH command as its represented object
-            // so we can call it when it's clicked
-            NSString* command = [object valueForKey:@"cmd"];
-            NSString* imagePath = [[object valueForKey:@"icon"] stringByExpandingTildeInPath];
-            
-            if(imagePath && [[NSFileManager defaultManager] fileExistsAtPath:imagePath])
+            if(m2.iconPath && [[NSFileManager defaultManager] fileExistsAtPath:m2.iconPath])
             {
-                NSImage* image = [[NSImage alloc] initWithContentsOfFile:imagePath];
+                NSImage* image = [[NSImage alloc] initWithContentsOfFile:m2.iconPath];
                 [image setSize:NSMakeSize(15, 15)];
-                [menuItem setImage:image];
+                [item setImage:image];
             }
-            
-            [menuItem setRepresentedObject:command];
         }
         
         i++;
@@ -274,8 +310,7 @@
 }
 
 - (void) openHost:(NSMenuItem *) sender {
-    //NSLog(@"sender: %@", sender);
-    //NSLog(@"Command: %@",[sender representedObject]);
+    SHMenuItem *item = sender.representedObject;
     
     if ( [terminalPref isEqualToString: @"iterm"] ) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
@@ -304,7 +339,7 @@
                                     @"      end if \n"
                                     @"  end tell \n"
                                     @"end tell \n"
-                                    , [sender representedObject]]];
+                                    , item.command]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
@@ -328,7 +363,7 @@
                                        @"      activate \n"
                                        @"  end if \n"
                                        @"end tell \n"
-                                       , [sender representedObject]]];
+                                       , item.command]];
         [terminalapp executeAndReturnError:nil];
     }
 }
