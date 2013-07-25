@@ -173,8 +173,13 @@
     
     NSMutableDictionary* fullMenu = [NSMutableDictionary dictionary];
     
+    
     // First add all the system servers we know
-    BOOL showSshConfigHosts = [json[@"show_ssh_config_hosts"] boolValue];
+    
+    BOOL showSshConfigHosts = YES;
+    if ([[json allKeys] containsObject:(@"show_ssh_config_hosts")] && [json[@"show_ssh_config_hosts"] boolValue] == NO) {
+        showSshConfigHosts = NO;
+    }
     
     if (showSshConfigHosts) {
         for (id key in servers) {
