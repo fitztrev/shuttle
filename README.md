@@ -29,6 +29,7 @@ This project was created by Trevor Fitzgerald. I owe many thanks to the followin
 (In alphabetical order)
 
 * Dmitry Filimonov
+* Jack Weeden
 * Marco Aurélio
 * Martin Grund
 * Ryan Cohen
