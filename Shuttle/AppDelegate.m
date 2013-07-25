@@ -173,34 +173,43 @@
     
     NSMutableDictionary* fullMenu = [NSMutableDictionary dictionary];
     
-    // First add all the system serves we know
-    for (id key in servers) {
-        NSDictionary* data = [servers objectForKey:key];
-        NSString* host = [data valueForKey:@"Host"];
+    
+    // First add all the system servers we know
+    
+    BOOL showSshConfigHosts = YES;
+    if ([[json allKeys] containsObject:(@"show_ssh_config_hosts")] && [json[@"show_ssh_config_hosts"] boolValue] == NO) {
+        showSshConfigHosts = NO;
+    }
+    
+    if (showSshConfigHosts) {
+        for (id key in servers) {
+            NSDictionary* data = [servers objectForKey:key];
+            NSString* host = [data valueForKey:@"Host"];
 
-        // Ignore entries that contain wildcard characters
-        if ([host rangeOfString:@"*"].length != 0)
-            continue;
-        
-        // Ignore entries that start with `.`
-        if ([host hasPrefix:@"."])
-            continue;
-
-        // Parse hosts...
-        NSRange ns = [host rangeOfString:@"/"];
-        if (ns.length == 0) {
-            [fullMenu setObject:[NSString stringWithFormat:@"ssh %@", host] forKey:[self humanize:host]];
+            // Ignore entries that contain wildcard characters
+            if ([host rangeOfString:@"*"].length != 0)
+                continue;
             
-        } else {
-            NSString *part = [host substringToIndex: ns.location];
-            host = [host substringFromIndex:ns.location + 1];
+            // Ignore entries that start with `.`
+            if ([host hasPrefix:@"."])
+                continue;
 
-            if ([fullMenu objectForKey:part] == nil) {
-                NSMutableDictionary *tmp = [NSMutableDictionary dictionary];
-                [fullMenu setObject:tmp forKey:part];
+            // Parse hosts...
+            NSRange ns = [host rangeOfString:@"/"];
+            if (ns.length == 0) {
+                [fullMenu setObject:[NSString stringWithFormat:@"ssh %@", host] forKey:[self humanize:host]];
+                
+            } else {
+                NSString *part = [host substringToIndex: ns.location];
+                host = [host substringFromIndex:ns.location + 1];
+
+                if ([fullMenu objectForKey:part] == nil) {
+                    NSMutableDictionary *tmp = [NSMutableDictionary dictionary];
+                    [fullMenu setObject:tmp forKey:part];
+                }
+
+                [[fullMenu objectForKey:part] setObject:[NSString stringWithFormat:@"ssh %@", [data valueForKey:@"Host"]] forKey:host];
             }
-
-            [[fullMenu objectForKey:part] setObject:[NSString stringWithFormat:@"ssh %@", [data valueForKey:@"Host"]] forKey:host];
         }
     }
     
