@@ -20,6 +20,11 @@
 		C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C149EC1015D5214600B1F558 /* AppDelegate.m */; };
 		C149EC1415D5214600B1F558 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C149EC1215D5214600B1F558 /* MainMenu.xib */; };
 		C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */ = {isa = PBXBuildFile; fileRef = C159DC2715D5DE7F00F5DE24 /* shuttle.icns */; };
+		E05B4FA11795B78800F04E5D /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = E05B4FA01795B78800F04E5D /* DDHotKeyCenter.m */; };
+		E05B4FA31795B85C00F04E5D /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E05B4FA21795B85C00F04E5D /* Carbon.framework */; };
+		E05B4FA61795BF6800F04E5D /* SRKeyCodeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = E05B4FA51795BF6800F04E5D /* SRKeyCodeTransformer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E05B4FA91795C1F200F04E5D /* SRCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = E05B4FA71795C1F200F04E5D /* SRCommon.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		E05B4FB21795D94700F04E5D /* MenuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = E05B4FB11795D94700F04E5D /* MenuItemView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +50,15 @@
 		C149EC1015D5214600B1F558 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C149EC1315D5214600B1F558 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		C159DC2715D5DE7F00F5DE24 /* shuttle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = shuttle.icns; path = ../shuttle.icns; sourceTree = "<group>"; };
+		E05B4F9F1795B78800F04E5D /* DDHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyCenter.h; sourceTree = "<group>"; };
+		E05B4FA01795B78800F04E5D /* DDHotKeyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDHotKeyCenter.m; sourceTree = "<group>"; };
+		E05B4FA21795B85C00F04E5D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		E05B4FA41795BF6800F04E5D /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyCodeTransformer.h; sourceTree = "<group>"; };
+		E05B4FA51795BF6800F04E5D /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyCodeTransformer.m; sourceTree = "<group>"; };
+		E05B4FA71795C1F200F04E5D /* SRCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRCommon.m; sourceTree = "<group>"; };
+		E05B4FA81795C1F200F04E5D /* SRCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRCommon.h; sourceTree = "<group>"; };
+		E05B4FB01795D94700F04E5D /* MenuItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemView.h; sourceTree = "<group>"; };
+		E05B4FB11795D94700F04E5D /* MenuItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItemView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E05B4FA31795B85C00F04E5D /* Carbon.framework in Frameworks */,
 				C149EBFE15D5214600B1F558 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -73,6 +88,7 @@
 		C149EBEE15D5214600B1F558 = {
 			isa = PBXGroup;
 			children = (
+				E05B4FA21795B85C00F04E5D /* Carbon.framework */,
 				C149EC0315D5214600B1F558 /* Shuttle */,
 				C149EBFC15D5214600B1F558 /* Frameworks */,
 				C149EBFA15D5214600B1F558 /* Products */,
@@ -109,6 +125,8 @@
 		C149EC0315D5214600B1F558 /* Shuttle */ = {
 			isa = PBXGroup;
 			children = (
+				E05B4FA71795C1F200F04E5D /* SRCommon.m */,
+				E05B4FA81795C1F200F04E5D /* SRCommon.h */,
 				7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */,
 				7E72D21E178003ED00A6389C /* Shuttle.entitlements */,
 				C159DC2715D5DE7F00F5DE24 /* shuttle.icns */,
@@ -119,6 +137,12 @@
 				C149EC1215D5214600B1F558 /* MainMenu.xib */,
 				0ADB3B10178EF8E2004E9BB9 /* Images */,
 				C149EC0415D5214600B1F558 /* Supporting Files */,
+				E05B4F9F1795B78800F04E5D /* DDHotKeyCenter.h */,
+				E05B4FA01795B78800F04E5D /* DDHotKeyCenter.m */,
+				E05B4FA41795BF6800F04E5D /* SRKeyCodeTransformer.h */,
+				E05B4FA51795BF6800F04E5D /* SRKeyCodeTransformer.m */,
+				E05B4FB01795D94700F04E5D /* MenuItemView.h */,
+				E05B4FB11795D94700F04E5D /* MenuItemView.m */,
 			);
 			path = Shuttle;
 			sourceTree = "<group>";
@@ -208,6 +232,10 @@
 				0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */,
 				C149EC0A15D5214600B1F558 /* main.m in Sources */,
 				C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */,
+				E05B4FA11795B78800F04E5D /* DDHotKeyCenter.m in Sources */,
+				E05B4FA61795BF6800F04E5D /* SRKeyCodeTransformer.m in Sources */,
+				E05B4FA91795C1F200F04E5D /* SRCommon.m in Sources */,
+				E05B4FB21795D94700F04E5D /* MenuItemView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

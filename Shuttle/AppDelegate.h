@@ -5,6 +5,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "LaunchAtLoginController.h"
+#import "DDHotKeyCenter.h"
+#import "SRKeyCodeTransformer.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate>{
     IBOutlet NSMenu *menu;
@@ -19,7 +21,9 @@
     NSDate *sshConfigSystem;
     
     NSString *terminalPref;
-    NSMutableArray* shuttleHosts;
+    NSMutableArray *shuttleHosts;
+    DDHotKeyCenter *hotKeyCenter;
+    SRKeyCodeTransformer *keycodeTransformer;
     
     LaunchAtLoginController *launchAtLoginController;
     
