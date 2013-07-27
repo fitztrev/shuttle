@@ -343,6 +343,51 @@
     }
 }
 
+- (IBAction)showImportPanel:(id)sender
+{
+    NSLog(@"doOpen");
+    NSOpenPanel * openPanelObj	= [NSOpenPanel openPanel];
+    NSInteger tvarNSInteger	= [openPanelObj runModal];
+    if(tvarNSInteger == NSOKButton){
+     	NSLog(@"doOpen OK button clicked");
+        
+        //Backup the current configuration
+        NSLog(@"doOpen Backup the current config");
+        [[NSFileManager defaultManager] moveItemAtPath:shuttleConfigFile toPath: [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json.bkp"] error: nil];
+        
+        NSURL * selectedFileUrl = [openPanelObj URL];
+        //Import the selected file
+        NSLog(@"copy filename from %@ to %@",selectedFileUrl.path,shuttleConfigFile);
+        [[NSFileManager defaultManager] copyItemAtPath:selectedFileUrl.path toPath:shuttleConfigFile error:nil];
+        //Delete the old configuration file
+        NSLog(@"doOpen deleteing the old config");
+         [[NSFileManager defaultManager] removeItemAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json.bkp"]  error: nil];
+    } else if(tvarNSInteger == NSCancelButton) {
+     	NSLog(@"doOpen Cancel button clicked");
+     	return;
+    } else {
+     	NSLog(@"doOpen do nothing");
+     	return;
+    }
+    
+}
+
+- (IBAction)showExportPanel:(id)sender
+{
+    NSLog(@"doSave");
+    NSSavePanel * savePanelObj	= [NSSavePanel savePanel];
+    //Display the Save Panel
+    NSInteger result	= [savePanelObj runModal];        
+        if (result == NSFileHandlingPanelOKButton) {
+            
+            NSURL *saveURL = [savePanelObj URL];
+            
+            // then copy a previous file to the new location
+            [[NSFileManager defaultManager] copyItemAtPath:shuttleConfigFile toPath:saveURL.path error:nil];
+        }
+}
+
+
 - (IBAction)configure:(id)sender {
     [[NSWorkspace sharedWorkspace] openFile:shuttleConfigFile];
 }
