@@ -181,6 +181,11 @@
         showSshConfigHosts = NO;
     }
     
+    NSString* sshConfigGroupSeparator;
+    if ([[json allKeys] containsObject:(@"ssh_config_group_separator")] ) {
+        sshConfigGroupSeparator = json[@"ssh_config_group_separator"];
+    }
+    
     if (showSshConfigHosts) {
         for (id key in servers) {
             NSDictionary* data = [servers objectForKey:key];
@@ -196,6 +201,9 @@
 
             // Parse hosts...
             NSRange ns = [host rangeOfString:@"/"];
+            if (ns.length == 0 && sshConfigGroupSeparator.length > 0) {
+                ns = [host rangeOfString:sshConfigGroupSeparator];
+            }
             if (ns.length == 0) {
                 [fullMenu setObject:[NSString stringWithFormat:@"ssh %@", host] forKey:[self humanize:host]];
                 
