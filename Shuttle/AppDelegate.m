@@ -197,6 +197,12 @@
             // Parse hosts...
             NSRange ns = [host rangeOfString:@"/"];
             if (ns.length == 0) {
+                ns = [host rangeOfString:@"-"];
+            }
+            if (ns.length == 0) {
+                ns = [host rangeOfString:@"_"];
+            }
+            if (ns.length == 0) {
                 [fullMenu setObject:[NSString stringWithFormat:@"ssh %@", host] forKey:[self humanize:host]];
                 
             } else {
