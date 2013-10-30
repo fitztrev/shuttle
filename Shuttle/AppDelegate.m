@@ -352,7 +352,7 @@
 }
 
 - (IBAction)quit:(id)sender {
-	[[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
+    [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
     [NSApp terminate:NSApp];
 }
 
