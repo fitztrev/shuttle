@@ -4,6 +4,7 @@
 //
 
 #import "AppDelegate.h"
+#import "NSString+minifyJSONString.h"
 
 @implementation AppDelegate
 
@@ -149,7 +150,9 @@
     
     // Parse the config file
     NSData *data = [NSData dataWithContentsOfFile:shuttleConfigFile];
-    id json = [NSJSONSerialization JSONObjectWithData:data
+    NSString *jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    jsonString = [jsonString minifyJSONString];
+    id json = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding]
                                               options:kNilOptions
                                                 error:nil];
     // Check valid JSON syntax

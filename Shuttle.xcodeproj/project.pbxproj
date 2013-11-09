@@ -12,6 +12,7 @@
 		0ADB3B0E178EF8DB004E9BB9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0A178EF8DB004E9BB9 /* StatusIcon@2x.png */; };
 		0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */; };
 		0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		1677C48C17992EE600073097 /* NSString+minifyJSONString.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677C48B17992EE600073097 /* NSString+minifyJSONString.m */; };
 		7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */; };
 		C149EBFE15D5214600B1F558 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C149EBFD15D5214600B1F558 /* Cocoa.framework */; };
 		C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C149EC0615D5214600B1F558 /* InfoPlist.strings */; };
@@ -29,6 +30,8 @@
 		0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StatusIconAlt@2x.png"; sourceTree = "<group>"; };
 		0ADB3B11178F3DE4004E9BB9 /* LaunchAtLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchAtLoginController.h; sourceTree = "<group>"; };
 		0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
+		1677C48A17992EE600073097 /* NSString+minifyJSONString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+minifyJSONString.h"; sourceTree = "<group>"; };
+		1677C48B17992EE600073097 /* NSString+minifyJSONString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+minifyJSONString.m"; sourceTree = "<group>"; };
 		7E72D21E178003ED00A6389C /* Shuttle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Shuttle.entitlements; sourceTree = "<group>"; };
 		7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shuttle.default.json; sourceTree = "<group>"; };
 		C149EBF915D5214600B1F558 /* Shuttle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuttle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,9 +73,19 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		1677C48917992EE600073097 /* jsonminifier */ = {
+			isa = PBXGroup;
+			children = (
+				1677C48A17992EE600073097 /* NSString+minifyJSONString.h */,
+				1677C48B17992EE600073097 /* NSString+minifyJSONString.m */,
+			);
+			path = jsonminifier;
+			sourceTree = "<group>";
+		};
 		C149EBEE15D5214600B1F558 = {
 			isa = PBXGroup;
 			children = (
+				1677C48917992EE600073097 /* jsonminifier */,
 				C149EC0315D5214600B1F558 /* Shuttle */,
 				C149EBFC15D5214600B1F558 /* Frameworks */,
 				C149EBFA15D5214600B1F558 /* Products */,
@@ -208,6 +221,7 @@
 				0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */,
 				C149EC0A15D5214600B1F558 /* main.m in Sources */,
 				C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */,
+				1677C48C17992EE600073097 /* NSString+minifyJSONString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
