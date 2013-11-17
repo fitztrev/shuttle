@@ -42,7 +42,15 @@
 		{
 			"Submenu 3": [
 				{
-					"name": "Submenu Item #3.1",
+					"Nested Menu - #3.1": [
+						{
+							"name": "Submenu Item #3.1.1",
+							"cmd": "echo \"OK\";"
+						}
+					]
+				},
+				{
+					"name": "Submenu Item #3.2",
 					"cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
 				}
 			]
