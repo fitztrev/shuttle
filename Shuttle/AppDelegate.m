@@ -92,39 +92,46 @@
     
     // Get file contents into fh.
     NSString *fh = [NSString stringWithContentsOfFile:configFile encoding:NSUTF8StringEncoding error:nil];
-    // Initialize our server list as an empty dictionary variable.
-    NSMutableDictionary *servers = [NSMutableDictionary dictionaryWithObjects:nil forKeys:nil];
+    
+    // build the regex for matching
+    NSError* error = NULL;
+    NSRegularExpression* rx = [NSRegularExpression regularExpressionWithPattern:@"^(#?)[ \\t]*([^ \\t=]+)[ \\t=]+(.*)$"
+                                                                        options:0
+                                                                          error:&error];
+    
+    // create data store
+    NSMutableDictionary* servers = [[NSMutableDictionary alloc] init];
+    NSString* key = nil;
     
     // Loop through each line and parse the file.
     for (NSString *line in [fh componentsSeparatedByString:@"\n"]) {
         
         // Strip line
-        NSString *cleanedLine = [line stringByTrimmingCharactersInSet:[ NSCharacterSet whitespaceCharacterSet]];
+        NSString *trimmed = [line stringByTrimmingCharactersInSet:[ NSCharacterSet whitespaceCharacterSet]];
         
-        // Empty lines and lines starting with `#' are comments.
-        if ([cleanedLine length] == 0 || [line characterAtIndex:0] == '#')
+        // run the regex against the line
+        NSTextCheckingResult* matches = [rx firstMatchInString:trimmed
+                                                       options:0
+                                                         range:NSMakeRange(0, [trimmed length])];
+        if ([matches numberOfRanges] != 4)
             continue;
         
-        // Since there might be the possibility that someone thought it might be useful to use = for separating properties
-        // we have to check that. And of course for now, we are only looking into the host
-        // section and gently ignore the rest
-        NSError* error = NULL;
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^Host\\b" options:0 error: &error];
-        NSUInteger num = [regex numberOfMatchesInString:cleanedLine options:0 range:NSMakeRange(0, [cleanedLine length])];
-        if (num == 1) {
-            
-            // Somebody really used =
-            NSArray* components = nil;
-            if ([cleanedLine rangeOfString:@"="].length != 0) {
-                components = [cleanedLine componentsSeparatedByString:@"="];
-                
-            } else {
-                components = [cleanedLine componentsSeparatedByCharactersInSet:
-                                        [NSCharacterSet whitespaceCharacterSet]];
-            }
-            NSString* host = [[components objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            
-            [servers setObject:[NSDictionary dictionaryWithObject: host forKey:@"Host"] forKey:host] ;
+        BOOL isComment = [[trimmed substringWithRange:[matches rangeAtIndex:1]] isEqualToString:@"#"];
+        NSString* first = [trimmed substringWithRange:[matches rangeAtIndex:2]];
+        NSString* second = [trimmed substringWithRange:[matches rangeAtIndex:3]];
+        
+        // check for special comment key/value pairs
+        if (isComment && key && [first hasPrefix:@"shuttle."])
+            servers[key][[first substringFromIndex:8]] = second;
+        
+        // other comments must be skipped
+        if (isComment)
+            continue;
+        
+        if ([first isEqualToString:@"Host"]) {
+            // a new host section
+            key = second;
+            servers[key] = [[NSMutableDictionary alloc] init];
         }
     }
     
@@ -137,10 +144,6 @@
 }
 
 - (void) loadMenu {
-    
-    // System configuration
-    NSDictionary* servers = [self parseSSHConfigFile];
-    
     // Clear out the hosts so we can start over
     NSUInteger n = [[menu itemArray] count];
     for (int i=0;i<n-4;i++) {
@@ -150,7 +153,7 @@
     // Parse the config file
     NSData *data = [NSData dataWithContentsOfFile:shuttleConfigFile];
     id json = [NSJSONSerialization JSONObjectWithData:data
-                                              options:kNilOptions
+                                              options:NSJSONReadingMutableContainers
                                                 error:nil];
     // Check valid JSON syntax
     if ( !json ) {
@@ -164,115 +167,139 @@
     }
     
     terminalPref = [json[@"terminal"] lowercaseString];
-    shuttleHosts = json[@"hosts"];
-    
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
+    shuttleHosts = json[@"hosts"];
 
-    // Rebuild the menu
-    int i = 0;
-    
-    NSMutableDictionary* fullMenu = [NSMutableDictionary dictionary];
-    
-    
-    // First add all the system servers we know
-    
+    // Should we merge ssh config hosts?
     BOOL showSshConfigHosts = YES;
     if ([[json allKeys] containsObject:(@"show_ssh_config_hosts")] && [json[@"show_ssh_config_hosts"] boolValue] == NO) {
         showSshConfigHosts = NO;
     }
-    
-    if (showSshConfigHosts) {
-        for (id key in servers) {
-            NSDictionary* data = [servers objectForKey:key];
-            NSString* host = [data valueForKey:@"Host"];
 
+    if (showSshConfigHosts) {
+        // Read configuration from ssh config
+        NSDictionary* servers = [self parseSSHConfigFile];
+        for (NSString* key in servers) {
+            NSDictionary* cfg = [servers objectForKey:key];
+            
+            // get special name from config if set, fallback to the key
+            NSString* name = cfg[@"name"] ? cfg[@"name"] : key;
+            
             // Ignore entries that contain wildcard characters
-            if ([host rangeOfString:@"*"].length != 0)
+            if ([name rangeOfString:@"*"].length != 0)
                 continue;
             
             // Ignore entries that start with `.`
-            if ([host hasPrefix:@"."])
+            if ([name hasPrefix:@"."])
                 continue;
-
-            // Parse hosts...
-            NSRange ns = [host rangeOfString:@"/"];
-            if (ns.length == 0) {
-                [fullMenu setObject:[NSString stringWithFormat:@"ssh %@", host] forKey:[self humanize:host]];
-                
-            } else {
-                NSString *part = [host substringToIndex: ns.location];
-                host = [host substringFromIndex:ns.location + 1];
-
-                if ([fullMenu objectForKey:part] == nil) {
-                    NSMutableDictionary *tmp = [NSMutableDictionary dictionary];
-                    [fullMenu setObject:tmp forKey:part];
-                }
-
-                [[fullMenu objectForKey:part] setObject:[NSString stringWithFormat:@"ssh %@", [data valueForKey:@"Host"]] forKey:host];
-            }
-        }
-    }
-    
-    
-    // Now add the JSON Configured Hosts
-    for (id key in shuttleHosts) {
-        // If it has a `cmd`, it's a top-level item
-        // otherwise, create a submenu for it
-        if ( [key valueForKey:@"cmd"] ) {
-            [fullMenu setObject:[key valueForKey:@"cmd"] forKey: [key valueForKey:@"name"]];
-        } else {
-            for ( id group in key ) {
-                if ([fullMenu valueForKey:group] == nil)
-                    [fullMenu setObject:[NSMutableDictionary dictionary] forKey:group];
-                
-                // Get the subpart
-                NSMutableDictionary* submenu = [fullMenu objectForKey:group];
-                for ( id subKey in [key valueForKey:group]) {
-                    [submenu setObject:[subKey valueForKey:@"cmd"] forKey:[subKey valueForKey:@"name"]];
-                }
-            }
             
-        }
-
-    }
-    
-    // Finally add everything
-    NSArray* keys = [[fullMenu allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    
-    
-    for(id key in keys) {
-        id object = [fullMenu valueForKey:key];
+            // Split the host into parts separated by / - the last part is the name for the leaf in the tree
+            NSMutableArray* path = [NSMutableArray arrayWithArray:[name componentsSeparatedByString:@"/"]];
+            NSString* leaf = [path lastObject];
+            if (leaf == nil)
+                continue;
+            [path removeLastObject];
+            
+            NSMutableArray* itemList = shuttleHosts;
+            for (NSString *part in path) {
+                BOOL createList = YES;
+                for (NSDictionary* item in itemList) {
+                    // if we encounter an item with cmd/name then we have to bail
+                    // since there's no way we can dig deeper here
+                    if (item[@"cmd"] || item[@"name"]) {
+                        continue;
+                    }
+                    
+                    // if this item has the name of our target check if we can
+                    // reuse it (if it's an array) - or if we need to bail
+                    if (item[part]) {
+                        // make sure this is an array and not an object
+                        if ([item[part] isKindOfClass:[NSArray class]]) {
+                            itemList = item[part];
+                            createList = NO;
+                        } else {
+                            itemList = nil;
+                        }
+                        break;
+                    }
+                }
+                
+                if (itemList == nil) {
+                    // things gone south... there's already something present and it's
+                    // not an array...
+                    break;
+                }
+                
+                if (createList) {
+                    // create a new entry and set it as itemList
+                    NSMutableArray *newList = [[NSMutableArray alloc] init];
+                    [itemList addObject:[NSDictionary dictionaryWithObject:newList
+                                                                    forKey:part]];
+                    itemList = newList;
+                }
+            }
         
-        // We have a submenu
-        if ([object isKindOfClass: [NSDictionary class]]) {
-            NSMenuItem *mainItem = [[NSMenuItem alloc] init];
-            [mainItem setTitle:key];
-            
-            NSMenu *submenu = [[NSMenu alloc] init];
-            NSArray* subkeys = [[object allKeys]  sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-            for (id sub in subkeys) {
-                NSMenuItem *menuItem = [submenu addItemWithTitle:sub
-                                                          action:@selector   (openHost:)
-                                                   keyEquivalent:@""];
-                [menuItem setRepresentedObject:[object valueForKey:sub]];
+            // if everything worked out we will see a non-nil itemList where the
+            // system should be appended to. part hold the last part of the splitted string (aka hostname).
+            if (itemList) {
+                // build the corresponding ssh command
+                NSString* cmd = [NSString stringWithFormat:@"ssh %@", key];
+                
+                // inject the data into the json parser result
+                [itemList addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:leaf, cmd, nil]
+                                                                forKeys:[NSArray arrayWithObjects:@"name", @"cmd", nil]]];
             }
-            [mainItem setSubmenu:submenu];
-            [menu insertItem:mainItem atIndex:i];
-            
-        } else {
-            NSMenuItem *menuItem = [menu insertItemWithTitle:key
-                                                      action:@selector(openHost:)
-                                               keyEquivalent:@""
-                                                     atIndex:i
-                                    ];
-            // Save that item's SSH command as its represented object
-            // so we can call it when it's clicked
-            [menuItem setRepresentedObject:object];
         }
-        i++;
     }
     
+    // feed the final result into the recursive method which builds the menu
+    [self buildMenu:shuttleHosts addToMenu:menu];
+}
+
+- (void) buildMenu:(NSArray*)data addToMenu:(NSMenu *)m {
+    // go through the array and sort out the menus and the leafs into
+    // separate bucks so we can sort them independently.
+    NSMutableDictionary* menus = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary* leafs = [[NSMutableDictionary alloc] init];
     
+    for (NSDictionary* item in data) {
+        if (item[@"cmd"] && item[@"name"]) {
+            // this is a leaf
+            [leafs setObject:item forKey:item[@"name"]];
+        } else {
+            // must be a menu - add all instances
+            for (NSString* key in item) {
+                [menus setObject:item[key] forKey:key];
+            }
+        }
+    }
+    
+    NSArray* menuKeys = [[menus allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    NSArray* leafKeys = [[leafs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    NSInteger pos = 0;
+    
+    // create menus first
+    for (NSString* key in menuKeys) {
+        NSMenu* subMenu = [[NSMenu alloc] init];
+        NSMenuItem* menuItem = [[NSMenuItem alloc] init];
+        [menuItem setTitle:key];
+        [menuItem setSubmenu:subMenu];
+        [m insertItem:menuItem atIndex:pos++];
+
+        // build submenu
+        [self buildMenu:menus[key] addToMenu:subMenu];
+    }
+    
+    // now create leafs
+    for (NSString *key in leafKeys) {
+        NSDictionary* cfg = leafs[key];
+        NSMenuItem* menuItem = [[NSMenuItem alloc] init];
+        [menuItem setTitle:cfg[@"name"]];
+        [menuItem setRepresentedObject:cfg[@"cmd"]];
+        [menuItem setAction:@selector(openHost:)];
+        [m insertItem:menuItem atIndex:pos++];
+    }
 }
 
 - (void) openHost:(NSMenuItem *) sender {
