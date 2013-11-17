@@ -17,6 +17,13 @@
 				 {
 					 "name": "My blog",
 					 "cmd": "ssh username@blog.example.com"
+				 },
+				 {
+					 "Spouse": [
+						 {
+							 "name": "Her blog",
+							 "cmd": "ssh username@blog2.example.com"
+						 }
 				 }
 			 ]
 		},
