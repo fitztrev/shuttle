@@ -7,8 +7,8 @@
 	"terminal": "Terminal.app",
 	"launch_at_login": false,
 	"show_ssh_config_hosts": true,
-    "ssh_config_ignore_hosts": [],
-    "ssh_config_ignore_keywords": [],
+	"ssh_config_ignore_hosts": [],
+	"ssh_config_ignore_keywords": [],
 	"hosts": [
 		{
 			"name": "My Dev Server",
