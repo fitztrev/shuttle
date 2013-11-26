@@ -20,6 +20,8 @@
     
     NSString *terminalPref;
     NSMutableArray* shuttleHosts;
+    NSMutableArray* ignoreHosts;
+    NSMutableArray* ignoreKeywords;
     
     LaunchAtLoginController *launchAtLoginController;
     
