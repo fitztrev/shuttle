@@ -169,6 +169,8 @@
     terminalPref = [json[@"terminal"] lowercaseString];
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
     shuttleHosts = json[@"hosts"];
+    ignoreHosts = json[@"ssh_config_ignore_hosts"];
+    ignoreKeywords = json[@"ssh_config_ignore_keywords"];
 
     // Should we merge ssh config hosts?
     BOOL showSshConfigHosts = YES;
@@ -180,6 +182,7 @@
         // Read configuration from ssh config
         NSDictionary* servers = [self parseSSHConfigFile];
         for (NSString* key in servers) {
+            BOOL skipCurrent = NO;
             NSDictionary* cfg = [servers objectForKey:key];
             
             // get special name from config if set, fallback to the key
@@ -187,11 +190,29 @@
             
             // Ignore entries that contain wildcard characters
             if ([name rangeOfString:@"*"].length != 0)
-                continue;
+                skipCurrent = YES;
             
             // Ignore entries that start with `.`
             if ([name hasPrefix:@"."])
+                skipCurrent = YES;
+            
+            // Ignore entries whose name matches exactly any of the values in ignoreHosts
+            for (NSString* ignore in ignoreHosts) {
+                if ([name isEqualToString:ignore]) {
+                    skipCurrent = YES;
+                }
+            }
+            
+            // Ignore entries whose name contains any of the values in ignoreKeywords
+            for (NSString* ignore in ignoreKeywords) {
+                if ([name rangeOfString:ignore].location != NSNotFound) {
+                    skipCurrent = YES;
+                }
+            }
+            
+            if (skipCurrent) {
                 continue;
+            }
             
             // Split the host into parts separated by / - the last part is the name for the leaf in the tree
             NSMutableArray* path = [NSMutableArray arrayWithArray:[name componentsSeparatedByString:@"/"]];
