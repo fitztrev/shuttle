@@ -22,6 +22,20 @@ A simple SSH shortcut menu for OS X
   * Open menu
   * Select host option within menu
 
+## Contributors
+
+This project was created by Trevor Fitzgerald. I owe many thanks to the following people who have helped make Shuttle even better.
+
+(In alphabetical order)
+
+* Dmitry Filimonov
+* Jack Weeden
+* Marco Aurélio
+* Martin Grund
+* Ryan Cohen
+* Thomas Rosenstein
+* Tibor Bödecs
+
 ## Credits
 
 Shuttle was inspired by [SSHMenu](http://sshmenu.sourceforge.net/), the GNOME applet for Linux.

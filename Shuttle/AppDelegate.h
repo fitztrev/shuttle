@@ -6,7 +6,8 @@
 #import <Cocoa/Cocoa.h>
 #import "LaunchAtLoginController.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate>{
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate> {
+    
     IBOutlet NSMenu *menu;
     IBOutlet NSArrayController *arrayController;
 
@@ -20,11 +21,13 @@
     
     NSString *terminalPref;
     NSMutableArray* shuttleHosts;
+    NSMutableArray* ignoreHosts;
+    NSMutableArray* ignoreKeywords;
     
     LaunchAtLoginController *launchAtLoginController;
-    
 }
 
 - (void)menuWillOpen:(NSMenu *)menu;
+- (BOOL)isJSONFile:(NSURL *)fileURL;
 
 @end

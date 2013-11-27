@@ -1,0 +1,59 @@
+{
+	"terminal": "Terminal.app",
+	"launch_at_login": false,
+	"show_ssh_config_hosts": true,
+	"hosts": [
+		{
+			"name": "Test escaping characters",
+			"cmd": "echo \"Hello\"; echo 'world'; "
+		},
+		{
+			"name": "Test opening URL",
+			"cmd": "http://fitztrev.github.io/shuttle"
+		},
+		{
+			"name": "Main Item",
+			"cmd": "ssh username@dev.example.com"
+		},
+		{
+			"Submenu 1": [
+				 {
+					 "name": "Submenu Item #1.1",
+					 "cmd": "ssh username@blog.example.com"
+				 }
+			 ]
+		},
+		{
+			"Submenu 2": [
+				{
+					"name": "Submenu Item #2.1",
+					"cmd": "ssh username@dev.example.net -p 3000"
+				},
+				{
+					"name": "Submenu Item #2.2",
+					"cmd": "ssh username@staging.example.net -p 3000"
+				},
+				{
+					"name": "Submenu Item #2.3",
+					"cmd": "ssh username@example.net -p 3000"
+				}
+			]
+		},
+		{
+			"Submenu 3": [
+				{
+					"Nested Menu - #3.1": [
+						{
+							"name": "Submenu Item #3.1.1",
+							"cmd": "echo \"OK\";"
+						}
+					]
+				},
+				{
+					"name": "Submenu Item #3.2",
+					"cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
+				}
+			]
+		}
+	]
+}
