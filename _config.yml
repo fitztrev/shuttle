@@ -5,5 +5,4 @@ exclude:
   - "*.jade"
   - "*.less"
   - "bootstrap"
-  - "bootstrap-glyphicons"
-  - "build.sh"
+  - "Makefile"
