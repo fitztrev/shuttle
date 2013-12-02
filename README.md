@@ -28,10 +28,15 @@ This project was created by Trevor Fitzgerald. I owe many thanks to the followin
 
 (In alphabetical order)
 
+* Dave Eddy
 * Dmitry Filimonov
+* Frank Enderle
 * Jack Weeden
+* Justin Swanson
 * Marco Aurélio
 * Martin Grund
+* Michael Davis
+* Rui Rodrigues
 * Ryan Cohen
 * Thomas Rosenstein
 * Tibor Bödecs
