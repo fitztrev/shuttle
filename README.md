@@ -11,6 +11,49 @@ A simple SSH shortcut menu for OS X
 1. Download [Shuttle](http://fitztrev.github.io/shuttle/)
 2. Copy to Applications
 
+## Customization
+
+The default, out-of-the-box configuration should be good enough to get started. However, if you're looking to customize the appearance further, here are a few advanced tips.
+
+### Disabling `~/.ssh/config` hosts
+
+By default, Shuttle will parse your `~/.ssh/config` file for hosts.
+
+##### To disable all ~/.ssh/config entries:
+
+```
+"show_ssh_config_hosts": false,
+```
+
+#### Disable specific hosts:
+
+```
+"ssh_config_ignore_hosts": ["github.com", "git.example.com"],
+```
+
+#### Disable hosts that contain a keyword:
+
+```
+"ssh_config_ignore_keywords": ["git"],
+```
+
+### Nested menus for `~/.ssh/config` hosts
+
+#### Create a menu item at "work" > "servers" > "web01"
+
+```
+Host work/servers/web01
+	HostName user@web01.example.com
+```
+\- *or* -
+
+```
+Host gandalf
+	# shuttle.name = work/servers/web01 (webserver)
+	HostName user@web01.example.com
+```
+
+
 ## Roadmap
 
 * Cloud hosting integration
