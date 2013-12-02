@@ -19,7 +19,7 @@ html
 					br
 					div.text-center
 						p
-							a.btn.btn-block.btn-success.btn-large(href="https://github.com/fitztrev/shuttle/releases/download/{{ site.shuttle_version }}/Shuttle.dmg")
+							a.btn.btn-block.btn-success.btn-lg(href="https://github.com/fitztrev/shuttle/releases/download/{{ site.shuttle_version }}/Shuttle.dmg")
 								i.glyphicon.glyphicon-arrow-down
 								| &nbsp; Download Shuttle
 						p.text-muted
@@ -29,7 +29,7 @@ html
 							a(href="https://github.com/fitztrev/shuttle")
 								| View on Github
 				div.col-lg-6.col-sm-6
-					img.pull-right.img-responsive.hidden-sm(src="img/shuttle-logo.png", alt="Shuttle")
+					img.pull-right.img-responsive.hidden-xs(src="img/shuttle-logo.png", alt="Shuttle")
 
 			hr
 
@@ -40,15 +40,6 @@ html
 
 			div.row
 				div.col-lg-6.col-sm-6
-					h3 Configuration
-					ol
-						li
-							| Open the app and choose Configure to edit 
-							code ~/.shuttle.json
-						li Define the menu items and the actions that are run when clicked
-
-					hr
-
 					h3 About
 					p
 						| Shuttle was created by 
@@ -56,20 +47,14 @@ html
 						| .
 					p It does exactly what you see above and nothing more.
 
-					hr.visible-sm
-
 				div.col-lg-6.col-sm-6
-
-					h3 FAQs
-					hr
-
-					h4 What terminal programs are supported?
-					p
-						| By default, it uses Terminal.app. To switch it to iTerm2, edit 
-						code ~/.shuttle.json
-						|  and change the terminal application value.
-					hr
-
-					h4 Why is the config a JSON file?
-					p Keep your config in Dropbox or under version control (preferrably private) and you can have it synced across multiple computers.
-					p Also, it makes it easy to generate a dynamic list of hosts from your hosting provider (if they have an API), so you're always up-to-date.
+					h3 Configuration
+					ol
+						li
+							| Open the app and choose Configure to edit 
+							code ~/.shuttle.json
+						li Define the menu items and the actions that are run when clicked
+						li
+							| Read 
+							a(href="https://github.com/fitztrev/shuttle") more configuration options
+							| .
