@@ -89,3 +89,7 @@ This project was created by Trevor Fitzgerald. I owe many thanks to the followin
 Shuttle was inspired by [SSHMenu](http://sshmenu.sourceforge.net/), the GNOME applet for Linux.
 
 I also looked to projects such as [MLBMenu](https://github.com/markolson/MLB-Menu) and [QuickSmileText](https://github.com/scturtle/QuickSmileText) for direction on building a Cocoa app for the status bar.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fitztrev/shuttle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
