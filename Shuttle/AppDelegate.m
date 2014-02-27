@@ -213,7 +213,6 @@
         }
     }
     
-    
     // Now add the JSON Configured Hosts
     for (id key in shuttleHosts) {
         // If it has a `cmd`, it's a top-level item
@@ -228,7 +227,7 @@
                 // Get the subpart
                 NSMutableDictionary* submenu = [fullMenu objectForKey:group];
                 for ( id subKey in [key valueForKey:group]) {
-                    [submenu setObject:[subKey valueForKey:@"cmd"] forKey:[subKey valueForKey:@"name"]];
+                    [submenu setObject:subKey forKey:[subKey valueForKey:@"name"]];
                 }
             }
             
@@ -267,7 +266,13 @@
                                     ];
             // Save that item's SSH command as its represented object
             // so we can call it when it's clicked
-            [menuItem setRepresentedObject:object];
+            for (id entryHost in shuttleHosts) {
+                if([entryHost valueForKey:@"name"]==key){
+                    [menuItem setRepresentedObject:entryHost];
+                }
+            }
+
+        
         }
         i++;
     }
@@ -276,13 +281,32 @@
 }
 
 - (void) openHost:(NSMenuItem *) sender {
-    //NSLog(@"sender: %@", sender);
-    //NSLog(@"Command: %@",[sender representedObject]);
+    //Menu data
+    NSArray* keys = [sender representedObject];
     
-    NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    
+    //Log
+    //NSLog(@"sender: %@", sender);
+    //NSLog(@"name: %@", [keys valueForKey:@"name"]);
+    //NSLog(@"cmd: %@", [keys valueForKey:@"cmd"]);
+    //NSLog(@"theme: %@", [keys valueForKey:@"theme"]);
+    //NSLog(@"title: %@", [keys valueForKey:@"title"]);
+    
+    
+    //Get values
+    NSString *theme=@"";
+    if([keys valueForKey:@"theme"]){
+        theme=[keys valueForKey:@"theme"];
+    }
+    NSString *title=@"";
+    if([keys valueForKey:@"title"]){
+        title=[keys valueForKey:@"title"];
+    }
+    
+    NSString *escapedObject = [[keys valueForKey:@"cmd"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
     // Check if Url
-    NSURL* url = [NSURL URLWithString:[sender representedObject]];
+    NSURL* url = [NSURL URLWithString:[keys valueForKey:@"cmd"]];
     if(url)
     {
         [[NSWorkspace sharedWorkspace] openURL:url];
@@ -300,21 +324,23 @@
                                     @"tell application \"iTerm\" \n"
                                     @"  tell the current terminal \n"
                                     @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
+                                    @"          set newSession to (launch session \"%2$@\") \n"
                                     @"          tell the last session \n"
                                     @"              write text \"clear\" \n"
                                     @"              write text \"%1$@\" \n"
+                                    @"              set name to \"%3$@\" \n"
                                     @"          end tell \n"
                                     @"      else \n"
                                     @"          tell the current session \n"
                                     @"              write text \"clear\" \n"
                                     @"              write text \"%1$@\" \n"
+                                    @"              set name to \"%3$@\" \n"
                                     @"              activate \n"
                                     @"          end tell \n"
                                     @"      end if \n"
                                     @"  end tell \n"
                                     @"end tell \n"
-                                    , escapedObject]];
+                                    , escapedObject,theme,title]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
@@ -337,8 +363,11 @@
                                        @"      do script \"%1$@\" in window 1 \n"
                                        @"      activate \n"
                                        @"  end if \n"
+                                       @"set current settings of windows to settings set \"%2$@\" \n"
+                                       @"set title displays custom title of windows to true \n"
+                                       @"set custom title of windows to \"%3$@\" \n"
                                        @"end tell \n"
-                                       , escapedObject]];
+                                       , escapedObject,theme,title]];
         [terminalapp executeAndReturnError:nil];
     }
 }
