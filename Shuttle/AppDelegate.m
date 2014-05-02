@@ -329,6 +329,9 @@
     
     NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
+    // Get the text of the menu item.
+    NSString *selectedItem = [sender title];
+    
     // Check if Url
     NSURL* url = [NSURL URLWithString:[sender representedObject]];
     if(url)
@@ -336,7 +339,9 @@
         [[NSWorkspace sharedWorkspace] openURL:url];
     }
     else if ( [terminalPref isEqualToString: @"iterm"] ) {
-        NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
+        if ([selectedItem rangeOfString:@"_macro_"
+                                options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
                                     @"on ApplicationIsRunning(appName) \n"
                                     @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
@@ -348,14 +353,13 @@
                                     @"tell application \"iTerm\" \n"
                                     @"  tell the current terminal \n"
                                     @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
-                                    @"          tell the last session \n"
-                                    @"              write text \"clear\" \n"
+                                    @"          tell the current session \n"
+                                    @"          reopen \n"
+                                    @"          activate \n"
                                     @"              write text \"%1$@\" \n"
                                     @"          end tell \n"
                                     @"      else \n"
                                     @"          tell the current session \n"
-                                    @"              write text \"clear\" \n"
                                     @"              write text \"%1$@\" \n"
                                     @"              activate \n"
                                     @"          end tell \n"
@@ -364,8 +368,64 @@
                                     @"end tell \n"
                                     , escapedObject]];
         [iTerm2 executeAndReturnError:nil];
-    } else {
-        NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
+        } else {
+            NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
+                                     [NSString stringWithFormat:
+                                      @"on ApplicationIsRunning(appName) \n"
+                                      @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
+                                      @"  return appNameIsRunning \n"
+                                      @"end ApplicationIsRunning \n"
+                                      @" \n"
+                                      @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
+                                      @" \n"
+                                      @"tell application \"iTerm\" \n"
+                                      @"  tell the current terminal \n"
+                                      @"      if isRunning then \n"
+                                      @"          set newSession to (launch session \"Default Session\") \n"
+                                      @"          tell the last session \n"
+                                      @"              write text \"clear\" \n"
+                                      @"              write text \"%1$@\" \n"
+                                      @"          end tell \n"
+                                      @"      else \n"
+                                      @"          tell the current session \n"
+                                      @"              write text \"clear\" \n"
+                                      @"              write text \"%1$@\" \n"
+                                      @"              activate \n"
+                                      @"          end tell \n"
+                                      @"      end if \n"
+                                      @"  end tell \n"
+                                      @"end tell \n"
+                                      , escapedObject]];
+            [iTerm2 executeAndReturnError:nil];
+        }
+    }
+    else
+    {
+        if ([selectedItem rangeOfString:@"_macro_"
+                                options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
+                                          [NSString stringWithFormat:
+                                           @"on ApplicationIsRunning(appName) \n"
+                                           @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
+                                           @"  return appNameIsRunning \n"
+                                           @"end ApplicationIsRunning \n"
+                                           @" \n"
+                                           @"set isRunning to ApplicationIsRunning(\"Terminal\") \n"
+                                           @" \n"
+                                           @"tell application \"Terminal\" \n"
+                                           @"  if isRunning then \n"
+                                           @"      reopen \n "
+                                           @"      activate \n"
+                                           @"      do script \"%1$@\" in front window \n"
+                                           @"  else \n"
+                                           @"      do script \"%1$@\" in window 1 \n"
+                                           @"      activate \n"
+                                           @"  end if \n"
+                                           @"end tell \n"
+                                           , escapedObject]];
+            [terminalapp executeAndReturnError:nil];
+            } else {
+                NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
                                       [NSString stringWithFormat:
                                        @"on ApplicationIsRunning(appName) \n"
                                        @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
@@ -376,6 +436,7 @@
                                        @" \n"
                                        @"tell application \"Terminal\" \n"
                                        @"  if isRunning then \n"
+                                       @"      reopen \n"
                                        @"      activate \n"
                                        @"      tell application \"System Events\" to tell process \"Terminal.app\" to keystroke \"t\" using command down \n"
                                        @"      do script \"clear\" in front window \n"
@@ -387,7 +448,8 @@
                                        @"  end if \n"
                                        @"end tell \n"
                                        , escapedObject]];
-        [terminalapp executeAndReturnError:nil];
+            [terminalapp executeAndReturnError:nil];
+            }
     }
 }
 
@@ -434,5 +496,4 @@
     [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
     [NSApp terminate:NSApp];
 }
-
 @end
