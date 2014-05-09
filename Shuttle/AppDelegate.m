@@ -89,7 +89,6 @@
         return nil;
     }
     
-    
     // Get file contents into fh.
     NSString *fh = [NSString stringWithContentsOfFile:configFile encoding:NSUTF8StringEncoding error:nil];
     
@@ -169,6 +168,7 @@
     terminalPref = [json[@"terminal"] lowercaseString];
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
     shuttleHosts = json[@"hosts"];
+    shuttleMacros = json[@"macros"];
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
     ignoreKeywords = json[@"ssh_config_ignore_keywords"];
 
@@ -273,11 +273,14 @@
         }
     }
     
-    // feed the final result into the recursive method which builds the menu
-    [self buildMenu:shuttleHosts addToMenu:menu];
+    // feed the final result into the recursive method which builds the menu from JSON hosts
+    [self buildMenu:shuttleHosts addToMenu:menu typeOfCommand:1];
+    
+    // feed the final result into the recursive method which builds the menu from JSON macros
+    [self buildMenu:shuttleMacros addToMenu:menu typeOfCommand:2];
 }
 
-- (void) buildMenu:(NSArray*)data addToMenu:(NSMenu *)m {
+- (void) buildMenu:(NSArray*)data addToMenu:(NSMenu *)m typeOfCommand:(int)cmdType {
     // go through the array and sort out the menus and the leafs into
     // separate bucks so we can sort them independently.
     NSMutableDictionary* menus = [[NSMutableDictionary alloc] init];
@@ -309,7 +312,7 @@
         [m insertItem:menuItem atIndex:pos++];
 
         // build submenu
-        [self buildMenu:menus[key] addToMenu:subMenu];
+        [self buildMenu:menus[key] addToMenu:subMenu typeOfCommand:cmdType];
     }
     
     // now create leafs
@@ -318,19 +321,32 @@
         NSMenuItem* menuItem = [[NSMenuItem alloc] init];
         [menuItem setTitle:cfg[@"name"]];
         [menuItem setRepresentedObject:cfg[@"cmd"]];
+        
+        if (cmdType == 1) {
         [menuItem setAction:@selector(openHost:)];
+        }
+        
+        if (cmdType ==2) {
+        [menuItem setAction:@selector(openMacro:)];
+        }
+        
         [m insertItem:menuItem atIndex:pos++];
     }
 }
 
-- (void) openHost:(NSMenuItem *) sender {
+- (void) openHost: (NSMenuItem *) hostData {
+    [self launchTerminal: hostData];
+}
+
+- (void) openMacro: (NSMenuItem *) macroData{
+    [self launchTerminal: macroData];
+}
+
+- (void) launchTerminal:(NSMenuItem *) sender {
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
     
     NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    
-    // Get the text of the menu item.
-    NSString *selectedItem = [sender title];
     
     // Check if Url
     NSURL* url = [NSURL URLWithString:[sender representedObject]];
@@ -339,8 +355,7 @@
         [[NSWorkspace sharedWorkspace] openURL:url];
     }
     else if ( [terminalPref isEqualToString: @"iterm"] ) {
-        if ([selectedItem rangeOfString:@"_macro_"
-                                options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        if ([sender action] == @selector(openMacro:)) {
             NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
                                     @"on ApplicationIsRunning(appName) \n"
@@ -399,10 +414,8 @@
             [iTerm2 executeAndReturnError:nil];
         }
     }
-    else
-    {
-        if ([selectedItem rangeOfString:@"_macro_"
-                                options:NSCaseInsensitiveSearch].location != NSNotFound) {
+    else {
+        if ([sender action] == @selector(openMacro:)) {
             NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
                                           [NSString stringWithFormat:
                                            @"on ApplicationIsRunning(appName) \n"
@@ -482,7 +495,6 @@
             [[NSFileManager defaultManager] copyItemAtPath:shuttleConfigFile toPath:saveURL.path error:nil];
         }
 }
-
 
 - (IBAction)configure:(id)sender {
     [[NSWorkspace sharedWorkspace] openFile:shuttleConfigFile];
