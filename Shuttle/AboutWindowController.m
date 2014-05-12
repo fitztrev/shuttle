@@ -33,6 +33,9 @@ NSDictionary *plistDict;
 {
     [super windowDidLoad];
     
+    //Prevent the window from changing positions after multiple opens.
+    [aboutWindow setShouldCascadeWindows:NO];
+    
     //Load the plist so we can get current info for the about box.
     plistDict = [[NSBundle mainBundle] infoDictionary];
     
