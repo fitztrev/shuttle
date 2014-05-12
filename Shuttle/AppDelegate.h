@@ -20,6 +20,7 @@
     
     NSString *terminalPref;
     NSMutableArray* shuttleHosts;
+    NSMutableArray* shuttleMacros;
     NSMutableArray* ignoreHosts;
     NSMutableArray* ignoreKeywords;
     
