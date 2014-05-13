@@ -1,10 +1,12 @@
 {
 	"_comments": [
 		"Valid terminals include: 'Terminal.app' or 'iTerm'",
+        "Set the editor to 'nano', 'vi', or any terminal based editor. Delete the editor line or keep it 'default' to use your systems default editor",
 		"Hosts will also be read from your ~/.ssh/config or /etc/ssh_config file, if available",
 		"For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
 	],
 	"terminal": "Terminal.app",
+    "editor": "default",
 	"launch_at_login": false,
 	"show_ssh_config_hosts": true,
 	"ssh_config_ignore_hosts": [],
