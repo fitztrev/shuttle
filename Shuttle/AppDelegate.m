@@ -19,13 +19,28 @@
 
     // Load the menu content
     // [self loadMenu];
+
+    // Define Icons
+    regularIcon = [NSImage imageNamed:@"StatusIcon"];
+    altIcon = [NSImage imageNamed:@"StatusIconAlt"];
+    
+    // Check for AppKit Version, add support for darkmode if > 10.9
+    BOOL oldAppKitVersion = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
+    
+    if (!oldAppKitVersion)
+    {
+        // 10.10 or higher, add support to icon for auto detection of Regular/Dark mode
+        [regularIcon setTemplate:YES];
+        [altIcon setTemplate:YES];
+    }
     
     // Create the status bar item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
+    
     [statusItem setMenu:menu];
     [statusItem setHighlightMode:YES];
-    [statusItem setImage:[NSImage imageNamed:@"StatusIcon"]];
-    [statusItem setAlternateImage:[NSImage imageNamed:@"StatusIconAlt"]];
+    [statusItem setImage: regularIcon];
+    [statusItem setAlternateImage: altIcon];
 
     launchAtLoginController = [[LaunchAtLoginController alloc] init];
     

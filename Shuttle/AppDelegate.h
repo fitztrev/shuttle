@@ -10,6 +10,9 @@
     IBOutlet NSMenu *menu;
     IBOutlet NSArrayController *arrayController;
 
+    NSImage *regularIcon;
+    NSImage *altIcon;
+    
     NSStatusItem *statusItem;
     NSString *shuttleConfigFile;
     
