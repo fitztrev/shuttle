@@ -1,6 +1,6 @@
 {
 	"_comments": [
-		"Valid terminals include: 'Terminal.app' or 'iTerm'",
+		"Valid terminals include: 'Terminal.app', 'iTerm' or 'iTerm_New_Window'",
 		"Hosts will also be read from your ~/.ssh/config or /etc/ssh_config file, if available",
 		"For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
 	],
