@@ -56,9 +56,7 @@
     if (old == NULL)
         return true;
     
-    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[file stringByExpandingTildeInPath]
-                                                                                error:nil];
-    NSDate *date = [attributes fileModificationDate];
+    NSDate *date = [self getMTimeFor:file];
     return [date compare: old] == NSOrderedDescending;
 }
 
