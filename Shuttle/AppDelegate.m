@@ -24,15 +24,9 @@
     regularIcon = [NSImage imageNamed:@"StatusIcon"];
     altIcon = [NSImage imageNamed:@"StatusIconAlt"];
     
-    // Check for AppKit Version, add support for darkmode if > 10.9
-    BOOL oldAppKitVersion = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
-    
-    if (!oldAppKitVersion)
-    {
-        // 10.10 or higher, add support to icon for auto detection of Regular/Dark mode
-        [regularIcon setTemplate:YES];
-        [altIcon setTemplate:YES];
-    }
+    // 10.10 or higher, add support to icon for auto detection of Regular/Dark mode
+    [regularIcon setTemplate:YES];
+    [altIcon setTemplate:YES];
     
     // Create the status bar item
     statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
@@ -353,28 +347,16 @@
     else if ( [terminalPref isEqualToString: @"iterm"] ) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
-                                    @"on ApplicationIsRunning(appName) \n"
-                                    @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
-                                    @"  return appNameIsRunning \n"
-                                    @"end ApplicationIsRunning \n"
-                                    @" \n"
-                                    @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
-                                    @" \n"
                                     @"tell application \"iTerm\" \n"
+                                    @"  set isRunning to running \n"
                                     @"  tell the current terminal \n"
                                     @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
-                                    @"          tell the last session \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"          end tell \n"
-                                    @"      else \n"
-                                    @"          tell the current session \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"              activate \n"
-                                    @"          end tell \n"
+                                    @"          launch session \"Default Session\" \n"
                                     @"      end if \n"
+                                    @"      tell the last session \n"
+                                    @"          write text \"clear\" \n"
+                                    @"          write text \"%1$@\" \n"
+                                    @"      end tell \n"
                                     @"  end tell \n"
                                     @"end tell \n"
                                     , escapedObject]];
@@ -382,24 +364,14 @@
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
                                       [NSString stringWithFormat:
-                                       @"on ApplicationIsRunning(appName) \n"
-                                       @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
-                                       @"  return appNameIsRunning \n"
-                                       @"end ApplicationIsRunning \n"
-                                       @" \n"
-                                       @"set isRunning to ApplicationIsRunning(\"Terminal\") \n"
-                                       @" \n"
                                        @"tell application \"Terminal\" \n"
-                                       @"  if isRunning then \n"
+                                       @"  if running then \n"
                                        @"      activate \n"
                                        @"      tell application \"System Events\" to tell process \"Terminal.app\" to keystroke \"t\" using command down \n"
-                                       @"      do script \"clear\" in front window \n"
-                                       @"      do script \"%1$@\" in front window \n"
-                                       @"  else \n"
-                                       @"      do script \"clear\" in window 1 \n"
-                                       @"      do script \"%1$@\" in window 1 \n"
-                                       @"      activate \n"
                                        @"  end if \n"
+                                       @"  do script \"clear\" in front window \n"
+                                       @"  do script \"%1$@\" in front window \n"
+                                       @"  activate \n"
                                        @"end tell \n"
                                        , escapedObject]];
         [terminalapp executeAndReturnError:nil];
