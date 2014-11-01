@@ -25,7 +25,7 @@
     altIcon = [NSImage imageNamed:@"StatusIconAlt"];
     
     // Check for AppKit Version, add support for darkmode if > 10.9
-    BOOL oldAppKitVersion = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
+    BOOL oldAppKitVersion = (floor(NSAppKitVersionNumber) <= 1265);
     
     if (!oldAppKitVersion)
     {
