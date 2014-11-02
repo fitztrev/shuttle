@@ -350,7 +350,40 @@
     {
         [[NSWorkspace sharedWorkspace] openURL:url];
     }
-    else if ( [terminalPref isEqualToString: @"iterm"] ) {
+    else if ( [terminalPref isEqualToString: @"iterm_new_window"] ) {
+        NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
+                                 [NSString stringWithFormat:
+                                  @"on ApplicationIsRunning(appName) \n"
+                                  @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
+                                  @"  return appNameIsRunning \n"
+                                  @"end ApplicationIsRunning \n"
+                                  @" \n"
+                                  @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
+                                  @" \n"
+                                  @"tell application \"iTerm\" \n"
+                                  @"  if isRunning then \n"
+                                  @"    set myterm to (make new terminal) \n"
+                                  @"    tell myterm \n"
+                                  @"      set newSession to (launch session \"Default Session\") \n"
+                                  @"      tell the last session \n"
+                                  @"        write text \"clear\" \n"
+                                  @"        write text \"%1$@ ; exit\" \n"
+                                  @"        activate \n"
+                                  @"      end tell \n"
+                                  @"    end tell \n"
+                                  @"  else \n"
+                                  @"    tell the current terminal \n"
+                                  @"      tell the current session \n"
+                                  @"        write text \"clear\" \n"
+                                  @"        write text \"%1$@ ; exit\" \n"
+                                  @"        activate \n"
+                                  @"      end tell \n"
+                                  @"    end tell \n"
+                                  @"  end if \n"
+                                  @"end tell \n"
+                                  , escapedObject]];
+        [iTerm2 executeAndReturnError:nil];
+    } else if ( [terminalPref isEqualToString: @"iterm"] ) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
                                     @"on ApplicationIsRunning(appName) \n"
@@ -366,12 +399,12 @@
                                     @"          set newSession to (launch session \"Default Session\") \n"
                                     @"          tell the last session \n"
                                     @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
+                                    @"              write text \"%1$@ ; exit\" \n"
                                     @"          end tell \n"
                                     @"      else \n"
                                     @"          tell the current session \n"
                                     @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
+                                    @"              write text \"%1$@ ; exit\" \n"
                                     @"              activate \n"
                                     @"          end tell \n"
                                     @"      end if \n"
@@ -394,10 +427,10 @@
                                        @"      activate \n"
                                        @"      tell application \"System Events\" to tell process \"Terminal.app\" to keystroke \"t\" using command down \n"
                                        @"      do script \"clear\" in front window \n"
-                                       @"      do script \"%1$@\" in front window \n"
+                                       @"      do script \"%1$@ ; exit\" in front window \n"
                                        @"  else \n"
                                        @"      do script \"clear\" in window 1 \n"
-                                       @"      do script \"%1$@\" in window 1 \n"
+                                       @"      do script \"%1$@ ; exit\" in window 1 \n"
                                        @"      activate \n"
                                        @"  end if \n"
                                        @"end tell \n"
