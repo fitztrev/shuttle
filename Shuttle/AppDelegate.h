@@ -22,7 +22,9 @@
     NSDate *sshConfigSystem;
     
     NSString *terminalPref;
+    NSString *editorPref;
     NSMutableArray* shuttleHosts;
+    NSMutableArray* shuttleMacros;
     NSMutableArray* ignoreHosts;
     NSMutableArray* ignoreKeywords;
     
