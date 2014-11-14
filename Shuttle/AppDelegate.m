@@ -9,11 +9,24 @@
 
 - (void) awakeFromNib {
     // The path for the configuration file (by default: ~/.shuttle.json)
-    shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json"];
+    
+    if ( [[NSFileManager defaultManager] fileExistsAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@"/Dropbox"]]){
+        shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@"/Dropbox/Apps/Shuttle/.shuttle.json"];
+        shuttleConfigFolder = [NSHomeDirectory() stringByAppendingPathComponent:@"/Dropbox/Apps/Shuttle/"];
+    } else {
+        shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@"/.shuttle.json"];
+        shuttleConfigFolder = NSHomeDirectory();
+    }
     
     // if the config file does not exist, create a default one
     if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
-        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
+        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"/shuttle.default" ofType:@"json"];
+
+        [[NSFileManager defaultManager]createDirectoryAtPath: shuttleConfigFolder
+                                                        withIntermediateDirectories: NO
+                                                                         attributes: nil
+                                                                              error: NULL];
+
         [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
     }
 
