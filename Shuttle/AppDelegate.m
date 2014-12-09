@@ -278,7 +278,7 @@
 - (void) openHost:(NSMenuItem *) sender {
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
-    NSLog(@"terminalPref:%@",terminalPref);
+
     NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
     // Check if Url
