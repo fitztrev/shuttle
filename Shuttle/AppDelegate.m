@@ -341,7 +341,7 @@
 - (void) openHost:(NSMenuItem *) sender {
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
-    
+
     NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
     // Check if Url
@@ -350,7 +350,7 @@
     {
         [[NSWorkspace sharedWorkspace] openURL:url];
     }
-    else if ( [terminalPref isEqualToString: @"iterm"] ) {
+    else if ( [terminalPref rangeOfString:@"iterm"].location!=NSNotFound) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
                                     @"on ApplicationIsRunning(appName) \n"
