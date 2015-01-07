@@ -34,5 +34,7 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+    <key>Product Homepage</key>
+    <string>http://fitztrev.github.io/shuttle/</string>
 </dict>
 </plist>
