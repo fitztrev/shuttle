@@ -451,7 +451,8 @@
         [aboutWindow.window setLevel:NSFloatingWindowLevel];
     
         //Show the window
-        [aboutWindow showWindow:self];}
+        [aboutWindow showWindow:self];
+}
 
 - (IBAction)quit:(id)sender {
     [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
