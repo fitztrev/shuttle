@@ -182,6 +182,7 @@
     }
     
     terminalPref = [json[@"terminal"] lowercaseString];
+    editorPref = [json[@"editor"] lowercaseString];
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
     shuttleHosts = json[@"hosts"];
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
@@ -438,8 +439,27 @@
 
 
 - (IBAction)configure:(id)sender {
-    [[NSWorkspace sharedWorkspace] openFile:shuttleConfigFile];
+    
+    //if the editor setting is omitted or contains 'default' open using the default editor.
+    if([editorPref rangeOfString:@"default"].location != NSNotFound) {
+        
+        [[NSWorkspace sharedWorkspace] openFile:shuttleConfigFile];
+    }
+    else{
+        //build the editor command
+        NSString *editorCommand = [NSString stringWithFormat:@"%@ %@", editorPref, shuttleConfigFile];
+        
+        //make a menu item for the command selector(openHost:) runs in a new terminal window.
+        NSMenuItem *editorMenu = [[NSMenuItem alloc] initWithTitle:@"editJSONconfig" action:@selector(openHost:) keyEquivalent:(@"")];
+        
+        //set the command for the menu item
+        [editorMenu setRepresentedObject:editorCommand];
+        
+        //open the JSON file in the terminal editor.
+        [self openHost:editorMenu];
+    }
 }
+
 
 - (IBAction)showAbout:(id)sender {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"http://fitztrev.github.io/shuttle"]];
