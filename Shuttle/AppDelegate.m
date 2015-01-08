@@ -331,8 +331,19 @@
     for (NSString *key in leafKeys) {
         NSDictionary* cfg = leafs[key];
         NSMenuItem* menuItem = [[NSMenuItem alloc] init];
+        
+        //Get the command we are going to run in termainal
+        NSString *menuCmd = cfg[@"cmd"];
+        //Get the theme for this terminal session
+        NSString *termTheme = cfg[@"theme"];
+        //Get the name for the terminal session
+        NSString *termTitle = cfg[@"title"];
+        
+        //Place the terminal command, theme, and title into an comma delimited string
+        NSString *menuRepObj = [NSString stringWithFormat:@"%@,%@,%@", menuCmd, termTheme, termTitle];
+        
         [menuItem setTitle:cfg[@"name"]];
-        [menuItem setRepresentedObject:cfg[@"cmd"]];
+        [menuItem setRepresentedObject:menuRepObj];
         [menuItem setAction:@selector(openHost:)];
         [m insertItem:menuItem atIndex:pos++];
     }
@@ -342,8 +353,41 @@
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
     
-    NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    //Place the comma delimited string of menu item settings into an array
+    NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@",")];
     
+    //This is our command that will be run in the terminal window
+    NSString *escapedObject;
+    //The theme for the terminal window
+    NSString *terminalTheme;
+    //The title for the terminal window
+    NSString *terminalTitle;
+    
+    //if for some reason we get a representedObject with only one item...
+    if (objectsFromJSON.count <=1) {
+        escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+
+    }
+    else {
+        escapedObject = [[objectsFromJSON objectAtIndex:0] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+        //Check if terminalTheme is null
+        if( [[objectsFromJSON objectAtIndex:1] isEqualToString:@"(null)"] ){
+            if( [terminalPref isEqualToString:@"iterm"] ){
+                terminalTheme = @"default";
+            }else{
+                terminalTheme = @"basic";
+            }
+        }else {
+            terminalTheme = [objectsFromJSON objectAtIndex:1];
+        }
+        //Check if terminalTitle is null
+        if( [[objectsFromJSON objectAtIndex:2] isEqualToString:@"(null)"]){
+            terminalTitle = @"";
+        }else{
+            terminalTitle = [objectsFromJSON objectAtIndex:2];
+        }
+    }
+
     // Check if Url
     NSURL* url = [NSURL URLWithString:[sender representedObject]];
     if(url)
@@ -363,21 +407,25 @@
                                     @"tell application \"iTerm\" \n"
                                     @"  tell the current terminal \n"
                                     @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
+                                    @"          set newSession to (launch session \"%2$@\") \n"
                                     @"          tell the last session \n"
+                                    @"              reopen \n"
+                                    @"              activate \n"
                                     @"              write text \"clear\" \n"
                                     @"              write text \"%1$@\" \n"
+                                    @"              set name to \"%3$@\" \n"
                                     @"          end tell \n"
                                     @"      else \n"
                                     @"          tell the current session \n"
                                     @"              write text \"clear\" \n"
                                     @"              write text \"%1$@\" \n"
+                                    @"              set name to \"%3$@\" \n"
                                     @"              activate \n"
                                     @"          end tell \n"
                                     @"      end if \n"
                                     @"  end tell \n"
                                     @"end tell \n"
-                                    , escapedObject]];
+                                    , escapedObject, terminalTheme, terminalTitle]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
@@ -391,6 +439,7 @@
                                        @" \n"
                                        @"tell application \"Terminal\" \n"
                                        @"  if isRunning then \n"
+                                       @"      reopen \n"
                                        @"      activate \n"
                                        @"      tell application \"System Events\" to tell process \"Terminal.app\" to keystroke \"t\" using command down \n"
                                        @"      do script \"clear\" in front window \n"
@@ -400,8 +449,11 @@
                                        @"      do script \"%1$@\" in window 1 \n"
                                        @"      activate \n"
                                        @"  end if \n"
+                                       @"set current settings of selected tab of front window to settings set \"%2$@\" \n"
+                                       @"set title displays custom title of windows to true \n"
+                                       @"set custom title of selected tab of front window to \"%3$@\" \n"
                                        @"end tell \n"
-                                       , escapedObject]];
+                                       , escapedObject, terminalTheme, terminalTitle]];
         [terminalapp executeAndReturnError:nil];
     }
 }
