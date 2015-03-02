@@ -8,13 +8,27 @@
 @implementation AppDelegate
 
 - (void) awakeFromNib {
+    
+    // The location for the path file. This is a simple file that contains the hard path to the *.json.
+    shuttleFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.path"];
+    
+    //if file shuttle.path exists in ~/.shuttle.path then read this file as it should contain the custom path to *.json
+    if( [[NSFileManager defaultManager] fileExistsAtPath:shuttleFilePath] ) {
+        //Read the shuttle.path file which contains the path to the json file
+        NSString *jsonConfigPath = [NSString stringWithContentsOfFile:shuttleFilePath encoding:NSUTF8StringEncoding error:NULL];
+        //Remove the white space if any.
+        jsonConfigPath = [ jsonConfigPath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        //set the custom path.
+        shuttleConfigFile = jsonConfigPath;
+    }   else {
     // The path for the configuration file (by default: ~/.shuttle.json)
     shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json"];
-    
+        
     // if the config file does not exist, create a default one
     if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
         NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
         [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
+        }
     }
 
     // Load the menu content
