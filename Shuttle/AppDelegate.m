@@ -4,6 +4,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AboutWindowController.h"
 
 @implementation AppDelegate
 
@@ -56,9 +57,7 @@
     if (old == NULL)
         return true;
     
-    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[file stringByExpandingTildeInPath]
-                                                                                error:nil];
-    NSDate *date = [attributes fileModificationDate];
+    NSDate *date = [self getMTimeFor:file];
     return [date compare: old] == NSOrderedDescending;
 }
 
@@ -442,7 +441,15 @@
 }
 
 - (IBAction)showAbout:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"http://fitztrev.github.io/shuttle"]];
+    
+    //Call the windows controller
+        AboutWindowController *aboutWindow = [[AboutWindowController alloc] initWithWindowNibName:@"AboutWindowController"];
+    
+        //Set the window to stay on top
+        [aboutWindow.window setLevel:NSFloatingWindowLevel];
+    
+        //Show the window
+        [aboutWindow showWindow:self];
 }
 
 - (IBAction)quit:(id)sender {
