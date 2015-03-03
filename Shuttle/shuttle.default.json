@@ -1,58 +1,60 @@
 {
-	"_comments": [
-		"Valid terminals include: 'Terminal.app' or 'iTerm'",
-		"Hosts will also be read from your ~/.ssh/config or /etc/ssh_config file, if available",
-		"For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
-	],
-	"terminal": "Terminal.app",
-	"launch_at_login": false,
-	"show_ssh_config_hosts": true,
-	"ssh_config_ignore_hosts": [],
-	"ssh_config_ignore_keywords": [],
-	"hosts": [
-		{
-			"name": "My Dev Server",
-			"cmd": "ssh username@dev.example.com"
-		},
-		{
-			"Personal": [
-				{
-					"name": "My blog",
-					"cmd": "ssh username@blog.example.com"
-				},
-				{
-					"Spouse": [
-						{
-							"name": "Her blog",
-							"cmd": "ssh username@blog2.example.com"
-						}
-					]
-				}
-			]
-		},
-		{
-			"Work": [
-				{
-					"name": "dev.example.net",
-					"cmd": "ssh username@dev.example.net -p 3000"
-				},
-				{
-					"name": "staging.example.net",
-					"cmd": "ssh username@staging.example.net -p 3000"
-				},
-				{
-					"name": "production.example.net",
-					"cmd": "ssh username@example.net -p 3000"
-				}
-			]
-		},
-		{
-			"Vagrant": [
-				{
-					"name": "precise32",
-					"cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
-				}
-			]
-		}
-	]
+    "_comments": [
+                  "Valid terminals include: 'Terminal.app' or 'iTerm'",
+                  "In the editor value change 'default' to 'nano', 'vi', or another terminal based editor.",
+                  "Hosts will also be read from your ~/.ssh/config or /etc/ssh_config file, if available",
+                  "For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
+                  ],
+    "terminal": "Terminal.app",
+    "editor": "default",
+    "launch_at_login": false,
+    "show_ssh_config_hosts": true,
+    "ssh_config_ignore_hosts": [],
+    "ssh_config_ignore_keywords": [],
+    "hosts": [
+              {
+              "name": "My Dev Server",
+              "cmd": "ssh username@dev.example.com"
+              },
+              {
+              "Personal": [
+                           {
+                           "name": "My blog",
+                           "cmd": "ssh username@blog.example.com"
+                           },
+                           {
+                           "Spouse": [
+                                      {
+                                      "name": "Her blog",
+                                      "cmd": "ssh username@blog2.example.com"
+                                      }
+                                      ]
+                           }
+                           ]
+              },
+              {
+              "Work": [
+                       {
+                       "name": "dev.example.net",
+                       "cmd": "ssh username@dev.example.net -p 3000"
+                       },
+                       {
+                       "name": "staging.example.net",
+                       "cmd": "ssh username@staging.example.net -p 3000"
+                       },
+                       {
+                       "name": "production.example.net",
+                       "cmd": "ssh username@example.net -p 3000"
+                       }
+                       ]
+              },
+              {
+              "Vagrant": [
+                          {
+                          "name": "precise32",
+                          "cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key"
+                          }
+                          ]
+              }
+              ]
 }
