@@ -331,8 +331,23 @@
     for (NSString *key in leafKeys) {
         NSDictionary* cfg = leafs[key];
         NSMenuItem* menuItem = [[NSMenuItem alloc] init];
+        
+        //Get the command we are going to run in termainal
+        NSString *menuCmd = cfg[@"cmd"];
+        //Get the theme for this terminal session
+        NSString *termTheme = cfg[@"theme"];
+        //Get the name for the terminal session
+        NSString *termTitle = cfg[@"title"];
+        //Get the value of setting isNewTab
+        NSString *isNewTab = cfg[@"isNewTab"];
+        //Get the value of setting isNewWindow
+        NSString *isNewWindow = cfg[@"isNewWindow"];
+        
+        //Place data fetched from JSON into into a comma delimited string
+        NSString *menuRepObj = [NSString stringWithFormat:@"%@,%@,%@,%@,%@", menuCmd, termTheme, termTitle, isNewTab, isNewWindow];
+        
         [menuItem setTitle:cfg[@"name"]];
-        [menuItem setRepresentedObject:cfg[@"cmd"]];
+        [menuItem setRepresentedObject:menuRepObj];
         [menuItem setAction:@selector(openHost:)];
         [m insertItem:menuItem atIndex:pos++];
     }
@@ -342,15 +357,112 @@
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
     
-    NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    //Place the comma delimited string of items in the array
+    NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@",")];
     
+    //This is our command that will be run in the terminal window
+    NSString *escapedObject;
+    //The theme for the terminal window
+    NSString *terminalTheme;
+    //The title for the terminal window
+    NSString *terminalTitle;
+    //The value of isNewTab
+    NSString *isNewTab;
+    //The value of isNewWindow
+    NSString *isNewWindow;
+    
+    //if for some reason we get a representedObject with only one item...
+    if (objectsFromJSON.count <=1) {
+        escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+
+    }
+    else {
+        escapedObject = [[objectsFromJSON objectAtIndex:0] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+        //Check if terminalTheme is null
+        if( [[objectsFromJSON objectAtIndex:1] isEqualToString:@"(null)"] ){
+            if( [terminalPref isEqualToString:@"iterm"] ){
+                terminalTheme = @"default";
+            }else{
+                terminalTheme = @"basic";
+            }
+        }else {
+            terminalTheme = [objectsFromJSON objectAtIndex:1];
+        }
+        //Check if terminalTitle is null
+        if( [[objectsFromJSON objectAtIndex:2] isEqualToString:@"(null)"]){
+            terminalTitle = @"";
+        }else{
+            terminalTitle = [objectsFromJSON objectAtIndex:2];
+        }
+        //Check if isNewTab is null
+        if( [[objectsFromJSON objectAtIndex:3] isEqualToString:@"(null)"]){
+            //true is the (default behavior) and runs all new commands in a new tab.
+            isNewTab = @"true";
+        }else{
+            isNewTab = [objectsFromJSON objectAtIndex:3];
+        }
+        //Check if isNewWindow is null
+        if ( [[objectsFromJSON objectAtIndex:4] isEqualToString:@"(null)"]){
+            //false is the (default behavior) and runs all new commands in a new tab.
+            isNewWindow = @"false";
+        }else{
+            isNewWindow = [objectsFromJSON objectAtIndex:4];
+        }
+    }
+
     // Check if Url
     NSURL* url = [NSURL URLWithString:[sender representedObject]];
     if(url)
     {
         [[NSWorkspace sharedWorkspace] openURL:url];
     }
-    else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound) {
+    else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
+        if ( [isNewWindow isEqualToString:@"true"] ) {
+            NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
+                                     [NSString stringWithFormat:
+                                      @"tell application \"iTerm\" \n"
+                                      @"    set newTerm to (make new terminal) \n"
+                                      @"        tell newTerm \n"
+                                      @"            set newSession to (launch session \"%2$@\") \n"
+                                      @"                tell newSession \n"
+                                      @"                    write text \"%1$@\" \n"
+                                      @"                    set name to \"%3$@\" \n"
+                                      @"                    activate \n"
+                                      @"                end tell \n"
+                                      @"        end tell \n"
+                                      @"end tell \n"
+                                      , escapedObject, terminalTheme, terminalTitle]];
+            [iTerm2 executeAndReturnError:nil];
+        }else{
+                if ( [isNewTab isEqualToString:@"false"] ) {
+            NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
+                                     [NSString stringWithFormat:
+                                      @"on ApplicationIsRunning(appName) \n"
+                                      @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
+                                      @"  return appNameIsRunning \n"
+                                      @"end ApplicationIsRunning \n"
+                                      @" \n"
+                                      @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
+                                      @" \n"
+                                      @"tell application \"iTerm\" \n"
+                                      @"  tell the current terminal \n"
+                                      @"      if isRunning then \n"
+                                      @"          tell the current session \n"
+                                      @"          reopen \n"
+                                      @"          activate \n"
+                                      @"              write text \"%1$@\" \n"
+                                      @"          end tell \n"
+                                      @"      else \n"
+                                      @"          tell the current session \n"
+                                      @"              write text \"%1$@\" \n"
+                                      @"              activate \n"
+                                      @"          end tell \n"
+                                      @"      end if \n"
+                                      @"  end tell \n"
+                                      @"end tell \n"
+                                      , escapedObject]]; //Command is running in a previously open tab. We are assuming it already has a name and theme.
+            [iTerm2 executeAndReturnError:nil];
+        }else{
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
                                     @"on ApplicationIsRunning(appName) \n"
@@ -363,23 +475,66 @@
                                     @"tell application \"iTerm\" \n"
                                     @"  tell the current terminal \n"
                                     @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
+                                    @"          set newSession to (launch session \"%2$@\") \n"
                                     @"          tell the last session \n"
+                                    @"              reopen \n"
+                                    @"              activate \n"
                                     @"              write text \"clear\" \n"
                                     @"              write text \"%1$@\" \n"
+                                    @"              set name to \"%3$@\" \n"
                                     @"          end tell \n"
                                     @"      else \n"
                                     @"          tell the current session \n"
                                     @"              write text \"clear\" \n"
                                     @"              write text \"%1$@\" \n"
+                                    @"              set name to \"%3$@\" \n"
                                     @"              activate \n"
                                     @"          end tell \n"
                                     @"      end if \n"
                                     @"  end tell \n"
                                     @"end tell \n"
-                                    , escapedObject]];
+                                    , escapedObject, terminalTheme, terminalTitle]];
         [iTerm2 executeAndReturnError:nil];
-    } else {
+        }
+      }
+    }
+
+    else {
+        if ( [isNewWindow isEqualToString:@"true"] ) {
+            NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
+                                          [NSString stringWithFormat:
+                                           @"tell application \"Terminal\" \n"
+                                           @"   activate \n"
+                                           @"   set newTerm to do script \"%1$@\" \n"
+                                           @"   set newTerm's current settings to settings set \"%2$@\" \n"
+                                           @"   set custom title of selected tab of front window to \"%3$@\" \n"
+                                           @"end tell \n"
+                                           , escapedObject, terminalTheme, terminalTitle]];
+            [terminalapp executeAndReturnError:nil];
+        }else{
+        if ( [isNewTab isEqualToString:@"false"] ) {
+            NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
+                                          [NSString stringWithFormat:
+                                           @"on ApplicationIsRunning(appName) \n"
+                                           @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
+                                           @"  return appNameIsRunning \n"
+                                           @"end ApplicationIsRunning \n"
+                                           @" \n"
+                                           @"set isRunning to ApplicationIsRunning(\"Terminal\") \n"
+                                           @" \n"
+                                           @"tell application \"Terminal\" \n"
+                                           @"  if isRunning then \n"
+                                           @"      reopen \n "
+                                           @"      activate \n"
+                                           @"      do script \"%1$@\" in front window \n"
+                                           @"  else \n"
+                                           @"      do script \"%1$@\" in window 1 \n"
+                                           @"      activate \n"
+                                           @"  end if \n"
+                                           @"end tell \n"
+                                           , escapedObject]];
+            [terminalapp executeAndReturnError:nil];
+        }else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
                                       [NSString stringWithFormat:
                                        @"on ApplicationIsRunning(appName) \n"
@@ -391,6 +546,7 @@
                                        @" \n"
                                        @"tell application \"Terminal\" \n"
                                        @"  if isRunning then \n"
+                                       @"      reopen \n"
                                        @"      activate \n"
                                        @"      tell application \"System Events\" to tell process \"Terminal.app\" to keystroke \"t\" using command down \n"
                                        @"      do script \"clear\" in front window \n"
@@ -400,11 +556,17 @@
                                        @"      do script \"%1$@\" in window 1 \n"
                                        @"      activate \n"
                                        @"  end if \n"
+                                       @"set current settings of selected tab of front window to settings set \"%2$@\" \n"
+                                       @"set title displays custom title of windows to true \n"
+                                       @"set custom title of selected tab of front window to \"%3$@\" \n"
                                        @"end tell \n"
-                                       , escapedObject]];
+                                       , escapedObject, terminalTheme, terminalTitle]];
         [terminalapp executeAndReturnError:nil];
+        }
+        }
     }
 }
+
 
 - (IBAction)showImportPanel:(id)sender {
     NSOpenPanel * openPanelObj	= [NSOpenPanel openPanel];
