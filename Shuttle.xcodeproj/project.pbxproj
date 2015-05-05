@@ -13,6 +13,8 @@
 		0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */; };
 		0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */; };
+		A1D700071A5DCE8D003563E4 /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1D700061A5DCE8D003563E4 /* AboutWindowController.m */; };
+		A1D700091A5DCFE1003563E4 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1D700081A5DCFE1003563E4 /* AboutWindowController.xib */; };
 		C149EBFE15D5214600B1F558 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C149EBFD15D5214600B1F558 /* Cocoa.framework */; };
 		C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C149EC0615D5214600B1F558 /* InfoPlist.strings */; };
 		C149EC0A15D5214600B1F558 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C149EC0915D5214600B1F558 /* main.m */; };
@@ -31,6 +33,9 @@
 		0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
 		7E72D21E178003ED00A6389C /* Shuttle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Shuttle.entitlements; sourceTree = "<group>"; };
 		7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shuttle.default.json; sourceTree = "<group>"; };
+		A1D700051A5DCDF4003563E4 /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
+		A1D700061A5DCE8D003563E4 /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
+		A1D700081A5DCFE1003563E4 /* AboutWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutWindowController.xib; sourceTree = "<group>"; };
 		C149EBF915D5214600B1F558 /* Shuttle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shuttle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C149EBFD15D5214600B1F558 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C149EC0015D5214600B1F558 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -119,6 +124,9 @@
 				C149EC1215D5214600B1F558 /* MainMenu.xib */,
 				0ADB3B10178EF8E2004E9BB9 /* Images */,
 				C149EC0415D5214600B1F558 /* Supporting Files */,
+				A1D700051A5DCDF4003563E4 /* AboutWindowController.h */,
+				A1D700061A5DCE8D003563E4 /* AboutWindowController.m */,
+				A1D700081A5DCFE1003563E4 /* AboutWindowController.xib */,
 			);
 			path = Shuttle;
 			sourceTree = "<group>";
@@ -189,6 +197,7 @@
 				0ADB3B0D178EF8DB004E9BB9 /* StatusIcon.png in Resources */,
 				0ADB3B0C178EF8DB004E9BB9 /* StatusIconAlt.png in Resources */,
 				C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */,
+				A1D700091A5DCFE1003563E4 /* AboutWindowController.xib in Resources */,
 				0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */,
 				0ADB3B0E178EF8DB004E9BB9 /* StatusIcon@2x.png in Resources */,
 				C149EC0E15D5214600B1F558 /* Credits.rtf in Resources */,
@@ -206,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */,
+				A1D700071A5DCE8D003563E4 /* AboutWindowController.m in Sources */,
 				C149EC0A15D5214600B1F558 /* main.m in Sources */,
 				C149EC1115D5214600B1F558 /* AppDelegate.m in Sources */,
 			);

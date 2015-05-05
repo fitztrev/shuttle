@@ -10,6 +10,9 @@
     IBOutlet NSMenu *menu;
     IBOutlet NSArrayController *arrayController;
 
+    NSImage *regularIcon;
+    NSImage *altIcon;
+    
     NSStatusItem *statusItem;
     NSString *shuttleConfigFile;
     NSString *itermProfile;
@@ -20,7 +23,10 @@
     NSDate *sshConfigSystem;
     
     NSString *terminalPref;
+    NSString *editorPref;
     NSMutableArray* shuttleHosts;
+    NSMutableArray* ignoreHosts;
+    NSMutableArray* ignoreKeywords;
     
     LaunchAtLoginController *launchAtLoginController;
     
