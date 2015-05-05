@@ -187,6 +187,11 @@
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
     ignoreKeywords = json[@"ssh_config_ignore_keywords"];
 
+    itermProfile = @"Default Session";
+    if (json[@"iterm_profile"]) {
+        itermProfile = json[@"iterm_profile"];
+    }
+    
     // Should we merge ssh config hosts?
     BOOL showSshConfigHosts = YES;
     if ([[json allKeys] containsObject:(@"show_ssh_config_hosts")] && [json[@"show_ssh_config_hosts"] boolValue] == NO) {
@@ -353,31 +358,29 @@
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
-                                    @"on ApplicationIsRunning(appName) \n"
-                                    @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
-                                    @"  return appNameIsRunning \n"
-                                    @"end ApplicationIsRunning \n"
-                                    @" \n"
-                                    @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
-                                    @" \n"
                                     @"tell application \"iTerm\" \n"
-                                    @"  tell the current terminal \n"
-                                    @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
-                                    @"          tell the last session \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"          end tell \n"
-                                    @"      else \n"
-                                    @"          tell the current session \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"              activate \n"
-                                    @"          end tell \n"
-                                    @"      end if \n"
+                                    @"  set isRunning to (it is running)\n"
+                                    @"  set myterm to (current terminal)\n"
+                                    @"  try\n"
+                                    @"     set tmp to myterm\n"
+                                    @"  on error\n"
+                                    @"     set myterm to (make new terminal)\n"
+                                    @"  end try\n"
+                                    @"  tell myterm \n"
+                                    @"      if not isRunning then \n"
+                                    @"          activate\n"
+                                    @"      end if\n"
+                                    @"      set newSession to (launch session \"%2$@\") \n"
+                                    @"      tell the last session \n"
+                                    @"          write text \"clear\" \n"
+                                    @"          write text \"%1$@\" \n"
+                                    @"      end tell \n"
+                                    @"      if not isRunning then \n"
+                                    @"          terminate the first session\n"
+                                    @"      end if\n"
                                     @"  end tell \n"
                                     @"end tell \n"
-                                    , escapedObject]];
+                                    , escapedObject, itermProfile]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:

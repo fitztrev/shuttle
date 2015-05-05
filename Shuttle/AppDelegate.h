@@ -15,6 +15,7 @@
     
     NSStatusItem *statusItem;
     NSString *shuttleConfigFile;
+    NSString *itermProfile;
     
     // This is for the JSON File
     NSDate *configModified;
