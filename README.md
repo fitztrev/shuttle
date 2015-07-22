@@ -17,6 +17,12 @@ A simple SSH shortcut menu for OS X
 
 The default, out-of-the-box configuration should be good enough to get started. However, if you're looking to customize the appearance further, here are a few advanced tips.
 
+### Use a specific iTerm profile for a connection
+
+```
+"profile": "iTerm Profile Name"
+```
+
 ### Disabling `~/.ssh/config` hosts
 
 By default, Shuttle will parse your `~/.ssh/config` file for hosts.
