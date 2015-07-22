@@ -8,15 +8,15 @@ set isRunning to ApplicationIsRunning("iTerm")
 tell application "iTerm"
 	tell the current terminal
 		if isRunning then
-			set newSession to (launch session "Default Session")
+			set newSession to (launch session "%1$@")
 			tell the last session
 				write text "clear"
-				write text "%1$@"
+				write text "%2$@"
 			end tell
 		else
 			tell the current session
 				write text "clear"
-				write text "%1$@"
+				write text "%2$@"
 				activate
 			end tell
 		end if

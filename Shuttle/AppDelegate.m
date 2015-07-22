@@ -332,7 +332,7 @@
         NSDictionary* cfg = leafs[key];
         NSMenuItem* menuItem = [[NSMenuItem alloc] init];
         [menuItem setTitle:cfg[@"name"]];
-        [menuItem setRepresentedObject:cfg[@"cmd"]];
+        [menuItem setRepresentedObject:cfg];
         [menuItem setAction:@selector(openHost:)];
         [m insertItem:menuItem atIndex:pos++];
     }
@@ -342,10 +342,14 @@
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
     
-    NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *escapedObject = [[sender representedObject][@"cmd"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *escapedProfile = [[sender representedObject][@"profile"] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    if(!escapedProfile) {
+        escapedProfile=@"Default Session";
+    }
     
     // Check if Url
-    NSURL* url = [NSURL URLWithString:[sender representedObject]];
+    NSURL* url = [NSURL URLWithString:[sender representedObject][@"cmd"]];
     if(url)
     {
         [[NSWorkspace sharedWorkspace] openURL:url];
@@ -363,21 +367,21 @@
                                     @"tell application \"iTerm\" \n"
                                     @"  tell the current terminal \n"
                                     @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
+                                    @"          set newSession to (launch session \"%1$@\") \n"
                                     @"          tell the last session \n"
                                     @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
+                                    @"              write text \"%2$@\" \n"
                                     @"          end tell \n"
                                     @"      else \n"
                                     @"          tell the current session \n"
                                     @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
+                                    @"              write text \"%2$@\" \n"
                                     @"              activate \n"
                                     @"          end tell \n"
                                     @"      end if \n"
                                     @"  end tell \n"
                                     @"end tell \n"
-                                    , escapedObject]];
+                                    , escapedProfile, escapedObject]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
