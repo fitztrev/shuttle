@@ -343,6 +343,7 @@
     //NSLog(@"Command: %@",[sender representedObject]);
     
     NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *escapedObjectTitle = [[sender title] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
     // Check if Url
     NSURL* url = [NSURL URLWithString:[sender representedObject]];
@@ -368,9 +369,16 @@
                                     @"		end tell \n"
                                     @"		activate \n"
                                     @"	end if \n"
+                                    
+                                    @"  set mysession to (current session of current window)\n"
+                                    @"  tell mysession\n"
+                                    @"     set name to \"%2$@\"\n"
+                                    @"  end tell\n"
+                                    @" \n"
+                                    
                                     @"end tell\n"
 
-                                    , escapedObject]];
+                                    , escapedObject, escapedObjectTitle]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
