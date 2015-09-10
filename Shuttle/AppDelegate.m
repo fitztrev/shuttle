@@ -343,6 +343,7 @@
     //NSLog(@"Command: %@",[sender representedObject]);
     
     NSString *escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *escapedObjectTitle = [[sender title] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
     // Check if Url
     NSURL* url = [NSURL URLWithString:[sender representedObject]];
@@ -353,31 +354,31 @@
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound) {
         NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
                                    [NSString stringWithFormat:
-                                    @"on ApplicationIsRunning(appName) \n"
-                                    @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
-                                    @"  return appNameIsRunning \n"
-                                    @"end ApplicationIsRunning \n"
-                                    @" \n"
-                                    @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
-                                    @" \n"
                                     @"tell application \"iTerm\" \n"
-                                    @"  tell the current terminal \n"
-                                    @"      if isRunning then \n"
-                                    @"          set newSession to (launch session \"Default Session\") \n"
-                                    @"          tell the last session \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"          end tell \n"
-                                    @"      else \n"
-                                    @"          tell the current session \n"
-                                    @"              write text \"clear\" \n"
-                                    @"              write text \"%1$@\" \n"
-                                    @"              activate \n"
-                                    @"          end tell \n"
-                                    @"      end if \n"
-                                    @"  end tell \n"
-                                    @"end tell \n"
-                                    , escapedObject]];
+                                    @"	set mywindow to (current window) \n"
+                                    @"	if mywindow is missing value then \n"
+                                    @"		create window with profile \"Default\" command \"%1$@\" \n"
+                                    @"		activate \n"
+                                    @"	else \n"
+                                    @"		tell current window \n"
+                                    @"			create tab with profile \"Default\" command \"%1$@\" \n"
+                                    @"			tell current tab \n"
+                                    @"				activate \n"
+                                    @"			end tell \n"
+                                    @"			activate \n"
+                                    @"		end tell \n"
+                                    @"		activate \n"
+                                    @"	end if \n"
+                                    
+                                    @"  set mysession to (current session of current window)\n"
+                                    @"  tell mysession\n"
+                                    @"     set name to \"%2$@\"\n"
+                                    @"  end tell\n"
+                                    @" \n"
+                                    
+                                    @"end tell\n"
+
+                                    , escapedObject, escapedObjectTitle]];
         [iTerm2 executeAndReturnError:nil];
     } else {
         NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
