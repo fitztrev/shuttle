@@ -6,6 +6,8 @@ A simple SSH shortcut menu for OS X
 
 ![How Shuttle works](https://raw.github.com/fitztrev/shuttle/gh-pages/img/how-shuttle-works.gif)
 
+***Sidenote***: *Many people ask, so here's how I have [my terminal setup](https://github.com/fitztrev/shuttle/wiki/My-Terminal-Prompt).*
+
 ## Installation
 
 1. Download [Shuttle](http://fitztrev.github.io/shuttle/)
