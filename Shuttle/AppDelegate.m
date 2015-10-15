@@ -9,13 +9,29 @@
 @implementation AppDelegate
 
 - (void) awakeFromNib {
-    // The path for the configuration file (by default: ~/.shuttle.json)
-    shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json"];
     
-    // if the config file does not exist, create a default one
-    if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
-        NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
-        [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
+    // The location for the JSON path file. This is a simple file that contains the hard path to the *.json settings file.
+    shuttleJSONPath = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.path"];
+    
+    //if file shuttle.path exists in ~/.shuttle.path then read this file as it should contain the custom path to *.json
+    if( [[NSFileManager defaultManager] fileExistsAtPath:shuttleJSONPath] ) {
+        
+        //Read the shuttle.path file which contains the path to the json file
+        NSString *jsonConfigPath = [NSString stringWithContentsOfFile:shuttleJSONPath encoding:NSUTF8StringEncoding error:NULL];
+        
+        //Remove the white space if any.
+        jsonConfigPath = [ jsonConfigPath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        shuttleConfigFile = jsonConfigPath;
+    }else{
+        // The path for the configuration file (by default: ~/.shuttle.json)
+        shuttleConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json"];
+        
+        // if the config file does not exist, create a default one
+        if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
+            NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
+            [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
+        }
     }
 
     // Load the menu content
@@ -182,6 +198,7 @@
     
     terminalPref = [json[@"terminal"] lowercaseString];
     editorPref = [json[@"editor"] lowercaseString];
+    iTermVersion = [json[@"iTerm_version"] lowercaseString];
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
     shuttleHosts = json[@"hosts"];
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
@@ -338,9 +355,11 @@
         NSString *termTheme = cfg[@"theme"];
         //Get the name for the terminal session
         NSString *termTitle = cfg[@"title"];
+        //Get the value of setting inTerminal
+        NSString *termWindow = cfg[@"inTerminal"];
         
         //Place the terminal command, theme, and title into an comma delimited string
-        NSString *menuRepObj = [NSString stringWithFormat:@"%@,%@,%@", menuCmd, termTheme, termTitle];
+        NSString *menuRepObj = [NSString stringWithFormat:@"%@,%@,%@,%@", menuCmd, termTheme, termTitle, termWindow];
         
         [menuItem setTitle:cfg[@"name"]];
         [menuItem setRepresentedObject:menuRepObj];
@@ -362,6 +381,8 @@
     NSString *terminalTheme;
     //The title for the terminal window
     NSString *terminalTitle;
+    //Are commands run in a new tab (default) a new terminal window (new), or in the current tab of the last used window (current).
+    NSString *terminalWindow;
     
     //if for some reason we get a representedObject with only one item...
     if (objectsFromJSON.count <=1) {
@@ -372,7 +393,7 @@
         //Check if terminalTheme is null
         if( [[objectsFromJSON objectAtIndex:1] isEqualToString:@"(null)"] ){
             if( [terminalPref isEqualToString:@"iterm"] ){
-                terminalTheme = @"default";
+                terminalTheme = @"Default";
             }else{
                 terminalTheme = @"basic";
             }
@@ -385,77 +406,146 @@
         }else{
             terminalTitle = [objectsFromJSON objectAtIndex:2];
         }
+        //Check if inTerminal is null
+        if( [[objectsFromJSON objectAtIndex:3] isEqualToString:@"(null)"]){
+            terminalWindow = @"default"; //this is not currently used.
+        }else{
+            terminalWindow = [objectsFromJSON objectAtIndex:3];
+        }
     }
     
-    // Check if Url
+    //Set Paths to iTerm Stable AppleScripts
+    NSString *iTermStableNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm-stable-new-window" ofType:@"scpt"];
+    NSString *iTermStableCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm-stable-current-window" ofType:@"scpt"];
+    NSString *iTermStableNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm-stable-new-tab-default" ofType:@"scpt"];
+
+    //Set Paths to iTerm Nightly AppleScripts
+    NSString *iTerm2NightlyNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-new-window" ofType:@"scpt"];
+    NSString *iTerm2NightlyCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-current-window" ofType:@"scpt"];
+    NSString *iTerm2StableNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-new-tab-default" ofType:@"scpt"];
+    
+    //Set Paths to terminalScripts
+    NSString *terminalNewWindow =  [[NSBundle mainBundle] pathForResource:@"terminal-new-window" ofType:@"scpt"];
+    NSString *terminalCurrentWindow = [[NSBundle mainBundle] pathForResource:@"terminal-current-window" ofType:@"scpt"];
+    NSString *terminalNewTabDefault = [[NSBundle mainBundle] pathForResource:@"terminal-new-tab-default" ofType:@"scpt"];
+    
+    //Set the name of the handler that we are passing parameters too in the apple script
+    NSString *handlerName = @"scriptRun";
+    
+    //script expects the following order: Command, Theme, Title
+    NSArray *passParameters = @[escapedObject, terminalTheme, terminalTitle];
+    
+// Check if Url
     NSURL* url = [NSURL URLWithString:[sender representedObject]];
     if(url)
     {
         [[NSWorkspace sharedWorkspace] openURL:url];
     }
-    else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound) {
-        NSAppleScript* iTerm2 = [[NSAppleScript alloc] initWithSource:
-                                 [NSString stringWithFormat:
-                                  @"on ApplicationIsRunning(appName) \n"
-                                  @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
-                                  @"  return appNameIsRunning \n"
-                                  @"end ApplicationIsRunning \n"
-                                  @" \n"
-                                  @"set isRunning to ApplicationIsRunning(\"iTerm\") \n"
-                                  @" \n"
-                                  @"tell application \"iTerm\" \n"
-                                  @"  tell the current terminal \n"
-                                  @"      if isRunning then \n"
-                                  @"          set newSession to (launch session \"%2$@\") \n"
-                                  @"          tell the last session \n"
-                                  @"              reopen \n"
-                                  @"              activate \n"
-                                  @"              write text \"clear\" \n"
-                                  @"              write text \"%1$@\" \n"
-                                  @"              set name to \"%3$@\" \n"
-                                  @"          end tell \n"
-                                  @"      else \n"
-                                  @"          tell the current session \n"
-                                  @"              write text \"clear\" \n"
-                                  @"              write text \"%1$@\" \n"
-                                  @"              set name to \"%3$@\" \n"
-                                  @"              activate \n"
-                                  @"          end tell \n"
-                                  @"      end if \n"
-                                  @"  end tell \n"
-                                  @"end tell \n"
-                                  , escapedObject, terminalTheme, terminalTitle]];
-        [iTerm2 executeAndReturnError:nil];
-    } else {
-        NSAppleScript* terminalapp = [[NSAppleScript alloc] initWithSource:
-                                      [NSString stringWithFormat:
-                                       @"on ApplicationIsRunning(appName) \n"
-                                       @"  tell application \"System Events\" to set appNameIsRunning to exists (processes where name is appName) \n"
-                                       @"  return appNameIsRunning \n"
-                                       @"end ApplicationIsRunning \n"
-                                       @" \n"
-                                       @"set isRunning to ApplicationIsRunning(\"Terminal\") \n"
-                                       @" \n"
-                                       @"tell application \"Terminal\" \n"
-                                       @"  if isRunning then \n"
-                                       @"      reopen \n"
-                                       @"      activate \n"
-                                       @"      tell application \"System Events\" to tell process \"Terminal.app\" to keystroke \"t\" using command down \n"
-                                       @"      do script \"clear\" in front window \n"
-                                       @"      do script \"%1$@\" in front window \n"
-                                       @"  else \n"
-                                       @"      do script \"clear\" in window 1 \n"
-                                       @"      do script \"%1$@\" in window 1 \n"
-                                       @"      activate \n"
-                                       @"  end if \n"
-                                       @"set current settings of selected tab of front window to settings set \"%2$@\" \n"
-                                       @"set title displays custom title of windows to true \n"
-                                       @"set custom title of selected tab of front window to \"%3$@\" \n"
-                                       @"end tell \n"
-                                       , escapedObject, terminalTheme, terminalTitle]];
-        [terminalapp executeAndReturnError:nil];
+    //If the JSON file is set to use iTerm
+    else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
+        
+        //If the JSON file is set to use applescript via iTermVersion then configure for iTerm Stable
+        if( [iTermVersion isEqualToString: @"stable"] ) {
+            //run the applescript that works with iTerm Stable
+            
+            //if we are running in a new iTerm "Stable" Window
+            if ( [terminalWindow isEqualToString:@"new"] ) {
+                [self runScript:iTermStableNewWindow handler:handlerName parameters:passParameters];
+                }else {
+                    //if we are running in the current iTerm "Stable" Window
+                    if ( [terminalWindow isEqualToString:@"current"] ) {
+                        [self runScript:iTermStableCurrentWindow handler:handlerName parameters:passParameters];
+                        }else {
+                            //we are using the default action of shuttle, use the active window in a new Tab
+                            [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
+                        }
+                }
+        }
+        //iTermVersion is not set to "stable" using applescripts Configured for Nightly
+        else {
+            //if we are running in a new iTerm "Nightly" Window
+            if( [terminalWindow isEqualToString:@"new"] ) {
+                [self runScript:iTerm2NightlyNewWindow handler:handlerName parameters:passParameters];
 
+                }else {
+                    //if we are running in the current iTerm "Nightly" Window
+                    if( [terminalWindow isEqualToString:@"current"] ) {
+                        [self runScript:iTerm2NightlyCurrentWindow handler:handlerName parameters:passParameters];
+                        }else {
+                        //we are using the default action of shuttle, use the active window in a new Tab
+                            [self runScript:iTerm2StableNewTabDefault handler:handlerName parameters:passParameters];
+                        }
+                }
+        }
     }
+    //If JSON file is set to use Terminal.app
+    else {
+        if ( [terminalWindow isEqualToString:@"new"] ) {
+            [self runScript:terminalNewWindow handler:handlerName parameters:passParameters];
+            }else {
+                if ( [terminalWindow isEqualToString:@"current"] ) {
+                    [self runScript:terminalCurrentWindow handler:handlerName parameters:passParameters];
+                    }else {
+                        [self runScript:terminalNewTabDefault handler:handlerName parameters:passParameters];
+                    }
+            }
+    }
+}
+
+- (void) runScript:(NSString *)scriptPath handler:(NSString*)handlerName parameters:(NSArray*)parametersInArray
+{
+    //special thanks to stackoverflow.com/users/316866/leandro for pointing me the right direction.
+    //see http://goo.gl/olcpaX
+    NSAppleScript           * appleScript;
+    NSAppleEventDescriptor  * thisApplication, *containerEvent;
+    NSURL                   * pathURL = [NSURL fileURLWithPath:scriptPath];
+    
+    NSDictionary * appleScriptCreationError = nil;
+    appleScript = [[NSAppleScript alloc] initWithContentsOfURL:pathURL error:&appleScriptCreationError];
+    
+        if (handlerName && [handlerName length])
+        {
+            /* If we have a handlerName (and potentially parameters), we build
+             * an NSAppleEvent to execute the script. */
+            
+            //Get a descriptor
+            int pid = [[NSProcessInfo processInfo] processIdentifier];
+            thisApplication = [NSAppleEventDescriptor descriptorWithDescriptorType:typeKernelProcessID
+                                                                             bytes:&pid
+                                                                            length:sizeof(pid)];
+            
+            //Create the container event
+            
+            //We need these constants from the Carbon OpenScripting framework, but we don't actually need Carbon.framework...
+            #define kASAppleScriptSuite 'ascr'
+            #define kASSubroutineEvent  'psbr'
+            #define keyASSubroutineName 'snam'
+            containerEvent = [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite
+                                                                      eventID:kASSubroutineEvent
+                                                             targetDescriptor:thisApplication
+                                                                     returnID:kAutoGenerateReturnID
+                                                                transactionID:kAnyTransactionID];
+            //Set the target handler
+            [containerEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithString:handlerName]
+                                    forKeyword:keyASSubroutineName];
+            
+            //Pass parameters - parameters is expecting an NSArray with only NSString objects
+            if ([parametersInArray count])
+            {
+                
+                NSAppleEventDescriptor  *arguments = [[NSAppleEventDescriptor alloc] initListDescriptor];
+                NSString                *object;
+                
+                for (object in parametersInArray) {
+                    [arguments insertDescriptor:[NSAppleEventDescriptor descriptorWithString:object]
+                                        atIndex:([arguments numberOfItems] +1)];
+                }
+                
+                [containerEvent setParamDescriptor:arguments forKeyword:keyDirectObject];
+            }
+            //Execute the event
+            [appleScript executeAppleEvent:containerEvent error:nil];
+        }
 }
 
 - (IBAction)showImportPanel:(id)sender {
@@ -488,7 +578,6 @@
         }
 }
 
-
 - (IBAction)configure:(id)sender {
     
     //if the editor setting is omitted or contains 'default' open using the default editor.
@@ -510,7 +599,6 @@
         [self openHost:editorMenu];
     }
 }
-
 
 - (IBAction)showAbout:(id)sender {
     

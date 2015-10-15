@@ -13,6 +13,15 @@
 		0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */; };
 		0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */; };
+		A12D9BF01BCF2C73004F52A6 /* iTerm-stable-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BE71BCF2C72004F52A6 /* iTerm-stable-current-window.scpt */; };
+		A12D9BF11BCF2C73004F52A6 /* iTerm-stable-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BE81BCF2C72004F52A6 /* iTerm-stable-new-tab-default.scpt */; };
+		A12D9BF21BCF2C73004F52A6 /* iTerm-stable-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BE91BCF2C72004F52A6 /* iTerm-stable-new-window.scpt */; };
+		A12D9BF31BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEA1BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt */; };
+		A12D9BF41BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEB1BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt */; };
+		A12D9BF51BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEC1BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt */; };
+		A12D9BF61BCF2C73004F52A6 /* terminal-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BED1BCF2C73004F52A6 /* terminal-current-window.scpt */; };
+		A12D9BF71BCF2C73004F52A6 /* terminal-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEE1BCF2C73004F52A6 /* terminal-new-tab-default.scpt */; };
+		A12D9BF81BCF2C73004F52A6 /* terminal-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEF1BCF2C73004F52A6 /* terminal-new-window.scpt */; };
 		A1D700071A5DCE8D003563E4 /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1D700061A5DCE8D003563E4 /* AboutWindowController.m */; };
 		A1D700091A5DCFE1003563E4 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1D700081A5DCFE1003563E4 /* AboutWindowController.xib */; };
 		C149EBFE15D5214600B1F558 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C149EBFD15D5214600B1F558 /* Cocoa.framework */; };
@@ -33,6 +42,15 @@
 		0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
 		7E72D21E178003ED00A6389C /* Shuttle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Shuttle.entitlements; sourceTree = "<group>"; };
 		7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shuttle.default.json; sourceTree = "<group>"; };
+		A12D9BE71BCF2C72004F52A6 /* iTerm-stable-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-stable-current-window.scpt"; sourceTree = "<group>"; };
+		A12D9BE81BCF2C72004F52A6 /* iTerm-stable-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-stable-new-tab-default.scpt"; sourceTree = "<group>"; };
+		A12D9BE91BCF2C72004F52A6 /* iTerm-stable-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-stable-new-window.scpt"; sourceTree = "<group>"; };
+		A12D9BEA1BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-current-window.scpt"; sourceTree = "<group>"; };
+		A12D9BEB1BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-new-tab-default.scpt"; sourceTree = "<group>"; };
+		A12D9BEC1BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-new-window.scpt"; sourceTree = "<group>"; };
+		A12D9BED1BCF2C73004F52A6 /* terminal-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "terminal-current-window.scpt"; sourceTree = "<group>"; };
+		A12D9BEE1BCF2C73004F52A6 /* terminal-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "terminal-new-tab-default.scpt"; sourceTree = "<group>"; };
+		A12D9BEF1BCF2C73004F52A6 /* terminal-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "terminal-new-window.scpt"; sourceTree = "<group>"; };
 		A1D700051A5DCDF4003563E4 /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
 		A1D700061A5DCE8D003563E4 /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
 		A1D700081A5DCFE1003563E4 /* AboutWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutWindowController.xib; sourceTree = "<group>"; };
@@ -75,6 +93,22 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		A12D9BE61BCF2C72004F52A6 /* apple-scpt */ = {
+			isa = PBXGroup;
+			children = (
+				A12D9BE71BCF2C72004F52A6 /* iTerm-stable-current-window.scpt */,
+				A12D9BE81BCF2C72004F52A6 /* iTerm-stable-new-tab-default.scpt */,
+				A12D9BE91BCF2C72004F52A6 /* iTerm-stable-new-window.scpt */,
+				A12D9BEA1BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt */,
+				A12D9BEB1BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt */,
+				A12D9BEC1BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt */,
+				A12D9BED1BCF2C73004F52A6 /* terminal-current-window.scpt */,
+				A12D9BEE1BCF2C73004F52A6 /* terminal-new-tab-default.scpt */,
+				A12D9BEF1BCF2C73004F52A6 /* terminal-new-window.scpt */,
+			);
+			path = "apple-scpt";
+			sourceTree = "<group>";
+		};
 		C149EBEE15D5214600B1F558 = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +148,7 @@
 		C149EC0315D5214600B1F558 /* Shuttle */ = {
 			isa = PBXGroup;
 			children = (
+				A12D9BE61BCF2C72004F52A6 /* apple-scpt */,
 				7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */,
 				7E72D21E178003ED00A6389C /* Shuttle.entitlements */,
 				C159DC2715D5DE7F00F5DE24 /* shuttle.icns */,
@@ -194,15 +229,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A12D9BF61BCF2C73004F52A6 /* terminal-current-window.scpt in Resources */,
+				A12D9BF31BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt in Resources */,
+				A12D9BF51BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt in Resources */,
+				A12D9BF21BCF2C73004F52A6 /* iTerm-stable-new-window.scpt in Resources */,
 				0ADB3B0D178EF8DB004E9BB9 /* StatusIcon.png in Resources */,
+				A12D9BF11BCF2C73004F52A6 /* iTerm-stable-new-tab-default.scpt in Resources */,
 				0ADB3B0C178EF8DB004E9BB9 /* StatusIconAlt.png in Resources */,
 				C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */,
 				A1D700091A5DCFE1003563E4 /* AboutWindowController.xib in Resources */,
 				0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */,
 				0ADB3B0E178EF8DB004E9BB9 /* StatusIcon@2x.png in Resources */,
+				A12D9BF41BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt in Resources */,
 				C149EC0E15D5214600B1F558 /* Credits.rtf in Resources */,
+				A12D9BF01BCF2C73004F52A6 /* iTerm-stable-current-window.scpt in Resources */,
+				A12D9BF71BCF2C73004F52A6 /* terminal-new-tab-default.scpt in Resources */,
 				C149EC1415D5214600B1F558 /* MainMenu.xib in Resources */,
 				C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */,
+				A12D9BF81BCF2C73004F52A6 /* terminal-new-window.scpt in Resources */,
 				7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
