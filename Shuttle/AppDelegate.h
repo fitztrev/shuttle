@@ -15,6 +15,7 @@
     
     NSStatusItem *statusItem;
     NSString *shuttleConfigFile;
+    NSString *shuttleJSONPath;
     
     // This is for the JSON File
     NSDate *configModified;
@@ -23,6 +24,7 @@
     
     NSString *terminalPref;
     NSString *editorPref;
+    NSString *iTermVersion;
     NSMutableArray* shuttleHosts;
     NSMutableArray* ignoreHosts;
     NSMutableArray* ignoreKeywords;

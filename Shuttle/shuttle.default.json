@@ -6,29 +6,36 @@
     "For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
   ],
   "editor": "default",
+  "iTerm_version": "nightly",
   "launch_at_login": false,
   "show_ssh_config_hosts": true,
   "ssh_config_ignore_hosts": [  ],
   "ssh_config_ignore_keywords": [  ],
-  "terminal": "iTerm"  
+  "terminal": "iTerm",
   "hosts": [
     {
-      "cmd": "ssh username@dev.example.com",
+      "cmd": "ps aux | grep foo",
+      "inTerminal": "new",
       "name": "My Dev Server",
       "theme": "Homebrew",
       "title": "Dev Server - SSH"
     },
     {
-      "Personal": [
+      "Spouses Servers": [
         {
-          "cmd": "ssh username@blog.example.com",
-          "name": "My blog"
+          "cmd": "echo '—->WARNING<-- Running a command in this active terminal! Are you sure? y/n'; read sure; if [ $sure == y ]; then echo running command... && tail -f /var/log/messages; else echo exiting...; fi",
+          "inTerminal": "current",
+          "name": "Look at the Logs"
         },
         {
-          "Spouse": [
+          "Jane’s Servers": [
             {
               "cmd": "ssh username@blog2.example.com",
-              "name": "Her blog"
+              "name": "Wordpress Box"
+            },
+			{ 
+              "cmd": "ssh username@shop1.example.com",
+              "name": "Shopping Site"
             }
           ]
         }
@@ -60,3 +67,20 @@
     }
   ]
 }
+        
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
