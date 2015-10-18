@@ -33,34 +33,32 @@
             [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
         }
     }
-
-    // Load the menu content
-    // [self loadMenu];
-
+    
     // Define Icons
+    //only regular icon is needed for 10.10 and higher. OS X changes the icon for us.
     regularIcon = [NSImage imageNamed:@"StatusIcon"];
     altIcon = [NSImage imageNamed:@"StatusIconAlt"];
+    
+    // Create the status bar item
+    statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+    [statusItem setMenu:menu];
+    [statusItem setImage: regularIcon];
     
     // Check for AppKit Version, add support for darkmode if > 10.9
     BOOL oldAppKitVersion = (floor(NSAppKitVersionNumber) <= 1265);
     
+    // 10.10 or higher, dont load the alt image let OS X style it.
     if (!oldAppKitVersion)
     {
-        // 10.10 or higher, add support to icon for auto detection of Regular/Dark mode
-        [regularIcon setTemplate:YES];
-        [altIcon setTemplate:YES];
+        regularIcon.template = YES;
+    }
+    // Load the alt image for OS X < 10.10
+    else{
+        [statusItem setHighlightMode:YES];
+        [statusItem setAlternateImage: altIcon];
     }
     
-    // Create the status bar item
-    statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:25.0];
-    
-    [statusItem setMenu:menu];
-    [statusItem setHighlightMode:YES];
-    [statusItem setImage: regularIcon];
-    [statusItem setAlternateImage: altIcon];
-
     launchAtLoginController = [[LaunchAtLoginController alloc] init];
-    
     // Needed to trigger the menuWillOpen event
     [menu setDelegate:self];
 }
@@ -357,9 +355,11 @@
         NSString *termTitle = cfg[@"title"];
         //Get the value of setting inTerminal
         NSString *termWindow = cfg[@"inTerminal"];
+        //Get the menu name will will use this as the title if title is null.
+        NSString *menuName = cfg[@"name"];
         
         //Place the terminal command, theme, and title into an comma delimited string
-        NSString *menuRepObj = [NSString stringWithFormat:@"%@,%@,%@,%@", menuCmd, termTheme, termTitle, termWindow];
+        NSString *menuRepObj = [NSString stringWithFormat:@"%@,%@,%@,%@,%@", menuCmd, termTheme, termTitle, termWindow, menuName];
         
         [menuItem setTitle:cfg[@"name"]];
         [menuItem setRepresentedObject:menuRepObj];
@@ -384,6 +384,7 @@
     //Are commands run in a new tab (default) a new terminal window (new), or in the current tab of the last used window (current).
     NSString *terminalWindow;
     
+    
     //if for some reason we get a representedObject with only one item...
     if (objectsFromJSON.count <=1) {
         escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
@@ -402,7 +403,7 @@
         }
         //Check if terminalTitle is null
         if( [[objectsFromJSON objectAtIndex:2] isEqualToString:@"(null)"]){
-            terminalTitle = @"";
+            terminalTitle = [objectsFromJSON objectAtIndex:4];
         }else{
             terminalTitle = [objectsFromJSON objectAtIndex:2];
         }
@@ -422,7 +423,7 @@
     //Set Paths to iTerm Nightly AppleScripts
     NSString *iTerm2NightlyNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-new-window" ofType:@"scpt"];
     NSString *iTerm2NightlyCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-current-window" ofType:@"scpt"];
-    NSString *iTerm2StableNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-new-tab-default" ofType:@"scpt"];
+    NSString *iTerm2NightlyNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-new-tab-default" ofType:@"scpt"];
     
     //Set Paths to terminalScripts
     NSString *terminalNewWindow =  [[NSBundle mainBundle] pathForResource:@"terminal-new-window" ofType:@"scpt"];
@@ -473,7 +474,7 @@
                         [self runScript:iTerm2NightlyCurrentWindow handler:handlerName parameters:passParameters];
                         }else {
                         //we are using the default action of shuttle, use the active window in a new Tab
-                            [self runScript:iTerm2StableNewTabDefault handler:handlerName parameters:passParameters];
+                            [self runScript:iTerm2NightlyNewTabDefault handler:handlerName parameters:passParameters];
                         }
                 }
         }
@@ -601,11 +602,12 @@
 }
 
 - (IBAction)showAbout:(id)sender {
-    
-    //Call the windows controller
+        
+        //Call the windows controller
         AboutWindowController *aboutWindow = [[AboutWindowController alloc] initWithWindowNibName:@"AboutWindowController"];
     
         //Set the window to stay on top
+        [aboutWindow.window makeKeyAndOrderFront:nil];
         [aboutWindow.window setLevel:NSFloatingWindowLevel];
     
         //Show the window

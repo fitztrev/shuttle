@@ -204,7 +204,7 @@
 		C149EBF015D5214600B1F558 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = fitztrev;
 			};
 			buildConfigurationList = C149EBF315D5214600B1F558 /* Build configuration list for PBXProject "Shuttle" */;
@@ -303,6 +303,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -352,6 +353,7 @@
 				GCC_PREFIX_HEADER = "Shuttle/Shuttle-Prefix.pch";
 				INFOPLIST_FILE = "Shuttle/Shuttle-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "shuttle.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -367,6 +369,7 @@
 				GCC_PREFIX_HEADER = "Shuttle/Shuttle-Prefix.pch";
 				INFOPLIST_FILE = "Shuttle/Shuttle-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "shuttle.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -16,9 +16,9 @@
     {
       "cmd": "ps aux | grep foo",
       "inTerminal": "new",
-      "name": "My Dev Server",
-      "theme": "Homebrew",
-      "title": "Dev Server - SSH"
+      "name": "look for process foo",
+      "theme": "Default",
+      "title": "grep foo"
     },
     {
       "Spouses Servers": [
