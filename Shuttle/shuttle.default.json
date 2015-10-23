@@ -6,17 +6,18 @@
     "For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
   ],
   "editor": "default",
-  "iTerm_version": "nightly",
   "launch_at_login": false,
-  "show_ssh_config_hosts": true,
+  "show_ssh_config_hosts": false,
   "ssh_config_ignore_hosts": [  ],
   "ssh_config_ignore_keywords": [  ],
   "terminal": "iTerm",
+  "iTerm_version": "nightly",
+  "open_in": "tab",
   "hosts": [
     {
       "cmd": "ps aux | grep foo",
       "inTerminal": "new",
-      "name": "look for process foo",
+      "name": "foo - Opens in a new terminal window",
       "theme": "Default",
       "title": "grep foo"
     },
@@ -25,35 +26,19 @@
         {
           "cmd": "echo '—->WARNING<-- Running a command in this active terminal! Are you sure? y/n'; read sure; if [ $sure == y ]; then echo running command... && tail -f /var/log/messages; else echo exiting...; fi",
           "inTerminal": "current",
-          "name": "Look at the Logs"
+          "name": "Logs - Opens in the current active terminal window"
         },
         {
           "Jane’s Servers": [
             {
               "cmd": "ssh username@blog2.example.com",
-              "name": "Wordpress Box"
+              "name": "WP - Opens in active terminal in a new tab"
             },
 			{ 
               "cmd": "ssh username@shop1.example.com",
-              "name": "Shopping Site"
+              "name": "Shop - Opens in active terminal in a new tab"
             }
           ]
-        }
-      ]
-    },
-    {
-      "Work": [
-        {
-          "cmd": "ssh username@dev.example.net -p 4000",
-          "name": "dev.example.net"
-        },
-        {
-          "cmd": "ssh username@staging.example.net -p 5000",
-          "name": "staging.example.net"
-        },
-        {
-          "cmd": "ssh username@example.net -p 6000",
-          "name": "production.example.net"
         }
       ]
     },
@@ -61,7 +46,7 @@
       "Vagrant": [
         {
           "cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key",
-          "name": "precise32"
+          "name": "SSH - Opens in active terminal in a new tab"
         }
       ]
     }

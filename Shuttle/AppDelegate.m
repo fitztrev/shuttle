@@ -11,13 +11,13 @@
 - (void) awakeFromNib {
     
     // The location for the JSON path file. This is a simple file that contains the hard path to the *.json settings file.
-    shuttleJSONPath = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.path"];
+    shuttleJSONPathPref = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.path"];
     
     //if file shuttle.path exists in ~/.shuttle.path then read this file as it should contain the custom path to *.json
-    if( [[NSFileManager defaultManager] fileExistsAtPath:shuttleJSONPath] ) {
+    if( [[NSFileManager defaultManager] fileExistsAtPath:shuttleJSONPathPref] ) {
         
         //Read the shuttle.path file which contains the path to the json file
-        NSString *jsonConfigPath = [NSString stringWithContentsOfFile:shuttleJSONPath encoding:NSUTF8StringEncoding error:NULL];
+        NSString *jsonConfigPath = [NSString stringWithContentsOfFile:shuttleJSONPathPref encoding:NSUTF8StringEncoding error:NULL];
         
         //Remove the white space if any.
         jsonConfigPath = [ jsonConfigPath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -196,7 +196,8 @@
     
     terminalPref = [json[@"terminal"] lowercaseString];
     editorPref = [json[@"editor"] lowercaseString];
-    iTermVersion = [json[@"iTerm_version"] lowercaseString];
+    iTermVersionPref = [json[@"iTerm_version"] lowercaseString];
+    openInPref = [json[@"open_in"] lowercaseString];
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
     shuttleHosts = json[@"hosts"];
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
@@ -384,35 +385,39 @@
     //Are commands run in a new tab (default) a new terminal window (new), or in the current tab of the last used window (current).
     NSString *terminalWindow;
     
+    escapedObject = [[objectsFromJSON objectAtIndex:0] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
-    //if for some reason we get a representedObject with only one item...
-    if (objectsFromJSON.count <=1) {
-        escapedObject = [[sender representedObject] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    }
-    else {
-        escapedObject = [[objectsFromJSON objectAtIndex:0] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-        //Check if terminalTheme is null
-        if( [[objectsFromJSON objectAtIndex:1] isEqualToString:@"(null)"] ){
-            if( [terminalPref isEqualToString:@"iterm"] ){
-                terminalTheme = @"Default";
+    //Check if terminalTheme is null
+    if( [[objectsFromJSON objectAtIndex:1] isEqualToString:@"(null)"] ){
+        if( [terminalPref isEqualToString:@"iterm"] ){
+            terminalTheme = @"Default";
             }else{
                 terminalTheme = @"basic";
             }
-        }else {
-            terminalTheme = [objectsFromJSON objectAtIndex:1];
+    }else{
+        terminalTheme = [objectsFromJSON objectAtIndex:1];
+    }
+    
+    //Check if terminalTitle is null
+    if( [[objectsFromJSON objectAtIndex:2] isEqualToString:@"(null)"]){
+        //setting the empty title to that of the menu item.
+        terminalTitle = [objectsFromJSON objectAtIndex:4];
+    }else{
+        terminalTitle = [objectsFromJSON objectAtIndex:2];
+    }
+    
+    //Check if inTerminal is null if so then use the default settings of open_in
+    if( [[objectsFromJSON objectAtIndex:3] isEqualToString:@"(null)"]){
+        //check if open_in is null
+        if([openInPref isEqualToString:@"(null)"]){
+            //open_in was null so we are opening the command the active window in a new tab
+            openInPref = @"tab";
         }
-        //Check if terminalTitle is null
-        if( [[objectsFromJSON objectAtIndex:2] isEqualToString:@"(null)"]){
-            terminalTitle = [objectsFromJSON objectAtIndex:4];
-        }else{
-            terminalTitle = [objectsFromJSON objectAtIndex:2];
-        }
-        //Check if inTerminal is null
-        if( [[objectsFromJSON objectAtIndex:3] isEqualToString:@"(null)"]){
-            terminalWindow = @"default"; //this is not currently used.
-        }else{
-            terminalWindow = [objectsFromJSON objectAtIndex:3];
-        }
+        //open_in was not null we are passing the settings. 
+        terminalWindow = openInPref;
+    }else{
+    //inTerminal is not null and overrides the default values of open_in
+        terminalWindow = [objectsFromJSON objectAtIndex:3];
     }
     
     //Set Paths to iTerm Stable AppleScripts
@@ -445,51 +450,59 @@
     //If the JSON file is set to use iTerm
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
         
-        //If the JSON file is set to use applescript via iTermVersion then configure for iTerm Stable
-        if( [iTermVersion isEqualToString: @"stable"] ) {
+        //If the JSON prefs for iTermVersion are set to "stable" then configure applescripts for iTerm Stable
+        if( [iTermVersionPref isEqualToString: @"stable"] ) {
             //run the applescript that works with iTerm Stable
             
             //if we are running in a new iTerm "Stable" Window
             if ( [terminalWindow isEqualToString:@"new"] ) {
                 [self runScript:iTermStableNewWindow handler:handlerName parameters:passParameters];
-                }else {
-                    //if we are running in the current iTerm "Stable" Window
-                    if ( [terminalWindow isEqualToString:@"current"] ) {
-                        [self runScript:iTermStableCurrentWindow handler:handlerName parameters:passParameters];
-                        }else {
-                            //we are using the default action of shuttle, use the active window in a new Tab
-                            [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
-                        }
-                }
+            }
+            
+            //if we are running in the current iTerm "Stable" Window
+            if ( [terminalWindow isEqualToString:@"current"] ) {
+                [self runScript:iTermStableCurrentWindow handler:handlerName parameters:passParameters];
+            }
+            
+            //we are using the default action of shuttle... The active window in a new tab
+            if ( [terminalWindow isEqualToString:@"tab"] ) {
+                [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
+            }
         }
         //iTermVersion is not set to "stable" using applescripts Configured for Nightly
         else {
             //if we are running in a new iTerm "Nightly" Window
-            if( [terminalWindow isEqualToString:@"new"] ) {
+            if ( [terminalWindow isEqualToString:@"new"] ) {
                 [self runScript:iTerm2NightlyNewWindow handler:handlerName parameters:passParameters];
-
-                }else {
-                    //if we are running in the current iTerm "Nightly" Window
-                    if( [terminalWindow isEqualToString:@"current"] ) {
-                        [self runScript:iTerm2NightlyCurrentWindow handler:handlerName parameters:passParameters];
-                        }else {
-                        //we are using the default action of shuttle, use the active window in a new Tab
-                            [self runScript:iTerm2NightlyNewTabDefault handler:handlerName parameters:passParameters];
-                        }
-                }
+            }
+            
+            //if we are running in the current iTerm "Nightly" Window
+            if ( [terminalWindow isEqualToString:@"current"] ) {
+                [self runScript:iTerm2NightlyCurrentWindow handler:handlerName parameters:passParameters];
+            }
+            
+            //we are using the default action of shuttle... The active window in a new tab
+            if ( [terminalWindow isEqualToString:@"tab"] ) {
+                [self runScript:iTerm2NightlyNewTabDefault handler:handlerName parameters:passParameters];
+            }
         }
     }
     //If JSON file is set to use Terminal.app
     else {
+        //if we are running in a new terminal Window
         if ( [terminalWindow isEqualToString:@"new"] ) {
             [self runScript:terminalNewWindow handler:handlerName parameters:passParameters];
-            }else {
-                if ( [terminalWindow isEqualToString:@"current"] ) {
-                    [self runScript:terminalCurrentWindow handler:handlerName parameters:passParameters];
-                    }else {
-                        [self runScript:terminalNewTabDefault handler:handlerName parameters:passParameters];
-                    }
-            }
+        }
+        
+        //if we are running in the current terminal Window
+        if ( [terminalWindow isEqualToString:@"current"] ) {
+            [self runScript:terminalCurrentWindow handler:handlerName parameters:passParameters];
+        }
+        
+        //we are using the default action of shuttle... The active window in a new tab
+        if ( [terminalWindow isEqualToString:@"tab"] ) {
+            [self runScript:terminalNewTabDefault handler:handlerName parameters:passParameters];
+        }
     }
 }
 
@@ -590,11 +603,14 @@
         //build the editor command
         NSString *editorCommand = [NSString stringWithFormat:@"%@ %@", editorPref, shuttleConfigFile];
         
+        //build the reprensented object. It's expecting menuCmd, termTheme, termTitle, termWindow, menuName
+        NSString *editorRepObj = [NSString stringWithFormat:@"%@,%@,%@,%@,%@", editorCommand, nil, @"Editing shuttle JSON", nil, nil];
+        
         //make a menu item for the command selector(openHost:) runs in a new terminal window.
         NSMenuItem *editorMenu = [[NSMenuItem alloc] initWithTitle:@"editJSONconfig" action:@selector(openHost:) keyEquivalent:(@"")];
         
         //set the command for the menu item
-        [editorMenu setRepresentedObject:editorCommand];
+        [editorMenu setRepresentedObject:editorRepObj];
         
         //open the JSON file in the terminal editor.
         [self openHost:editorMenu];
