@@ -20,10 +20,10 @@ The default, out-of-the-box configuration should be good enough to get started. 
 
 ### JSON Options
 #### Global settings
-##### ```"editor": "default",```
+##### ```"editor": "VALUE",```
 _This changes the app that opens settings.json for editing (Global Setting)_
 
-Valid settings are ```default``` ```nano``` ```vi``` ```vim``` or any terminal based editor. 
+Possible values are ```default```, ```nano```, ```vi```, ```vim``` or any terminal based editor. 
 ```default``` opens settings.json in whatever app is registered as the default for extension ```.json```
 ```
 "editor": "vim",
@@ -32,56 +32,63 @@ would open ```~/.shuttle.json``` in vim
 
 ----
 
-##### ```"launch_at_login": false,```
+##### ```"launch_at_login": VALUE,```
 _This allows you to flag the shuttle.app to start automatically (Global Setting)_
 
-Valid settings are ```true``` or ```false```
+Possible values are ```true``` or ```false```
 
 ----
 
-##### ```"terminal": "iTerm",```
+##### ```"terminal": "VALUE",```
 _This allows you to set the default terminal (Global Setting)_
 
-Valid settings are ```Terminal.app``` or ```iTerm```
+Possible values are ```Terminal.app``` or ```iTerm```
 
 ----
 
-##### ```"iTerm_version": "nightly",```
+##### ```"iTerm_version": "VALUE",```
 _This changes the applescripts for iTerm (Global Setting)_
 
-Valid settings are ```stable``` or ```nightly```
+Possible values are ```stable``` or ```nightly```
 
-**If the terminal is set to ```iTerm``` this setting is mandatory**
+**If ```terminal``` is set to ```iTerm``` this setting is mandatory**
 
 ----
 
-##### ```"open_in": "tab",```
+##### ```"open_in": "VALUE",```
 _This changes the default action for how commands are opened (Global Setting)_
 
-Valid settings are ```tab``` or ```new```. ```tab``` opens the command in the active terminal in a new tab. ```new``` opens the command in window. This setting can be overwritten b$
+Possible values are ```tab``` or ```new```. 
+
+```tab``` opens the command in the active terminal in a new tab. 
+
+```new``` opens the command in window. This setting can be overwritten by the command level ```"inTerminal"``` settings
 
 ----
-##### ``````"show_ssh_config_hosts": false,````
-_This changes parsing ssh config. By default, Shuttle will parse your `~/.ssh/config` file for hosts. (Global Setting)_
+##### ```"show_ssh_config_hosts": VALUE,```
+_This changes parsing ssh config. By default, Shuttle will parse your ```~/.ssh/config``` file for hosts. (Global Setting)_
 
-Valid settings are ```false``` or ```true````
+Possbile values are ```false``` or ```true```
 
 ----
 
-##### ```"ssh_config_ignore_hosts": ["github.com", "git.example.com"],```
+##### ```"ssh_config_ignore_hosts": ["VALUE", "VALUE"],```
 _This will ignore hosts in the ssh config. (Global Settings)_
 
-Valid settings are the hosts in your config that you want to ignore. 
+Possible values are the hosts in your config that you want to ignore. If you had github.com and git.example.com in your ssh config, to ignor them you set:
+
+```"ssh_config_ignore_hosts": ["github.com", "git.example.com"],```
 
 ----
 
-##### ```"ssh_config_ignore_keywords": ["git"],```
+##### ```"ssh_config_ignore_keywords": ["VALUE"],```
 _This will ignore keywoards in your ssh config. (Global Settings)_
 
-Valid settings are the keywords in your ssh config that you want to ignore.
+Possible values are the keywords in your ssh config that you want to ignore.
 
 ----
-***Additional ssh config customization** 
+
+**Additional ssh config customization** 
 ##### Nested menus for `~/.ssh/config` hosts
 
 ###### Create a menu item at "work" > "servers" > "web01"
@@ -99,10 +106,10 @@ Host gandalf
 ```
 
 #### Command level settings
-#### ```"inTerminal": "new",```
+#### ```"inTerminal": "VALUE",```
 _This sets how command will open in the terminal window_
 
-Valid settings are ```new```, ```tab```, or ```current```
+Possible values are ```new```, ```tab```, or ```current```
 
 ```new``` opens the command in a new terminal window. 
 
@@ -112,24 +119,27 @@ Valid settings are ```new```, ```tab```, or ```current```
 
 When using using ```current``` I recommend that you wrap the command in some user input like this:
 
-```echo "are you sure y/n"; read sure; if [ "$sure" == "y" ]; then echo "running command" && ps aux | grep [s]sh; else echo "exiting..."; fi```
+```
+echo "are you sure y/n"; read sure; if [ "$sure" == "y" ]; then echo "running command" && ps aux | grep [s]sh; else echo "exiting..."; fi
+```
 
 Do this as a precaution as it could be possible to run a command on the wrong host. 
+
 ----
 
-##### ```"theme": "Default",```
+##### ```"theme": "VALUE",```
 _This sets the theme for the terminal window_
 
-Valid settings are the profile names for iTerm or Terminal.app
+Possbile values are the profile names for iTerm or Terminal.app
 
 ---
 
-##### ```"title": "grep foo"```
+##### ```"title": "VALUE"```
 _This sets the text that will appear in the terminal's title bar_
 
+Where VALUE is the text you want to set in the terminals title bar. 
+
 If ```title``` is missing shuttle uses the menu's name and sets this as ```title```
-
-
 
 ## Roadmap
 
