@@ -6,21 +6,16 @@ A simple SSH shortcut menu for OS X
 
 ![How Shuttle works](https://raw.github.com/fitztrev/shuttle/gh-pages/img/how-shuttle-works.gif)
 
-***Sidenote***: *Many people ask, so here's how I have [my terminal setup](https://github.com/fitztrev/shuttle/wiki/My-Terminal-Prompt).*
+**Sidenote**: *Many people ask, so here's how I have [my terminal setup](https://github.com/fitztrev/shuttle/wiki/My-Terminal-Prompt).*
 
 ## Installation
 
 1. Download [Shuttle](http://fitztrev.github.io/shuttle/)
 2. Copy to Applications
 
-
-## Customization
-
-The default, out-of-the-box configuration should be good enough to get started. However, if you're looking to customize the appearance further, here are a few advanced tips.
-
-### JSON Options
-#### Global settings
-##### ```"editor": "VALUE",```
+## JSON Options
+### Global settings
+#### ```"editor": "VALUE",```
 _This changes the app that opens settings.json for editing (Global Setting)_
 
 Possible values are ```default```, ```nano```, ```vi```, ```vim``` or any terminal based editor. 
@@ -32,66 +27,84 @@ would open ```~/.shuttle.json``` in vim
 
 ----
 
-##### ```"launch_at_login": VALUE,```
+#### ```"launch_at_login": VALUE,```
 _This allows you to flag the shuttle.app to start automatically (Global Setting)_
 
 Possible values are ```true``` or ```false```
 
 ----
 
-##### ```"terminal": "VALUE",```
+#### ```"terminal": "VALUE",```
 _This allows you to set the default terminal (Global Setting)_
 
 Possible values are ```Terminal.app``` or ```iTerm```
 
 ----
 
-##### ```"iTerm_version": "VALUE",```
+#### ```"iTerm_version": "VALUE",```
 _This changes the applescripts for iTerm (Global Setting)_
 
 Possible values are ```stable``` or ```nightly```
 
 **If ```terminal``` is set to ```iTerm``` this setting is mandatory**
 
+_This setting is ignored if your terminal is set to ```Terminal.app```_
+
 ----
 
-##### ```"open_in": "VALUE",```
+#### ```"default_theme": "Homebrew",```
+_This sets the Terminal theme for all windows. (Global Setting)_ 
+
+Possible values are the Profile names in your terminal preferences. iTerm ships with one Profile named "Default". OS X Terminal ships with several. To see the names see the preferences area of the terminal you are using.
+
+In iTerm the profile names are case sensitive.
+
+**Please ensure the theme names you set are valid. If shuttle passes theme "Dagobah" and it does not exist in iTerm or OS X Terminal then your command won't run. This is because the applescripts are not making any checks to see if the theme you passed actually exists within the terminal application.** 
+
+This setting can be overwritten by the command level "theme" settings
+
+----
+
+#### ```"open_in": "VALUE",```
 _This changes the default action for how commands are opened (Global Setting)_
 
 Possible values are ```tab``` or ```new```. 
 
 ```tab``` opens the command in the active terminal in a new tab. 
 
-```new``` opens the command in window. This setting can be overwritten by the command level ```"inTerminal"``` settings
+```new``` opens the command in a new window. 
+
+This setting can be overwritten by the command level ```"inTerminal"``` settings
 
 ----
-##### ```"show_ssh_config_hosts": VALUE,```
+
+#### ```"show_ssh_config_hosts": VALUE,```
 _This changes parsing ssh config. By default, Shuttle will parse your ```~/.ssh/config``` file for hosts. (Global Setting)_
 
-Possbile values are ```false``` or ```true```
+Possible values are ```false``` or ```true```
 
 ----
 
-##### ```"ssh_config_ignore_hosts": ["VALUE", "VALUE"],```
-_This will ignore hosts in the ssh config. (Global Settings)_
+#### ```"ssh_config_ignore_hosts": ["VALUE", "VALUE"],```
+_This will ignore hosts in the ssh config. (Global Setting)_
 
-Possible values are the hosts in your config that you want to ignore. If you had github.com and git.example.com in your ssh config, to ignor them you set:
+Possible values are the hosts in your config that you want to ignore. If you had github.com and git.example.com in your ssh config, to ignore them you set:
 
 ```"ssh_config_ignore_hosts": ["github.com", "git.example.com"],```
 
 ----
 
-##### ```"ssh_config_ignore_keywords": ["VALUE"],```
-_This will ignore keywoards in your ssh config. (Global Settings)_
+#### ```"ssh_config_ignore_keywords": ["VALUE"],```
+_This will ignore keywords in your ssh config. (Global Setting)_
 
 Possible values are the keywords in your ssh config that you want to ignore.
 
 ----
 
 **Additional ssh config customization** 
-##### Nested menus for `~/.ssh/config` hosts
+#### Nested menus for `~/.ssh/config` hosts
 
-###### Create a menu item at "work" > "servers" > "web01"
+##### Create a menu item at "work" > "servers" > "web01"
 
 ```
 Host work/servers/web01
@@ -105,9 +118,34 @@ Host gandalf
         HostName user@web01.example.com
 ```
 
-#### Command level settings
+### Command level settings
+_Command level settings unique to your command and will overwrite the Global setting equivalent_
+
+#### ```"cmd": "VALUE"```
+_This is the command / script that will be launched in the terminal. (Command setting)_
+
+Where Value is a command or script. 
+```
+"cmd": "ps aux | grep [s]sh"
+```
+Would check for ssh processes.
+
+----
+
+#### ```"name": "VALUE"```
+_This sets the text that will appear in shuttles drop down menu. (Command setting)_
+
+Were Value is the text you want to see in the drop down menu for this command. 
+```
+"name": "SSH to my wordpress blog"
+```
+
+This value can also set the title of the terminal window if ```"title" :"VALUE"``` is not set.
+
+----
+
 #### ```"inTerminal": "VALUE",```
-_This sets how command will open in the terminal window_
+_This sets how command will open in the terminal window. (Command setting)_
 
 Possible values are ```new```, ```tab```, or ```current```
 
@@ -127,15 +165,15 @@ Do this as a precaution as it could be possible to run a command on the wrong ho
 
 ----
 
-##### ```"theme": "VALUE",```
-_This sets the theme for the terminal window_
+#### ```"theme": "VALUE",```
+_This sets the theme for the terminal window. (Command setting)_
 
-Possbile values are the profile names for iTerm or Terminal.app
+Possible values are the profile names for iTerm or OS X Terminal.
 
----
+----
 
-##### ```"title": "VALUE"```
-_This sets the text that will appear in the terminal's title bar_
+#### ```"title": "VALUE"```
+_This sets the text that will appear in the terminal's title bar. (Command setting)_
 
 Where VALUE is the text you want to set in the terminals title bar. 
 
