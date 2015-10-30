@@ -198,6 +198,7 @@
     editorPref = [json[@"editor"] lowercaseString];
     iTermVersionPref = [json[@"iTerm_version"] lowercaseString];
     openInPref = [json[@"open_in"] lowercaseString];
+    themePref = json[@"default_theme"];
     launchAtLoginController.launchAtLogin = [json[@"launch_at_login"] boolValue];
     shuttleHosts = json[@"hosts"];
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
@@ -373,6 +374,10 @@
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
     
+    NSString *errorMessage;
+    NSString *errorInfo;
+
+    
     //Place the comma delimited string of menu item settings into an array
     NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@",")];
     
@@ -387,13 +392,21 @@
     
     escapedObject = [[objectsFromJSON objectAtIndex:0] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     
-    //Check if terminalTheme is null
+    //if terminalTheme is not set then check for a global setting.
     if( [[objectsFromJSON objectAtIndex:1] isEqualToString:@"(null)"] ){
-        if( [terminalPref isEqualToString:@"iterm"] ){
-            terminalTheme = @"Default";
-            }else{
-                terminalTheme = @"basic";
-            }
+        if(themePref == 0) {
+            if( [terminalPref isEqualToString:@"iterm"] ){
+                //we have no global theme and there is no theme in the command settings.
+                //Forcing the Default profile for iTerm and the basic profile for Terminal.app
+                terminalTheme = @"Default";
+                }else{
+                    terminalTheme = @"basic";
+                }
+        //We have a global setting using this as the theme.
+        }else {
+            terminalTheme = themePref;
+        }
+    //we have command level theme override the Global default_theme settings.
     }else{
         terminalTheme = [objectsFromJSON objectAtIndex:1];
     }
@@ -408,16 +421,22 @@
     
     //Check if inTerminal is null if so then use the default settings of open_in
     if( [[objectsFromJSON objectAtIndex:3] isEqualToString:@"(null)"]){
-        //check if open_in is null
-        if([openInPref isEqualToString:@"(null)"]){
-            //open_in was null so we are opening the command the active window in a new tab
+        
+        //if open_in is not "tab" or "new" then force the default of "tab".
+        if( ![openInPref isEqualToString:@"tab"] && ![openInPref isEqualToString:@"new"]){
             openInPref = @"tab";
         }
-        //open_in was not null we are passing the settings. 
+        //open_in was not empty or bad value we are passing the settings.
         terminalWindow = openInPref;
     }else{
     //inTerminal is not null and overrides the default values of open_in
         terminalWindow = [objectsFromJSON objectAtIndex:3];
+         if( ![terminalWindow isEqualToString:@"new"] && ![terminalWindow isEqualToString:@"current"] && ![terminalWindow isEqualToString:@"tab"])
+         {
+             errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",terminalWindow,@"'", @"is not a valid value for inTerminal. Please fix this in the JSON file"];
+             errorInfo = @"bad \"inTerminal\":\"VALUE\" in the JSON settings";
+             [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:NO];
+         }
     }
     
     //Set Paths to iTerm Stable AppleScripts
@@ -450,44 +469,55 @@
     //If the JSON file is set to use iTerm
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
         
-        //If the JSON prefs for iTermVersion are set to "stable" then configure applescripts for iTerm Stable
-        if( [iTermVersionPref isEqualToString: @"stable"] ) {
-            //run the applescript that works with iTerm Stable
-            
+        //If the JSON prefs for iTermVersion are not stable or nightly throw an error
+        if( ![iTermVersionPref isEqualToString: @"stable"] && ![iTermVersionPref isEqualToString:@"nightly"] ) {
+
+            if( iTermVersionPref == 0 ) {
+                errorMessage = @"\"iTerm_version\": \"VALUE\", is missing.\n\"VALUE\" can be \"stable\" or \"nightly\"\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help.";
+                errorInfo = @"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis will fail if you have iTerm nightly installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle.";
+                [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:YES];
+                iTermVersionPref = @"stable";
+
+            }else{
+                errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",iTermVersionPref,@"'", @"is not a valid value for iTerm_version. Please fix this in the JSON file"];
+                errorInfo = @"bad \"iTerm_version\": \"VALUE\" in the JSON settings";
+                [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:NO];
+            }
+        }
+        
+        if( [iTermVersionPref isEqualToString:@"stable"]) {
+                
+        //run the applescript that works with iTerm Stable
             //if we are running in a new iTerm "Stable" Window
             if ( [terminalWindow isEqualToString:@"new"] ) {
                 [self runScript:iTermStableNewWindow handler:handlerName parameters:passParameters];
             }
-            
             //if we are running in the current iTerm "Stable" Window
             if ( [terminalWindow isEqualToString:@"current"] ) {
                 [self runScript:iTermStableCurrentWindow handler:handlerName parameters:passParameters];
             }
-            
             //we are using the default action of shuttle... The active window in a new tab
             if ( [terminalWindow isEqualToString:@"tab"] ) {
-                [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
+                    [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
             }
         }
         //iTermVersion is not set to "stable" using applescripts Configured for Nightly
-        else {
+        if( [iTermVersionPref isEqualToString:@"nightly"]) {
             //if we are running in a new iTerm "Nightly" Window
             if ( [terminalWindow isEqualToString:@"new"] ) {
                 [self runScript:iTerm2NightlyNewWindow handler:handlerName parameters:passParameters];
             }
-            
             //if we are running in the current iTerm "Nightly" Window
             if ( [terminalWindow isEqualToString:@"current"] ) {
                 [self runScript:iTerm2NightlyCurrentWindow handler:handlerName parameters:passParameters];
             }
-            
             //we are using the default action of shuttle... The active window in a new tab
             if ( [terminalWindow isEqualToString:@"tab"] ) {
                 [self runScript:iTerm2NightlyNewTabDefault handler:handlerName parameters:passParameters];
             }
         }
     }
-    //If JSON file is set to use Terminal.app
+    //If JSON settings are set to use Terminal.app
     else {
         //if we are running in a new terminal Window
         if ( [terminalWindow isEqualToString:@"new"] ) {
@@ -506,8 +536,7 @@
     }
 }
 
-- (void) runScript:(NSString *)scriptPath handler:(NSString*)handlerName parameters:(NSArray*)parametersInArray
-{
+- (void) runScript:(NSString *)scriptPath handler:(NSString*)handlerName parameters:(NSArray*)parametersInArray {
     //special thanks to stackoverflow.com/users/316866/leandro for pointing me the right direction.
     //see http://goo.gl/olcpaX
     NSAppleScript           * appleScript;
@@ -579,6 +608,25 @@
      	return;
     }
     
+}
+
+-(void) throwError:(NSString*)errorMessage additionalInfo:(NSString*)errorInfo continueOnErrorOption:(BOOL)continueOption {
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert setInformativeText:errorInfo];
+    [alert setMessageText:errorMessage];
+    [alert setAlertStyle:NSWarningAlertStyle];
+    
+    if (continueOption) {
+        [alert addButtonWithTitle:@"Quit"];
+        [alert addButtonWithTitle:@"Continue"];
+        
+    }else{
+        [alert addButtonWithTitle:@"Quit"];
+    }
+    
+    if ([alert runModal] == NSAlertFirstButtonReturn) {
+        [NSApp terminate:NSApp];
+    }
 }
 
 - (IBAction)showExportPanel:(id)sender {

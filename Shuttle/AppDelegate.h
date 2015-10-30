@@ -27,6 +27,7 @@
     NSString *editorPref; //what app opens the JSON fiile vi, nano...
     NSString *iTermVersionPref; //which version of iTerm nightly or stable
     NSString *openInPref; //by default are commands opened in tabs or new windows.
+    NSString *themePref; //The global theme.
     
     //used to gather ssh config settings
     NSMutableArray* shuttleHosts;
