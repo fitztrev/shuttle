@@ -61,7 +61,7 @@ In iTerm the profile names are case sensitive.
 
 **Please ensure the theme names you set are valid. If shuttle passes theme "Dagobah" and it does not exist in iTerm or OS X Terminal then your command won't run. This is because the applescripts are not making any checks to see if the theme you passed actually exists within the terminal application.** 
 
-This setting can be overwritten by the command level "theme" settings
+This setting can be overwritten by the command level ```"theme"``` settings
 
 ----
 
@@ -119,7 +119,7 @@ Host gandalf
 ```
 
 ### Command level settings
-_Command level settings unique to your command and will overwrite the Global setting equivalent_
+_Command level settings are unique to your command and will overwrite the Global setting equivalent_
 
 #### ```"cmd": "VALUE"```
 _This is the command / script that will be launched in the terminal. (Command setting)_
@@ -169,6 +169,8 @@ Do this as a precaution as it could be possible to run a command on the wrong ho
 _This sets the theme for the terminal window. (Command setting)_
 
 Possible values are the profile names for iTerm or OS X Terminal.
+
+If ```"theme"``` is not set and ```"default_theme"``` is not set then shuttle passes Profile ```Default``` for iTerm and Profile ```basic``` for OS X terminal.
 
 ----
 
