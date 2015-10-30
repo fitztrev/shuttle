@@ -13,6 +13,16 @@ A simple SSH shortcut menu for OS X
 1. Download [Shuttle](http://fitztrev.github.io/shuttle/)
 2. Copy to Applications
 
+## JSON Path Change
+
+In your home directory create a file called ```~/.shuttle.path```
+In this file should be a single line with the path to the JSON settings file. 
+
+```
+/Users/thshdw/Dropbox/shuttle/shuttle.json
+``` 
+shuttle will read ```~/.shuttle.path``` first and use its contents as the path to your JSON file.
+
 ## JSON Options
 ### Global settings
 #### ```"editor": "VALUE",```
