@@ -6,54 +6,43 @@
     "For more information on how to configure, please see http://fitztrev.github.io/shuttle/"
   ],
   "editor": "default",
-  "iTerm_version": "nightly",
   "launch_at_login": false,
-  "show_ssh_config_hosts": true,
+  "terminal": "Terminal.app",
+  "iTerm_version": "nightly",
+  "default_theme": "Homebrew",
+  "open_in": "new",  
+  "show_ssh_config_hosts": false,
   "ssh_config_ignore_hosts": [  ],
   "ssh_config_ignore_keywords": [  ],
-  "terminal": "iTerm",
   "hosts": [
     {
-      "cmd": "ps aux | grep foo",
-      "inTerminal": "new",
-      "name": "look for process foo",
-      "theme": "Default",
-      "title": "grep foo"
+      "cmd": "ps aux | grep defaults",
+      "name": "Grep - Opens in Default-window-theme-title"
     },
     {
       "Spouses Servers": [
         {
-          "cmd": "echo '—->WARNING<-- Running a command in this active terminal! Are you sure? y/n'; read sure; if [ $sure == y ]; then echo running command... && tail -f /var/log/messages; else echo exiting...; fi",
+          "cmd": "echo '—->WARNING<-- Running a command in this active terminal! Are you sure? y/n'; read sure; if [ $sure == y ]; then echo running command... && tail -f /var/log/current; else echo exiting...; fi",
           "inTerminal": "current",
-          "name": "Look at the Logs"
+          "name": "Logs - Opens in the current active terminal window"
         },
         {
           "Jane’s Servers": [
             {
               "cmd": "ssh username@blog2.example.com",
-              "name": "Wordpress Box"
+              "inTerminal": "tab",
+              "name": "SSH blog - Opens in Tab of active window",
+              "theme": "basic",
+              "title": "title of tab"
             },
-			{ 
+            {
               "cmd": "ssh username@shop1.example.com",
-              "name": "Shopping Site"
+              "inTerminal": "new",
+              "name": "SSH Shop - Opens in New Window",
+              "theme": "basic",
+              "title": "title of new window"
             }
           ]
-        }
-      ]
-    },
-    {
-      "Work": [
-        {
-          "cmd": "ssh username@dev.example.net -p 4000",
-          "name": "dev.example.net"
-        },
-        {
-          "cmd": "ssh username@staging.example.net -p 5000",
-          "name": "staging.example.net"
-        },
-        {
-          "cmd": "ssh username@example.net -p 6000",
-          "name": "production.example.net"
         }
       ]
     },
@@ -61,26 +50,9 @@
       "Vagrant": [
         {
           "cmd": "ssh vagrant@127.0.0.1 -p 2222 -i ~/.vagrant.d/insecure_private_key",
-          "name": "precise32"
+          "name": "Vagrant - Opens in default-window-theme-title"
         }
       ]
     }
   ]
 }
-        
-        
-        
-        
-        
-        
-        
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
