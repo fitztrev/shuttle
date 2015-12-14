@@ -158,7 +158,11 @@
         
         if ([first isEqualToString:@"Host"]) {
             // a new host section
-            key = second;
+            
+            // split multiple aliases on space and only save the first
+            NSArray* hostAliases = [second componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            hostAliases = [hostAliases filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+            key = [hostAliases firstObject];
             servers[key] = [[NSMutableDictionary alloc] init];
         }
     }
