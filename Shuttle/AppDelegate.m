@@ -435,7 +435,8 @@
     }else{
     //inTerminal is not null and overrides the default values of open_in
         terminalWindow = [objectsFromJSON objectAtIndex:3];
-         if( ![terminalWindow isEqualToString:@"new"] && ![terminalWindow isEqualToString:@"current"] && ![terminalWindow isEqualToString:@"tab"])
+         if( ![terminalWindow isEqualToString:@"new"] && ![terminalWindow isEqualToString:@"current"]
+            && ![terminalWindow isEqualToString:@"tab"] && ![terminalWindow isEqualToString:@"none"])
          {
              errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",terminalWindow,@"'", @"is not a valid value for inTerminal. Please fix this in the JSON file"];
              errorInfo = @"bad \"inTerminal\":\"VALUE\" in the JSON settings";
@@ -538,6 +539,54 @@
             [self runScript:terminalNewTabDefault handler:handlerName parameters:passParameters];
         }
     }
+    // If JSON settings are set to any terminal
+    // Run a command in background
+    // we are running command as a subprocess (via NSTask)
+    if ( [terminalWindow isEqualToString:@"none"] ) {
+        NSString *scriptOutput = [self runSubprocess:handlerName parameters:passParameters];
+        // Display output if there is one.
+        if ( ![scriptOutput isEqualToString:@""] )
+        {
+            NSString *userCommandString = [passParameters objectAtIndex:0];
+            NSString *mainMessage = [NSString stringWithFormat:@"'%@' output:", userCommandString];
+            
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:mainMessage];
+            [alert setInformativeText:scriptOutput];
+            [alert addButtonWithTitle:@"Ok"];
+            [alert runModal];
+        }
+    }
+}
+
+/**
+ * Run a shell script as a subprocess via NSTask.
+ */
+- (NSString *) runSubprocess:(NSString*)handlerName parameters:(NSArray*)parametersArray
+{
+    // based on this topic from stackoverflow.com: 'Execute a terminal command from a Cocoa app'
+    // see: http://bit.ly/1PQtzxn
+    NSString *userCommandString = [parametersArray objectAtIndex:0];
+    NSString *shellPath = @"/bin/bash";
+    NSArray *argumentsArray = @[@"-c", userCommandString];
+    
+    //int pid = [[NSProcessInfo processInfo] processIdentifier];
+    NSPipe *pipe = [NSPipe pipe];
+    NSFileHandle *file = pipe.fileHandleForReading;
+    
+    NSTask *task = [[NSTask alloc] init];
+    task.launchPath = shellPath;
+    task.arguments = argumentsArray;
+    task.standardOutput = pipe;
+    
+    [task launch];
+    
+    NSData *data = [file readDataToEndOfFile];
+    [file closeFile];
+    
+    NSString *cmdOutput = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+    
+    return cmdOutput;
 }
 
 - (void) runScript:(NSString *)scriptPath handler:(NSString*)handlerName parameters:(NSArray*)parametersInArray {
