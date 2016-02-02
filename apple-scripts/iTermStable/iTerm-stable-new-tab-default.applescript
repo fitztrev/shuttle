@@ -16,7 +16,13 @@ end scriptRun
 on CommandRun(withCmd, withTheme, theTitle)
 	tell application "iTerm"
 		if it is running then
-			tell the current terminal
+			set curTerm to (current terminal)
+			try
+				set tmp to curTerm
+			on error
+				set curTerm to (make new terminal)
+			end try
+			tell curTerm
 				set newSession to (launch session withTheme)
 				tell the last session
 					reopen
