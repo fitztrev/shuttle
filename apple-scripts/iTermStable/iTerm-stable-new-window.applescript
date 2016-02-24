@@ -3,7 +3,7 @@
 --	set argsCmd to "ps aux | grep [s]sh"
 --	set argsTheme to "Homebrew"
 --	set argsTitle to "Custom title"
---	preLoad(argsCmd, argsTheme, argsTitle)
+--	scriptRun(argsCmd, argsTheme, argsTitle)
 --end run
 
 on scriptRun(argsCmd, argsTheme, argsTitle)
@@ -16,9 +16,12 @@ end scriptRun
 on preLoad(withCmd, withTheme, theTitle)
 	tell application "iTerm"
 		if it is not running then
+			--activate opens iTerm using default settings
 			activate
 			delay 0.2
 			close first window
+			--we don't want the defaults. 
+			--lets close the first window and make our own
 		end if
 	end tell
 	CommandRun(withCmd, withTheme, theTitle)
