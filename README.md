@@ -49,7 +49,7 @@ Possible values are ```true``` or ```false```
 #### ```"terminal": "VALUE",```
 _This allows you to set the default terminal (Global Setting)_
 
-Possible values are ```Terminal.app``` or ```iTerm```
+Possible values are ```Terminal.app``` or ```iTerm```.
 
 ----
 
@@ -174,6 +174,10 @@ echo "are you sure y/n"; read sure; if [ "$sure" == "y" ]; then echo "running co
 ```
 
 Do this as a precaution as it could be possible to run a command on the wrong host. 
+
+```none``` the command will be executed in background, by running a subprocess.
+
+When using using ```none``` you can interact with script. You can only get output inside an alert panel.
 
 ----
 
