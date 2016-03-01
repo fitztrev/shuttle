@@ -3,7 +3,7 @@
 --	set argsCmd to "ps aux | grep xcode"
 --	set argsTheme to "Homebrew"
 --	set argsTitle to "Custom title"
---	CommandRun(argsCmd, argsTheme, argsTitle)
+--	scriptRun(argsCmd, argsTheme, argsTitle)
 --end run
 
 on scriptRun(argsCmd, argsTheme, argsTitle)
@@ -23,7 +23,11 @@ on CommandRun(withCmd, withTheme, theTitle)
 			end tell
 			
 			tell application "iTerm"
-				create window with profile withTheme
+				try
+					create window with profile withTheme
+				on error msg
+					create window with profile "Default"
+				end try
 				tell the current window
 					tell the current session
 						set name to theTitle
@@ -33,11 +37,16 @@ on CommandRun(withCmd, withTheme, theTitle)
 				end tell
 			end tell
 		else
-			--assume that iTerm is open and open a new tab 
+			--assume that iTerm is open and open a new tab
 			try
 				tell application "iTerm"
+					activate
 					tell the current window
-						create tab with profile withTheme
+						try
+							create tab with profile withTheme
+						on error msg
+							create tab with profile "Default"
+						end try
 						tell the current tab
 							tell the current session
 								set name to theTitle
@@ -49,7 +58,11 @@ on CommandRun(withCmd, withTheme, theTitle)
 			on error msg
 				--if all iTerm windows are closed the app stays open. In this scenario iTerm has no "current window" and will give an error when trying to create the new tab.  
 				tell application "iTerm"
-					create window with profile withTheme
+					try
+						create window with profile withTheme
+					on error msg
+						create window with profile "Default"
+					end try
 					tell the current window
 						tell the current session
 							set name to theTitle

@@ -465,7 +465,7 @@
     NSArray *passParameters = @[escapedObject, terminalTheme, terminalTitle];
     
 // Check if Url
-    NSURL* url = [NSURL URLWithString:[sender representedObject]];
+    NSURL* url = [NSURL URLWithString:escapedObject];
     if(url)
     {
         [[NSWorkspace sharedWorkspace] openURL:url];

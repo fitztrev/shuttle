@@ -3,7 +3,7 @@
 --	set argsCmd to "ps aux | grep [s]sh"
 --	set argsTheme to "Homebrew"
 --	set argsTitle to "Custom title"
---	CommandRun(argsCmd, argsTheme, argsTitle)
+--	scriptRun(argsCmd, argsTheme, argsTitle)
 --end run
 
 on scriptRun(argsCmd, argsTheme, argsTitle)
@@ -22,11 +22,14 @@ on CommandRun(withCmd, withTheme, theTitle)
 		end if
 	end tell
 	tell application "iTerm"
-		create window with profile withTheme
+		try
+			create window with profile withTheme
+		on error msg
+			create window with profile "Default"
+		end try
 		tell the current window
 			tell the current session
 				set name to theTitle
-				set profile to withTheme
 				write text withCmd
 			end tell
 		end tell

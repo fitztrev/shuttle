@@ -1,7 +1,7 @@
 --for testing uncomment the "on run" block
 --on run
 --	set argsCmd to "ps aux | grep [s]sh"
---	CommandRun(argsCmd)
+--	scriptRun(argsCmd)
 --end run
 
 on scriptRun(argsCmd)
