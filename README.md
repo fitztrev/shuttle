@@ -71,7 +71,8 @@ Possible values are the Profile names in your terminal preferences. iTerm ships 
 
 In iTerm the profile names are case sensitive.
 
-**Please ensure the theme names you set are valid. If shuttle passes theme "Dagobah" and it does not exist in iTerm or OS X Terminal then your command won't run. This is because the applescripts are not making any checks to see if the theme you passed actually exists within the terminal application.** 
+**Please ensure the theme names you set are valid. If shuttle passes theme "Dagobah" and it does not exist in iTerm, shuttle's applescripts fall back to the default profile. In iTerm this profile is called ```Default```.
+If you have removed ```Default``` or renamed it shuttle may not open your command.** 
 
 This setting can be overwritten by the command level ```"theme"``` settings
 
