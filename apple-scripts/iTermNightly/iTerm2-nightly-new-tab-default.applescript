@@ -19,7 +19,9 @@ on CommandRun(withCmd, withTheme, theTitle)
 			tell application "iTerm"
 				activate
 				delay 0.2
-				close first window
+				try
+					close first window
+				end try
 			end tell
 			
 			tell application "iTerm"

@@ -18,7 +18,9 @@ on CommandRun(withCmd, withTheme, theTitle)
 		if it is not running then
 			activate
 			delay 0.2
-			close first window
+			try
+				close first window
+			end try
 		end if
 	end tell
 	tell application "iTerm"
