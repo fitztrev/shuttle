@@ -207,23 +207,29 @@ If ```title``` is missing shuttle uses the menu's name and sets this as ```title
 
 ## Contributors
 
-This project was created by Trevor Fitzgerald. I owe many thanks to the following people who have helped make Shuttle even better.
+This project was created by [Trevor Fitzgerald](https://github.com/fitztrev). I owe many thanks to the following people who have helped make Shuttle even better.
 
 (In alphabetical order)
 
-* Alex Carter
-* Dave Eddy
-* Dmitry Filimonov
-* Frank Enderle
-* Jack Weeden
-* Justin Swanson
+* [Alex Carter](https://github.com/blazeworx)
+* [Dave Eddy](https://github.com/bahamas10)
+* [Dmitry Filimonov](https://github.com/petethepig)
+* [Frank Enderle](https://github.com/fenderle)
+* [Jack Weeden](https://github.com/jackbot)
+* [Justin Swanson](https://github.com/geeksunny)
+* [Kees Fransen](https://github.com/keesfransen)
 * Marco Aurélio
-* Martin Grund
-* Michael Davis
-* Rui Rodrigues
-* Ryan Cohen
+* [Martin Grund](https://github.com/grundprinzip)
+* [Matt Turner](https://github.com/thshdw)
+* [Michael Davis](https://github.com/mpdavis)
+* [Morton Fox](https://github.com/mortonfox)
+* [Rui Rodrigues](https://github.com/rmrodrigues)
+* [Ryan Cohen](https://github.com/imryan)
+* [Stefan Jansen](https://github.com/steffex)
 * Thomas Rosenstein
-* Tibor Bödecs
+* [Thoro](https://github.com/Thoro)
+* [Tibor Bödecs](https://github.com/tib)
+* [welsonla](https://github.com/welsonla)
 
 ## Credits
 
