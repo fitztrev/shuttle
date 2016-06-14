@@ -223,6 +223,7 @@ This project was created by [Trevor Fitzgerald](https://github.com/fitztrev). I 
 * [Matt Turner](https://github.com/thshdw)
 * [Michael Davis](https://github.com/mpdavis)
 * [Morton Fox](https://github.com/mortonfox)
+* [pluwen](https://github.com/pluwen)
 * [Rui Rodrigues](https://github.com/rmrodrigues)
 * [Ryan Cohen](https://github.com/imryan)
 * [Stefan Jansen](https://github.com/steffex)
