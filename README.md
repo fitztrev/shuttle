@@ -71,7 +71,8 @@ Possible values are the Profile names in your terminal preferences. iTerm ships 
 
 In iTerm the profile names are case sensitive.
 
-**Please ensure the theme names you set are valid. If shuttle passes theme "Dagobah" and it does not exist in iTerm or OS X Terminal then your command won't run. This is because the applescripts are not making any checks to see if the theme you passed actually exists within the terminal application.** 
+**Please ensure the theme names you set are valid. If shuttle passes theme "Dagobah" and it does not exist in iTerm, shuttle's applescripts fall back to the default profile. In iTerm this profile is called ```Default```.
+If you have removed ```Default``` or renamed it shuttle may not open your command.** 
 
 This setting can be overwritten by the command level ```"theme"``` settings
 
@@ -206,23 +207,30 @@ If ```title``` is missing shuttle uses the menu's name and sets this as ```title
 
 ## Contributors
 
-This project was created by Trevor Fitzgerald. I owe many thanks to the following people who have helped make Shuttle even better.
+This project was created by [Trevor Fitzgerald](https://github.com/fitztrev). I owe many thanks to the following people who have helped make Shuttle even better.
 
 (In alphabetical order)
 
-* Alex Carter
-* Dave Eddy
-* Dmitry Filimonov
-* Frank Enderle
-* Jack Weeden
-* Justin Swanson
+* [Alex Carter](https://github.com/blazeworx)
+* [Dave Eddy](https://github.com/bahamas10)
+* [Dmitry Filimonov](https://github.com/petethepig)
+* [Frank Enderle](https://github.com/fenderle)
+* [Jack Weeden](https://github.com/jackbot)
+* [Justin Swanson](https://github.com/geeksunny)
+* [Kees Fransen](https://github.com/keesfransen)
 * Marco Aurélio
-* Martin Grund
-* Michael Davis
-* Rui Rodrigues
-* Ryan Cohen
+* [Martin Grund](https://github.com/grundprinzip)
+* [Matt Turner](https://github.com/thshdw)
+* [Michael Davis](https://github.com/mpdavis)
+* [Morton Fox](https://github.com/mortonfox)
+* [pluwen](https://github.com/pluwen)
+* [Rui Rodrigues](https://github.com/rmrodrigues)
+* [Ryan Cohen](https://github.com/imryan)
+* [Stefan Jansen](https://github.com/steffex)
 * Thomas Rosenstein
-* Tibor Bödecs
+* [Thoro](https://github.com/Thoro)
+* [Tibor Bödecs](https://github.com/tib)
+* [welsonla](https://github.com/welsonla)
 
 ## Credits
 
