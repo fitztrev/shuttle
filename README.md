@@ -56,9 +56,13 @@ Possible values are ```Terminal.app``` or ```iTerm```
 #### ```"iTerm_version": "VALUE",```
 _This changes the applescripts for iTerm (Global Setting)_
 
-Possible values are ```stable``` or ```nightly```
+Possible values are ```legacy``` or ```stable``` or ```nightly```
 
 **If ```terminal``` is set to ```iTerm``` this setting is mandatory**
+
+```"iTerm_version": "legacy",``` targeting iTerm 2.14
+```"iTerm_version": "stable",``` targeting new versions of iTerm
+```"iTerm_version": "nightly",```targeting only the nightly build of iTerm
 
 _This setting is ignored if your terminal is set to ```Terminal.app```_
 
