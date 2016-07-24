@@ -365,7 +365,7 @@
         NSString *menuName = cfg[@"name"];
         
         //Place the terminal command, theme, and title into an comma delimited string
-        NSString *menuRepObj = [NSString stringWithFormat:@"%@,%@,%@,%@,%@", menuCmd, termTheme, termTitle, termWindow, menuName];
+        NSString *menuRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", menuCmd, termTheme, termTitle, termWindow, menuName];
         
         [menuItem setTitle:cfg[@"name"]];
         [menuItem setRepresentedObject:menuRepObj];
@@ -383,7 +383,7 @@
 
     
     //Place the comma delimited string of menu item settings into an array
-    NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@",")];
+    NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@"¬_¬")];
     
     //This is our command that will be run in the terminal window
     NSString *escapedObject;
@@ -443,10 +443,15 @@
          }
     }
     
+    //Set Paths to iTerm Legacy AppleScripts
+    NSString *iTermLegacyNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm-legacy-new-window" ofType:@"scpt"];
+    NSString *iTermLegacyCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm-legacy-current-window" ofType:@"scpt"];
+    NSString *iTermLegacyNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm-legacy-new-tab-default" ofType:@"scpt"];
+    
     //Set Paths to iTerm Stable AppleScripts
-    NSString *iTermStableNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm-stable-new-window" ofType:@"scpt"];
-    NSString *iTermStableCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm-stable-current-window" ofType:@"scpt"];
-    NSString *iTermStableNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm-stable-new-tab-default" ofType:@"scpt"];
+    NSString *iTermStableNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-new-window" ofType:@"scpt"];
+    NSString *iTermStableCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-current-window" ofType:@"scpt"];
+    NSString *iTermStableNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-new-tab-default" ofType:@"scpt"];
 
     //Set Paths to iTerm Nightly AppleScripts
     NSString *iTerm2NightlyNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-new-window" ofType:@"scpt"];
@@ -474,11 +479,11 @@
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
         
         //If the JSON prefs for iTermVersion are not stable or nightly throw an error
-        if( ![iTermVersionPref isEqualToString: @"stable"] && ![iTermVersionPref isEqualToString:@"nightly"] ) {
+        if( ![iTermVersionPref isEqualToString: @"legacy"] && ![iTermVersionPref isEqualToString: @"stable"] && ![iTermVersionPref isEqualToString:@"nightly"] ) {
 
             if( iTermVersionPref == 0 ) {
-                errorMessage = @"\"iTerm_version\": \"VALUE\", is missing.\n\"VALUE\" can be \"stable\" or \"nightly\"\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help.";
-                errorInfo = @"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis will fail if you have iTerm nightly installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle.";
+                errorMessage = @"\"iTerm_version\": \"VALUE\", is missing.\n\n\"VALUE\" can be:\n\"legacy\" targeting iTerm 2.14\n\"stable\" targeting new versions.\n\"nightly\" targeting nightly builds.\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help.";
+                errorInfo = @"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis will fail if you have another version of iTerm installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle.";
                 [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:YES];
                 iTermVersionPref = @"stable";
 
@@ -489,9 +494,26 @@
             }
         }
         
-        if( [iTermVersionPref isEqualToString:@"stable"]) {
+        if( [iTermVersionPref isEqualToString:@"legacy"]) {
                 
-        //run the applescript that works with iTerm Stable
+        //run the applescript that works with iTerm Legacy
+            //if we are running in a new iTerm "Stable" Window
+            if ( [terminalWindow isEqualToString:@"new"] ) {
+                [self runScript:iTermLegacyNewWindow handler:handlerName parameters:passParameters];
+            }
+            //if we are running in the current iTerm "Stable" Window
+            if ( [terminalWindow isEqualToString:@"current"] ) {
+                [self runScript:iTermLegacyCurrentWindow handler:handlerName parameters:passParameters];
+            }
+            //we are using the default action of shuttle... The active window in a new tab
+            if ( [terminalWindow isEqualToString:@"tab"] ) {
+                    [self runScript:iTermLegacyNewTabDefault handler:handlerName parameters:passParameters];
+            }
+        }
+        //iTermVersion is not set to "legacy" using applescripts Configured for Stable
+        if( [iTermVersionPref isEqualToString:@"stable"]) {
+            
+            //run the applescript that works with iTerm Stable
             //if we are running in a new iTerm "Stable" Window
             if ( [terminalWindow isEqualToString:@"new"] ) {
                 [self runScript:iTermStableNewWindow handler:handlerName parameters:passParameters];
@@ -502,7 +524,7 @@
             }
             //we are using the default action of shuttle... The active window in a new tab
             if ( [terminalWindow isEqualToString:@"tab"] ) {
-                    [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
+                [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
             }
         }
         //iTermVersion is not set to "stable" using applescripts Configured for Nightly
