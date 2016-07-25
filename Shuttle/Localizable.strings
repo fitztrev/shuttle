@@ -1,0 +1,24 @@
+/* 
+  Localizable.strings
+  Shuttle
+
+  Created by pluwen on 16/7/25.
+  Copyright © 2016年 fitztrev. All rights reserved.
+*/
+/* NSLocalizedString(@"",nil)*/
+
+"About " = "关于 ";
+"Version: " = "版本：";
+" - A simple SSH shortcut menu." = " - 简易的 SSH 快捷菜单。";
+
+"Quit" = "退出";
+"Continue" = "继续";
+
+"is not a valid value for inTerminal. Please fix this in the JSON file" = "不是一个有效的 inTerminal 值。请修改 JSON 文件。";
+"bad \"inTerminal\":\"VALUE\" in the JSON settings" = "错误的 \"inTerminal\":\"VALUE\" 在 JSON 设置中";
+
+"\"iTerm_version\": \"VALUE\", is missing.\n\n\"VALUE\" can be:\n\"legacy\" targeting iTerm 2.14\n\"stable\" targeting new versions.\n\"nightly\" targeting nightly builds.\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help." = "\"iTerm_version\": \"VALUE\", 已丢失。\n\n\"VALUE\" 可以是：\n\"legacy\" 指向 iTerm 2.14\n\"stable\" 指向新版本。\n\"nightly\" 指向内测版本.\n\n请修复你的 Shuttle JSON 设置。\n更多帮助，请浏览 Shuttle 在 GitHub 上的 readme.md 文件。";
+"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis will fail if you have another version of iTerm installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle." = "点击“继续”按钮尝试 iTerm 稳定版的 AppleScript。\n              -->(不推荐)<--\n如果你有另外一个 iTerm 版本，将会失败。\n\n请修复 JSON 设置。\n点击“退出”按钮退出 Shuttle。";
+
+"is not a valid value for iTerm_version. Please fix this in the JSON file" = "不是一个有效的 iTerm_version 值。请修改 JSON 文件。";
+"bad \"iTerm_version\": \"VALUE\" in the JSON settings" = "错误的 \"iTerm_version\": \"VALUE\" 在 JSON 设置中";

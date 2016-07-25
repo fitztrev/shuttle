@@ -167,7 +167,7 @@
         }
     }
     
-    return servers;    
+    return servers;
 }
 
 // Replaces Underscores with Spaces for better readable names
@@ -190,10 +190,10 @@
     // Check valid JSON syntax
     if ( !json ) {
         NSMenuItem *menuItem = [menu insertItemWithTitle:@"Error parsing config"
-                           action:false
-                   keyEquivalent:@""
-                         atIndex:0
-        ];
+                                                  action:false
+                                           keyEquivalent:@""
+                                                 atIndex:0
+                                ];
         [menuItem setEnabled:false];
         return;
     }
@@ -207,13 +207,13 @@
     shuttleHosts = json[@"hosts"];
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
     ignoreKeywords = json[@"ssh_config_ignore_keywords"];
-
+    
     // Should we merge ssh config hosts?
     BOOL showSshConfigHosts = YES;
     if ([[json allKeys] containsObject:(@"show_ssh_config_hosts")] && [json[@"show_ssh_config_hosts"] boolValue] == NO) {
         showSshConfigHosts = NO;
     }
-
+    
     if (showSshConfigHosts) {
         // Read configuration from ssh config
         NSDictionary* servers = [self parseSSHConfigFile];
@@ -295,7 +295,7 @@
                     itemList = newList;
                 }
             }
-        
+            
             // if everything worked out we will see a non-nil itemList where the
             // system should be appended to. part hold the last part of the splitted string (aka hostname).
             if (itemList) {
@@ -343,7 +343,7 @@
         [menuItem setTitle:key];
         [menuItem setSubmenu:subMenu];
         [m insertItem:menuItem atIndex:pos++];
-
+        
         // build submenu
         [self buildMenu:menus[key] addToMenu:subMenu];
     }
@@ -380,7 +380,7 @@
     
     NSString *errorMessage;
     NSString *errorInfo;
-
+    
     
     //Place the comma delimited string of menu item settings into an array
     NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@"¬_¬")];
@@ -403,14 +403,14 @@
                 //we have no global theme and there is no theme in the command settings.
                 //Forcing the Default profile for iTerm and the basic profile for Terminal.app
                 terminalTheme = @"Default";
-                }else{
-                    terminalTheme = @"basic";
-                }
-        //We have a global setting using this as the theme.
+            }else{
+                terminalTheme = @"basic";
+            }
+            //We have a global setting using this as the theme.
         }else {
             terminalTheme = themePref;
         }
-    //we have command level theme override the Global default_theme settings.
+        //we have command level theme override the Global default_theme settings.
     }else{
         terminalTheme = [objectsFromJSON objectAtIndex:1];
     }
@@ -433,14 +433,14 @@
         //open_in was not empty or bad value we are passing the settings.
         terminalWindow = openInPref;
     }else{
-    //inTerminal is not null and overrides the default values of open_in
+        //inTerminal is not null and overrides the default values of open_in
         terminalWindow = [objectsFromJSON objectAtIndex:3];
-         if( ![terminalWindow isEqualToString:@"new"] && ![terminalWindow isEqualToString:@"current"] && ![terminalWindow isEqualToString:@"tab"])
-         {
-             errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",terminalWindow,@"'", @"is not a valid value for inTerminal. Please fix this in the JSON file"];
-             errorInfo = @"bad \"inTerminal\":\"VALUE\" in the JSON settings";
-             [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:NO];
-         }
+        if( ![terminalWindow isEqualToString:@"new"] && ![terminalWindow isEqualToString:@"current"] && ![terminalWindow isEqualToString:@"tab"])
+        {
+            errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",terminalWindow,@"'", NSLocalizedString(@"is not a valid value for inTerminal. Please fix this in the JSON file",nil)];
+            errorInfo = NSLocalizedString(@"bad \"inTerminal\":\"VALUE\" in the JSON settings",nil);
+            [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:NO];
+        }
     }
     
     //Set Paths to iTerm Legacy AppleScripts
@@ -452,7 +452,7 @@
     NSString *iTermStableNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-new-window" ofType:@"scpt"];
     NSString *iTermStableCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-current-window" ofType:@"scpt"];
     NSString *iTermStableNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-new-tab-default" ofType:@"scpt"];
-
+    
     //Set Paths to iTerm Nightly AppleScripts
     NSString *iTerm2NightlyNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-new-window" ofType:@"scpt"];
     NSString *iTerm2NightlyCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm2-nightly-current-window" ofType:@"scpt"];
@@ -469,7 +469,7 @@
     //script expects the following order: Command, Theme, Title
     NSArray *passParameters = @[escapedObject, terminalTheme, terminalTitle];
     
-// Check if Url
+    // Check if Url
     NSURL* url = [NSURL URLWithString:escapedObject];
     if(url)
     {
@@ -480,23 +480,23 @@
         
         //If the JSON prefs for iTermVersion are not stable or nightly throw an error
         if( ![iTermVersionPref isEqualToString: @"legacy"] && ![iTermVersionPref isEqualToString: @"stable"] && ![iTermVersionPref isEqualToString:@"nightly"] ) {
-
+            
             if( iTermVersionPref == 0 ) {
-                errorMessage = @"\"iTerm_version\": \"VALUE\", is missing.\n\n\"VALUE\" can be:\n\"legacy\" targeting iTerm 2.14\n\"stable\" targeting new versions.\n\"nightly\" targeting nightly builds.\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help.";
-                errorInfo = @"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis will fail if you have another version of iTerm installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle.";
+                errorMessage = NSLocalizedString(@"\"iTerm_version\": \"VALUE\", is missing.\n\n\"VALUE\" can be:\n\"legacy\" targeting iTerm 2.14\n\"stable\" targeting new versions.\n\"nightly\" targeting nightly builds.\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help.",nil);
+                errorInfo = NSLocalizedString(@"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis will fail if you have another version of iTerm installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle.",nil);
                 [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:YES];
                 iTermVersionPref = @"stable";
-
+                
             }else{
-                errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",iTermVersionPref,@"'", @"is not a valid value for iTerm_version. Please fix this in the JSON file"];
-                errorInfo = @"bad \"iTerm_version\": \"VALUE\" in the JSON settings";
+                errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",iTermVersionPref,@"'", NSLocalizedString(@"is not a valid value for iTerm_version. Please fix this in the JSON file",nil)];
+                errorInfo = NSLocalizedString(@"bad \"iTerm_version\": \"VALUE\" in the JSON settings",nil);
                 [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:NO];
             }
         }
         
         if( [iTermVersionPref isEqualToString:@"legacy"]) {
-                
-        //run the applescript that works with iTerm Legacy
+            
+            //run the applescript that works with iTerm Legacy
             //if we are running in a new iTerm "Stable" Window
             if ( [terminalWindow isEqualToString:@"new"] ) {
                 [self runScript:iTermLegacyNewWindow handler:handlerName parameters:passParameters];
@@ -507,7 +507,7 @@
             }
             //we are using the default action of shuttle... The active window in a new tab
             if ( [terminalWindow isEqualToString:@"tab"] ) {
-                    [self runScript:iTermLegacyNewTabDefault handler:handlerName parameters:passParameters];
+                [self runScript:iTermLegacyNewTabDefault handler:handlerName parameters:passParameters];
             }
         }
         //iTermVersion is not set to "legacy" using applescripts Configured for Stable
@@ -572,49 +572,49 @@
     NSDictionary * appleScriptCreationError = nil;
     appleScript = [[NSAppleScript alloc] initWithContentsOfURL:pathURL error:&appleScriptCreationError];
     
-        if (handlerName && [handlerName length])
+    if (handlerName && [handlerName length])
+    {
+        /* If we have a handlerName (and potentially parameters), we build
+         * an NSAppleEvent to execute the script. */
+        
+        //Get a descriptor
+        int pid = [[NSProcessInfo processInfo] processIdentifier];
+        thisApplication = [NSAppleEventDescriptor descriptorWithDescriptorType:typeKernelProcessID
+                                                                         bytes:&pid
+                                                                        length:sizeof(pid)];
+        
+        //Create the container event
+        
+        //We need these constants from the Carbon OpenScripting framework, but we don't actually need Carbon.framework...
+#define kASAppleScriptSuite 'ascr'
+#define kASSubroutineEvent  'psbr'
+#define keyASSubroutineName 'snam'
+        containerEvent = [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite
+                                                                  eventID:kASSubroutineEvent
+                                                         targetDescriptor:thisApplication
+                                                                 returnID:kAutoGenerateReturnID
+                                                            transactionID:kAnyTransactionID];
+        //Set the target handler
+        [containerEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithString:handlerName]
+                                forKeyword:keyASSubroutineName];
+        
+        //Pass parameters - parameters is expecting an NSArray with only NSString objects
+        if ([parametersInArray count])
         {
-            /* If we have a handlerName (and potentially parameters), we build
-             * an NSAppleEvent to execute the script. */
             
-            //Get a descriptor
-            int pid = [[NSProcessInfo processInfo] processIdentifier];
-            thisApplication = [NSAppleEventDescriptor descriptorWithDescriptorType:typeKernelProcessID
-                                                                             bytes:&pid
-                                                                            length:sizeof(pid)];
+            NSAppleEventDescriptor  *arguments = [[NSAppleEventDescriptor alloc] initListDescriptor];
+            NSString                *object;
             
-            //Create the container event
-            
-            //We need these constants from the Carbon OpenScripting framework, but we don't actually need Carbon.framework...
-            #define kASAppleScriptSuite 'ascr'
-            #define kASSubroutineEvent  'psbr'
-            #define keyASSubroutineName 'snam'
-            containerEvent = [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite
-                                                                      eventID:kASSubroutineEvent
-                                                             targetDescriptor:thisApplication
-                                                                     returnID:kAutoGenerateReturnID
-                                                                transactionID:kAnyTransactionID];
-            //Set the target handler
-            [containerEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithString:handlerName]
-                                    forKeyword:keyASSubroutineName];
-            
-            //Pass parameters - parameters is expecting an NSArray with only NSString objects
-            if ([parametersInArray count])
-            {
-                
-                NSAppleEventDescriptor  *arguments = [[NSAppleEventDescriptor alloc] initListDescriptor];
-                NSString                *object;
-                
-                for (object in parametersInArray) {
-                    [arguments insertDescriptor:[NSAppleEventDescriptor descriptorWithString:object]
-                                        atIndex:([arguments numberOfItems] +1)];
-                }
-                
-                [containerEvent setParamDescriptor:arguments forKeyword:keyDirectObject];
+            for (object in parametersInArray) {
+                [arguments insertDescriptor:[NSAppleEventDescriptor descriptorWithString:object]
+                                    atIndex:([arguments numberOfItems] +1)];
             }
-            //Execute the event
-            [appleScript executeAppleEvent:containerEvent error:nil];
+            
+            [containerEvent setParamDescriptor:arguments forKeyword:keyDirectObject];
         }
+        //Execute the event
+        [appleScript executeAppleEvent:containerEvent error:nil];
+    }
 }
 
 - (IBAction)showImportPanel:(id)sender {
@@ -631,7 +631,7 @@
         //Delete the old configuration file
         [[NSFileManager defaultManager] removeItemAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json.backup"]  error: nil];
     } else {
-     	return;
+        return;
     }
     
 }
@@ -643,11 +643,11 @@
     [alert setAlertStyle:NSWarningAlertStyle];
     
     if (continueOption) {
-        [alert addButtonWithTitle:@"Quit"];
-        [alert addButtonWithTitle:@"Continue"];
+        [alert addButtonWithTitle:NSLocalizedString(@"Quit",nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Continue",nil)];
         
     }else{
-        [alert addButtonWithTitle:@"Quit"];
+        [alert addButtonWithTitle:NSLocalizedString(@"Quit",nil)];
     }
     
     if ([alert runModal] == NSAlertFirstButtonReturn) {
@@ -658,12 +658,12 @@
 - (IBAction)showExportPanel:(id)sender {
     NSSavePanel * savePanelObj	= [NSSavePanel savePanel];
     //Display the Save Panel
-    NSInteger result	= [savePanelObj runModal];        
-        if (result == NSFileHandlingPanelOKButton) {
-            NSURL *saveURL = [savePanelObj URL];
-            // then copy a previous file to the new location
-            [[NSFileManager defaultManager] copyItemAtPath:shuttleConfigFile toPath:saveURL.path error:nil];
-        }
+    NSInteger result	= [savePanelObj runModal];
+    if (result == NSFileHandlingPanelOKButton) {
+        NSURL *saveURL = [savePanelObj URL];
+        // then copy a previous file to the new location
+        [[NSFileManager defaultManager] copyItemAtPath:shuttleConfigFile toPath:saveURL.path error:nil];
+    }
 }
 
 - (IBAction)configure:(id)sender {
@@ -692,16 +692,16 @@
 }
 
 - (IBAction)showAbout:(id)sender {
-        
-        //Call the windows controller
-        AboutWindowController *aboutWindow = [[AboutWindowController alloc] initWithWindowNibName:@"AboutWindowController"];
     
-        //Set the window to stay on top
-        [aboutWindow.window makeKeyAndOrderFront:nil];
-        [aboutWindow.window setLevel:NSFloatingWindowLevel];
+    //Call the windows controller
+    AboutWindowController *aboutWindow = [[AboutWindowController alloc] initWithWindowNibName:@"AboutWindowController"];
     
-        //Show the window
-        [aboutWindow showWindow:self];
+    //Set the window to stay on top
+    [aboutWindow.window makeKeyAndOrderFront:nil];
+    [aboutWindow.window setLevel:NSFloatingWindowLevel];
+    
+    //Show the window
+    [aboutWindow showWindow:self];
 }
 
 - (IBAction)quit:(id)sender {
