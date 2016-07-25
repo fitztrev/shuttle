@@ -300,7 +300,9 @@
             // system should be appended to. part hold the last part of the splitted string (aka hostname).
             if (itemList) {
                 // build the corresponding ssh command
-                NSString* cmd = [NSString stringWithFormat:@"ssh %@", key];
+            //  NSString* cmd = [NSString stringWithFormat:@"ssh %@", key];
+                NSString* cmd = servers[key][@"cmd"] ?
+                  cmd = servers[key][@"cmd"] : [NSString stringWithFormat:@"ssh %@", key];
                 
                 // inject the data into the json parser result
                 [itemList addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:leaf, cmd, nil]
@@ -470,7 +472,7 @@
     NSArray *passParameters = @[escapedObject, terminalTheme, terminalTitle];
     
 // Check if Url
-    NSURL* url = [NSURL URLWithString:escapedObject];
+    NSURL* url = [NSURL URLWithString:[sender representedObject]];
     if(url)
     {
         [[NSWorkspace sharedWorkspace] openURL:url];
