@@ -678,7 +678,7 @@
         NSString *editorCommand = [NSString stringWithFormat:@"%@ %@", editorPref, shuttleConfigFile];
         
         //build the reprensented object. It's expecting menuCmd, termTheme, termTitle, termWindow, menuName
-        NSString *editorRepObj = [NSString stringWithFormat:@"%@,%@,%@,%@,%@", editorCommand, nil, @"Editing shuttle JSON", nil, nil];
+        NSString *editorRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", editorCommand, nil, @"Editing shuttle JSON", nil, nil];
         
         //make a menu item for the command selector(openHost:) runs in a new terminal window.
         NSMenuItem *editorMenu = [[NSMenuItem alloc] initWithTitle:@"editJSONconfig" action:@selector(openHost:) keyEquivalent:(@"")];
