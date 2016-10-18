@@ -1,10 +1,10 @@
 --for testing uncomment the "on run" block
-on run
-	set argsCmd to "ps aux | grep [s]sh"
-	set argsTheme to "Homebrew"
-	set argsTitle to "Custom title"
-	scriptRun(argsCmd, argsTheme, argsTitle)
-end run
+--on run
+--	set argsCmd to "ps aux | grep [s]sh"
+--	set argsTheme to "Homebrew"
+--	set argsTitle to "Custom title"
+--	scriptRun(argsCmd, argsTheme, argsTitle)
+--end run
 
 on scriptRun(argsCmd, argsTheme, argsTitle)
 	set withCmd to (argsCmd)
