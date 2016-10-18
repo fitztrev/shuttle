@@ -1,0 +1,45 @@
+/*
+ Translations done by Rebecca Dominguez
+ */
+
+/* Class = "NSMenu"; title = "AMainMenu"; ObjectID = "29"; */
+"29.title" = "AMainMenu";
+
+/* Class = "NSMenuItem"; title = "Shuttle"; ObjectID = "56"; */
+"56.title" = "Shuttle";
+
+/* Class = "NSMenu"; title = "Shuttle"; ObjectID = "57"; */
+"57.title" = "Shuttle";
+
+/* Class = "NSMenuItem"; title = "About Shuttle"; ObjectID = "58"; */
+"58.title" = "Acerca Shuttle";
+
+/* Class = "NSMenuItem"; title = "Quit Shuttle"; ObjectID = "136"; */
+"136.title" = "Cerrar Shuttle";
+
+/* Class = "NSMenuItem"; title = "About"; ObjectID = "638"; */
+"638.title" = "Acerca";
+
+/* Class = "NSMenuItem"; title = "Quit"; ObjectID = "644"; */
+"644.title" = "Cerrar";
+
+/* Class = "NSMenuItem"; title = "Settings"; ObjectID = "646"; */
+"646.title" = "Ajustes";
+
+/* Class = "NSMenu"; title = "Settings"; ObjectID = "647"; */
+"647.title" = "Ajustes";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "648"; */
+"648.title" = "Editar";
+
+/* Class = "NSMenuItem"; title = "Quit"; ObjectID = "649"; */
+"649.title" = "Cerrar";
+
+/* Class = "NSMenuItem"; title = "Export"; ObjectID = "651"; */
+"651.title" = "Exportar";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "652"; */
+"652.title" = "Editar";
+
+/* Class = "NSMenuItem"; title = "Import"; ObjectID = "653"; */
+"653.title" = "Importar";
