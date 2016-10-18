@@ -36,6 +36,7 @@ This project was created by [Trevor Fitzgerald](https://github.com/fitztrev). I 
 (In alphabetical order)
 
 * [Alex Carter](https://github.com/blazeworx)
+* [bihicheng](https://github.com/bihicheng)
 * [Dave Eddy](https://github.com/bahamas10)
 * [Dmitry Filimonov](https://github.com/petethepig)
 * [Frank Enderle](https://github.com/fenderle)
@@ -48,6 +49,7 @@ This project was created by [Trevor Fitzgerald](https://github.com/fitztrev). I 
 * [Michael Davis](https://github.com/mpdavis)
 * [Morton Fox](https://github.com/mortonfox)
 * [Pluwen](https://github.com/pluwen)
+* Rebecca Dominguez
 * [Rui Rodrigues](https://github.com/rmrodrigues)
 * [Ryan Cohen](https://github.com/imryan)
 * [Stefan Jansen](https://github.com/steffex)

@@ -18,8 +18,8 @@ on CommandRun(withCmd, withTheme, theTitle)
 		if it is not running then
 			--if this is the first time Terminal is running you have specify window 1
 			--if you dont do this you will get two windows and the title wont be set
-			set newTerm to do script withCmd in window 1
 			activate
+			set newTerm to do script withCmd in window 1
 			set newTerm's current settings to settings set withTheme
 			set custom title of front window to theTitle
 		else
@@ -28,8 +28,8 @@ on CommandRun(withCmd, withTheme, theTitle)
 			if windowCount = 0 then
 				--Terminal is running but no windows are open
 				--run our script in a new window
-				activate
 				reopen
+				activate
 				do script withCmd in window 1
 			else
 				--Terminal is running and we have a window run in a new tab
@@ -41,6 +41,7 @@ on CommandRun(withCmd, withTheme, theTitle)
 						keystroke "t" using {command down}
 					end tell
 				end tell
+				activate
 				do script withCmd in front window
 			end if
 			set current settings of selected tab of front window to settings set withTheme

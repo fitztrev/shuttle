@@ -22,8 +22,8 @@
     {
       "Spouses Servers": [
         {
-          "cmd": "echo '—->WARNING<-- Running a command in this active terminal! Are you sure? y/n'; read sure; if [ $sure == y ]; then echo running command... && tail -f /var/log/current; else echo exiting...; fi",
-          "inTerminal": "current",
+          "cmd": "echo '—->WARNING! Running commands<-- Are you sure? y/n'; read sure; if [ $sure == y ]; then echo running command && ps aux | grep [a]pple; else echo save to history and show... && history -s 'ps aux | grep [a]pple' && osascript -e 'tell application \"System Events\" to keystroke \"p\" using {control down}'; fi",
+	      "inTerminal": "current",
           "name": "Logs - Opens in the current active terminal window"
         },
         {
@@ -56,3 +56,5 @@
     }
   ]
 }
+
+        
