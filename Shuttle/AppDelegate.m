@@ -394,7 +394,7 @@
     //Are commands run in a new tab (default) a new terminal window (new), or in the current tab of the last used window (current).
     NSString *terminalWindow;
     
-    escapedObject = [[objectsFromJSON objectAtIndex:0] stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    escapedObject = [objectsFromJSON objectAtIndex:0];
     
     //if terminalTheme is not set then check for a global setting.
     if( [[objectsFromJSON objectAtIndex:1] isEqualToString:@"(null)"] ){

@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  Shuttle
+  Translations done by Rebecca Dominguez
+*/
+
+"About " = "Acerca ";
+"Version: " = "Versión: ";
+" - A simple SSH shortcut menu." = " - Un SSH menu simple de shortcuts (atajos).";

@@ -1,0 +1,42 @@
+
+/* Class = "NSMenu"; title = "AMainMenu"; ObjectID = "29"; */
+"29.title" = "AMainMenu";
+
+/* Class = "NSMenuItem"; title = "Shuttle"; ObjectID = "56"; */
+"56.title" = "Shuttle";
+
+/* Class = "NSMenu"; title = "Shuttle"; ObjectID = "57"; */
+"57.title" = "Shuttle";
+
+/* Class = "NSMenuItem"; title = "关于 Shuttle"; ObjectID = "58"; */
+"58.title" = "关于 Shuttle";
+
+/* Class = "NSMenuItem"; title = "退出 Shuttle"; ObjectID = "136"; */
+"136.title" = "退出 Shuttle";
+
+/* Class = "NSMenuItem"; title = "关于"; ObjectID = "638"; */
+"638.title" = "关于";
+
+/* Class = "NSMenuItem"; title = "退出"; ObjectID = "644"; */
+"644.title" = "退出";
+
+/* Class = "NSMenuItem"; title = "设置"; ObjectID = "646"; */
+"646.title" = "设置";
+
+/* Class = "NSMenu"; title = "设置"; ObjectID = "647"; */
+"647.title" = "设置";
+
+/* Class = "NSMenuItem"; title = "编辑"; ObjectID = "648"; */
+"648.title" = "编辑";
+
+/* Class = "NSMenuItem"; title = "Quit"; ObjectID = "649"; */
+"649.title" = "Quit";
+
+/* Class = "NSMenuItem"; title = "导出"; ObjectID = "651"; */
+"651.title" = "导出";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "652"; */
+"652.title" = "Edit";
+
+/* Class = "NSMenuItem"; title = "导入"; ObjectID = "653"; */
+"653.title" = "导入";
