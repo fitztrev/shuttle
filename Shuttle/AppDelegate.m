@@ -189,7 +189,7 @@
                                                 error:nil];
     // Check valid JSON syntax
     if ( !json ) {
-        NSMenuItem *menuItem = [menu insertItemWithTitle:@"Error parsing config"
+        NSMenuItem *menuItem = [menu insertItemWithTitle:NSLocalizedString(@"Error parsing config",nil)
                                                   action:false
                                            keyEquivalent:@""
                                                  atIndex:0
