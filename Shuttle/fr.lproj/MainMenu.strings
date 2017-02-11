@@ -1,0 +1,45 @@
+/*
+ Translations done by Alexis NIVON <anivon@alexisnivon.fr>
+ */
+
+/* Class = "NSMenu"; title = "AMainMenu"; ObjectID = "29"; */
+"29.title" = "AMainMenu";
+
+/* Class = "NSMenuItem"; title = "Shuttle"; ObjectID = "56"; */
+"56.title" = "Shuttle";
+
+/* Class = "NSMenu"; title = "Shuttle"; ObjectID = "57"; */
+"57.title" = "Shuttle";
+
+/* Class = "NSMenuItem"; title = "About Shuttle"; ObjectID = "58"; */
+"58.title" = "A propos de Shuttle";
+
+/* Class = "NSMenuItem"; title = "Quit Shuttle"; ObjectID = "136"; */
+"136.title" = "Quitter Shuttle";
+
+/* Class = "NSMenuItem"; title = "About"; ObjectID = "638"; */
+"638.title" = "A propos";
+
+/* Class = "NSMenuItem"; title = "Quit"; ObjectID = "644"; */
+"644.title" = "Quitter";
+
+/* Class = "NSMenuItem"; title = "Settings"; ObjectID = "646"; */
+"646.title" = "Paramétrage";
+
+/* Class = "NSMenu"; title = "Settings"; ObjectID = "647"; */
+"647.title" = "Paramétrage";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "648"; */
+"648.title" = "Modifier";
+
+/* Class = "NSMenuItem"; title = "Quit"; ObjectID = "649"; */
+"649.title" = "Quitter";
+
+/* Class = "NSMenuItem"; title = "Export"; ObjectID = "651"; */
+"651.title" = "Exporter";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "652"; */
+"652.title" = "Modifier";
+
+/* Class = "NSMenuItem"; title = "Import"; ObjectID = "653"; */
+"653.title" = "Importer";
