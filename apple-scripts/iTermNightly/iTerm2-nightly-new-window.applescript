@@ -17,18 +17,12 @@ on CommandRun(withCmd, withTheme, theTitle)
 	tell application "iTerm"
 		if it is not running then
 			activate
-			delay 0.2
-			try
-				close first window
-			end try
+			if (count windows) is 0 then
+				NewWin(withTheme) of me
+			end if
+		else
+			NewWin(withTheme) of me
 		end if
-	end tell
-	tell application "iTerm"
-		try
-			create window with profile withTheme
-		on error msg
-			create window with profile "Default"
-		end try
 		tell the current window
 			tell the current session
 				set name to theTitle
@@ -37,3 +31,13 @@ on CommandRun(withCmd, withTheme, theTitle)
 		end tell
 	end tell
 end CommandRun
+
+on NewWin(argsTheme)
+	tell application "iTerm"
+		try
+			create window with profile argsTheme
+		on error msg
+			create window with profile "Default"
+		end try
+	end tell
+end NewWin
