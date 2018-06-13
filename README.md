@@ -35,6 +35,7 @@ This project was created by [Trevor Fitzgerald](https://github.com/fitztrev). I 
 
 (In alphabetical order)
 
+* [Alexis NIVON](https://github.com/anivon)
 * [Alex Carter](https://github.com/blazeworx)
 * [bihicheng](https://github.com/bihicheng)
 * [Dave Eddy](https://github.com/bahamas10)

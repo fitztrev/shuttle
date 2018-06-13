@@ -1,0 +1,10 @@
+/*
+ Localizable.strings
+ Shuttle
+ Translations done by Alexis NIVON <anivon@alexisnivon.fr>
+*/
+
+"About " = "A propos de ";
+"Version: " = "Version: ";
+" - A simple SSH shortcut menu." = " - Le gestionnaire de raccourcis SSH.";
+"Error parsing config" = "Fichier de paramétrage invalide";
