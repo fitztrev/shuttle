@@ -340,10 +340,13 @@
     for (NSString* key in menuKeys) {
         NSMenu* subMenu = [[NSMenu alloc] init];
         NSMenuItem* menuItem = [[NSMenuItem alloc] init];
-        [menuItem setTitle:key];
+        [self separatorSortRemoval:key];
+        [menuItem setTitle:menuName];
         [menuItem setSubmenu:subMenu];
         [m insertItem:menuItem atIndex:pos++];
-        
+        if (addSeparator) {
+            [m insertItem:[NSMenuItem separatorItem] atIndex:pos++];
+        }
         // build submenu
         [self buildMenu:menus[key] addToMenu:subMenu];
     }
@@ -362,15 +365,53 @@
         //Get the value of setting inTerminal
         NSString *termWindow = cfg[@"inTerminal"];
         //Get the menu name will will use this as the title if title is null.
-        NSString *menuName = cfg[@"name"];
+        [self separatorSortRemoval:cfg[@"name"]];
         
         //Place the terminal command, theme, and title into an comma delimited string
         NSString *menuRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", menuCmd, termTheme, termTitle, termWindow, menuName];
         
-        [menuItem setTitle:cfg[@"name"]];
+        [menuItem setTitle:menuName];
         [menuItem setRepresentedObject:menuRepObj];
         [menuItem setAction:@selector(openHost:)];
         [m insertItem:menuItem atIndex:pos++];
+        if (addSeparator) {
+            [m insertItem:[NSMenuItem separatorItem] atIndex:pos++];
+        }
+    }
+}
+
+- (void) separatorSortRemoval:(NSString *)currentName {
+    NSError *regexError = nil;
+    addSeparator = NO;
+    
+    NSRegularExpression *regexSort = [NSRegularExpression regularExpressionWithPattern:@"([\\[][a-z]{3}[\\]])" options:0 error:&regexError];
+    NSRegularExpression *regexSeparator = [NSRegularExpression regularExpressionWithPattern:@"([\\[][-]{3}[\\]])" options:0 error:&regexError];
+    
+    NSUInteger sortMatches = [regexSort numberOfMatchesInString:currentName options:0 range:NSMakeRange(0,[currentName length])];
+    NSUInteger separatorMatches = [regexSeparator  numberOfMatchesInString:currentName options:0 range:NSMakeRange(0,[currentName length])];
+    //NSUInteger *totalMatches = sortMatches + separatorMatches;
+    
+    
+    
+    if ( sortMatches == 1 || separatorMatches == 1 ) {
+        if (sortMatches == 1 && separatorMatches == 1 ) {
+            menuName = [regexSort stringByReplacingMatchesInString:currentName options:0 range:NSMakeRange(0, [currentName length]) withTemplate:@""];
+            menuName = [regexSeparator stringByReplacingMatchesInString:menuName options:0 range:NSMakeRange(0, [menuName length]) withTemplate:@""];
+            addSeparator = YES;
+        } else {
+            
+            if( sortMatches == 1) {
+                menuName = [regexSort stringByReplacingMatchesInString:currentName options:0 range:NSMakeRange(0, [currentName length]) withTemplate:@""];
+                addSeparator = NO;
+            }
+            if ( separatorMatches == 1 ) {
+                menuName = [regexSeparator stringByReplacingMatchesInString:currentName options:0 range:NSMakeRange(0, [currentName length]) withTemplate:@""];
+                addSeparator = YES;
+            }
+        }
+    } else {
+        menuName = currentName;
+        addSeparator = NO;
     }
 }
 
@@ -443,11 +484,6 @@
         }
     }
     
-    //Set Paths to iTerm Legacy AppleScripts
-    NSString *iTermLegacyNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm-legacy-new-window" ofType:@"scpt"];
-    NSString *iTermLegacyCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm-legacy-current-window" ofType:@"scpt"];
-    NSString *iTermLegacyNewTabDefault = [[NSBundle mainBundle] pathForResource:@"iTerm-legacy-new-tab-default" ofType:@"scpt"];
-    
     //Set Paths to iTerm Stable AppleScripts
     NSString *iTermStableNewWindow =  [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-new-window" ofType:@"scpt"];
     NSString *iTermStableCurrentWindow = [[NSBundle mainBundle] pathForResource:@"iTerm2-stable-current-window" ofType:@"scpt"];
@@ -479,11 +515,11 @@
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
         
         //If the JSON prefs for iTermVersion are not stable or nightly throw an error
-        if( ![iTermVersionPref isEqualToString: @"legacy"] && ![iTermVersionPref isEqualToString: @"stable"] && ![iTermVersionPref isEqualToString:@"nightly"] ) {
+        if( ![iTermVersionPref isEqualToString: @"stable"] && ![iTermVersionPref isEqualToString:@"nightly"] ) {
             
             if( iTermVersionPref == 0 ) {
-                errorMessage = NSLocalizedString(@"\"iTerm_version\": \"VALUE\", is missing.\n\n\"VALUE\" can be:\n\"legacy\" targeting iTerm 2.14\n\"stable\" targeting new versions.\n\"nightly\" targeting nightly builds.\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help.",nil);
-                errorInfo = NSLocalizedString(@"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis will fail if you have another version of iTerm installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle.",nil);
+                errorMessage = NSLocalizedString(@"\"iTerm_version\": \"VALUE\", is missing.\n\n\"VALUE\" can be:\n\"stable\" targeting new versions.\n\"nightly\" targeting nightly builds.\n\nPlease fix your shuttle JSON settings.\nSee readme.md on shuttle's github for help.",nil);
+                errorInfo = NSLocalizedString(@"Press Continue to try iTerm stable applescripts.\n              -->(not recommended)<--\nThis could fail if you have another version of iTerm installed.\n\nPlease fix the JSON settings.\nPress Quit to exit shuttle.",nil);
                 [self throwError:errorMessage additionalInfo:errorInfo continueOnErrorOption:YES];
                 iTermVersionPref = @"stable";
                 
@@ -494,23 +530,6 @@
             }
         }
         
-        if( [iTermVersionPref isEqualToString:@"legacy"]) {
-            
-            //run the applescript that works with iTerm Legacy
-            //if we are running in a new iTerm "Stable" Window
-            if ( [terminalWindow isEqualToString:@"new"] ) {
-                [self runScript:iTermLegacyNewWindow handler:handlerName parameters:passParameters];
-            }
-            //if we are running in the current iTerm "Stable" Window
-            if ( [terminalWindow isEqualToString:@"current"] ) {
-                [self runScript:iTermLegacyCurrentWindow handler:handlerName parameters:passParameters];
-            }
-            //we are using the default action of shuttle... The active window in a new tab
-            if ( [terminalWindow isEqualToString:@"tab"] ) {
-                [self runScript:iTermLegacyNewTabDefault handler:handlerName parameters:passParameters];
-            }
-        }
-        //iTermVersion is not set to "legacy" using applescripts Configured for Stable
         if( [iTermVersionPref isEqualToString:@"stable"]) {
             
             //run the applescript that works with iTerm Stable
