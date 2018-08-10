@@ -364,11 +364,12 @@
         NSString *termTitle = cfg[@"title"];
         //Get the value of setting inTerminal
         NSString *termWindow = cfg[@"inTerminal"];
+        NSString *loops = cfg[@"loops"];
         //Get the menu name will will use this as the title if title is null.
         [self separatorSortRemoval:cfg[@"name"]];
         
         //Place the terminal command, theme, and title into an comma delimited string
-        NSString *menuRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", menuCmd, termTheme, termTitle, termWindow, menuName];
+        NSString *menuRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", menuCmd, termTheme, termTitle, termWindow, menuName, loops];
         
         [menuItem setTitle:menuName];
         [menuItem setRepresentedObject:menuRepObj];
@@ -434,7 +435,18 @@
     NSString *terminalTitle;
     //Are commands run in a new tab (default) a new terminal window (new), or in the current tab of the last used window (current).
     NSString *terminalWindow;
+    int loops = 1;
     
+    escapedObject = [objectsFromJSON objectAtIndex:5];
+    if(escapedObject != nil ){
+        loops = 1;
+        if([escapedObject rangeOfCharacterFromSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]].location == NSNotFound) {
+            loops = [escapedObject intValue];
+        }
+
+        // Fix invalid value...
+        if (loops < 1) loops = 1;
+    }
     escapedObject = [objectsFromJSON objectAtIndex:0];
     
     //if terminalTheme is not set then check for a global setting.
@@ -535,30 +547,30 @@
             //run the applescript that works with iTerm Stable
             //if we are running in a new iTerm "Stable" Window
             if ( [terminalWindow isEqualToString:@"new"] ) {
-                [self runScript:iTermStableNewWindow handler:handlerName parameters:passParameters];
+                [self runScript:iTermStableNewWindow handler:handlerName parameters:passParameters loops:loops];
             }
             //if we are running in the current iTerm "Stable" Window
             if ( [terminalWindow isEqualToString:@"current"] ) {
-                [self runScript:iTermStableCurrentWindow handler:handlerName parameters:passParameters];
+                [self runScript:iTermStableCurrentWindow handler:handlerName parameters:passParameters loops:loops];
             }
             //we are using the default action of shuttle... The active window in a new tab
             if ( [terminalWindow isEqualToString:@"tab"] ) {
-                [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
+                [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters loops:loops];
             }
         }
         //iTermVersion is not set to "stable" using applescripts Configured for Nightly
         if( [iTermVersionPref isEqualToString:@"nightly"]) {
             //if we are running in a new iTerm "Nightly" Window
             if ( [terminalWindow isEqualToString:@"new"] ) {
-                [self runScript:iTerm2NightlyNewWindow handler:handlerName parameters:passParameters];
+                [self runScript:iTerm2NightlyNewWindow handler:handlerName parameters:passParameters loops:loops];
             }
             //if we are running in the current iTerm "Nightly" Window
             if ( [terminalWindow isEqualToString:@"current"] ) {
-                [self runScript:iTerm2NightlyCurrentWindow handler:handlerName parameters:passParameters];
+                [self runScript:iTerm2NightlyCurrentWindow handler:handlerName parameters:passParameters loops:loops];
             }
             //we are using the default action of shuttle... The active window in a new tab
             if ( [terminalWindow isEqualToString:@"tab"] ) {
-                [self runScript:iTerm2NightlyNewTabDefault handler:handlerName parameters:passParameters];
+                [self runScript:iTerm2NightlyNewTabDefault handler:handlerName parameters:passParameters loops:loops];
             }
         }
     }
@@ -566,22 +578,22 @@
     else {
         //if we are running in a new terminal Window
         if ( [terminalWindow isEqualToString:@"new"] ) {
-            [self runScript:terminalNewWindow handler:handlerName parameters:passParameters];
+            [self runScript:terminalNewWindow handler:handlerName parameters:passParameters loops:loops];
         }
         
         //if we are running in the current terminal Window
         if ( [terminalWindow isEqualToString:@"current"] ) {
-            [self runScript:terminalCurrentWindow handler:handlerName parameters:passParameters];
+            [self runScript:terminalCurrentWindow handler:handlerName parameters:passParameters loops:loops];
         }
         
         //we are using the default action of shuttle... The active window in a new tab
         if ( [terminalWindow isEqualToString:@"tab"] ) {
-            [self runScript:terminalNewTabDefault handler:handlerName parameters:passParameters];
+            [self runScript:terminalNewTabDefault handler:handlerName parameters:passParameters loops:loops];
         }
     }
 }
 
-- (void) runScript:(NSString *)scriptPath handler:(NSString*)handlerName parameters:(NSArray*)parametersInArray {
+- (void) runScript:(NSString *)scriptPath handler:(NSString*)handlerName parameters:(NSArray*)parametersInArray loops:(int) loops {
     //special thanks to stackoverflow.com/users/316866/leandro for pointing me the right direction.
     //see http://goo.gl/olcpaX
     NSAppleScript           * appleScript;
@@ -593,46 +605,48 @@
     
     if (handlerName && [handlerName length])
     {
-        /* If we have a handlerName (and potentially parameters), we build
-         * an NSAppleEvent to execute the script. */
-        
-        //Get a descriptor
-        int pid = [[NSProcessInfo processInfo] processIdentifier];
-        thisApplication = [NSAppleEventDescriptor descriptorWithDescriptorType:typeKernelProcessID
-                                                                         bytes:&pid
-                                                                        length:sizeof(pid)];
-        
-        //Create the container event
-        
-        //We need these constants from the Carbon OpenScripting framework, but we don't actually need Carbon.framework...
-#define kASAppleScriptSuite 'ascr'
-#define kASSubroutineEvent  'psbr'
-#define keyASSubroutineName 'snam'
-        containerEvent = [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite
-                                                                  eventID:kASSubroutineEvent
-                                                         targetDescriptor:thisApplication
-                                                                 returnID:kAutoGenerateReturnID
-                                                            transactionID:kAnyTransactionID];
-        //Set the target handler
-        [containerEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithString:handlerName]
-                                forKeyword:keyASSubroutineName];
-        
-        //Pass parameters - parameters is expecting an NSArray with only NSString objects
-        if ([parametersInArray count])
-        {
+        for (int i = 0; i < loops; i++) {
+            /* If we have a handlerName (and potentially parameters), we build
+             * an NSAppleEvent to execute the script. */
             
-            NSAppleEventDescriptor  *arguments = [[NSAppleEventDescriptor alloc] initListDescriptor];
-            NSString                *object;
+            //Get a descriptor
+            int pid = [[NSProcessInfo processInfo] processIdentifier];
+            thisApplication = [NSAppleEventDescriptor descriptorWithDescriptorType:typeKernelProcessID
+                                                                             bytes:&pid
+                                                                            length:sizeof(pid)];
             
-            for (object in parametersInArray) {
-                [arguments insertDescriptor:[NSAppleEventDescriptor descriptorWithString:object]
-                                    atIndex:([arguments numberOfItems] +1)];
+            //Create the container event
+            
+            //We need these constants from the Carbon OpenScripting framework, but we don't actually need Carbon.framework...
+    #define kASAppleScriptSuite 'ascr'
+    #define kASSubroutineEvent  'psbr'
+    #define keyASSubroutineName 'snam'
+            containerEvent = [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite
+                                                                      eventID:kASSubroutineEvent
+                                                             targetDescriptor:thisApplication
+                                                                     returnID:kAutoGenerateReturnID
+                                                                transactionID:kAnyTransactionID];
+            //Set the target handler
+            [containerEvent setParamDescriptor:[NSAppleEventDescriptor descriptorWithString:handlerName]
+                                    forKeyword:keyASSubroutineName];
+            
+            //Pass parameters - parameters is expecting an NSArray with only NSString objects
+            if ([parametersInArray count])
+            {
+                
+                NSAppleEventDescriptor  *arguments = [[NSAppleEventDescriptor alloc] initListDescriptor];
+                NSString                *object;
+                
+                for (object in parametersInArray) {
+                    [arguments insertDescriptor:[NSAppleEventDescriptor descriptorWithString:object]
+                                        atIndex:([arguments numberOfItems] +1)];
+                }
+                
+                [containerEvent setParamDescriptor:arguments forKeyword:keyDirectObject];
             }
-            
-            [containerEvent setParamDescriptor:arguments forKeyword:keyDirectObject];
+            //Execute the event
+            [appleScript executeAppleEvent:containerEvent error:nil];
         }
-        //Execute the event
-        [appleScript executeAppleEvent:containerEvent error:nil];
     }
 }
 
@@ -696,8 +710,8 @@
         //build the editor command
         NSString *editorCommand = [NSString stringWithFormat:@"%@ %@", editorPref, shuttleConfigFile];
         
-        //build the reprensented object. It's expecting menuCmd, termTheme, termTitle, termWindow, menuName
-        NSString *editorRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", editorCommand, nil, @"Editing shuttle JSON", nil, nil];
+        //build the reprensented object. It's expecting menuCmd, termTheme, termTitle, termWindow, menuName, loops
+        NSString *editorRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", editorCommand, nil, @"Editing shuttle JSON", nil, nil, nil];
         
         //make a menu item for the command selector(openHost:) runs in a new terminal window.
         NSMenuItem *editorMenu = [[NSMenuItem alloc] initWithTitle:@"editJSONconfig" action:@selector(openHost:) keyEquivalent:(@"")];
