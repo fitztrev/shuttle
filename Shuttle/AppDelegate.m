@@ -170,10 +170,6 @@
     return servers;
 }
 
-// Replaces Underscores with Spaces for better readable names
-- (NSString*) humanize: (NSString*) val{
-    return [val stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-}
 
 - (void) loadMenu {
     // Clear out the hosts so we can start over
