@@ -97,7 +97,7 @@
 
 // Parsing of the SSH Config File
 // Courtesy of https://gist.github.com/geeksunny/3376694
-- (NSDictionary*) parseSSHConfigFile {
+- (NSDictionary<NSString *, NSDictionary *> *)parseSSHConfigFile {
     
     NSString *configFile = nil;
     NSFileManager *fileMgr = [[NSFileManager alloc] init];
@@ -116,10 +116,12 @@
         // We did not find any config file so we gracefully die
         return nil;
     }
-    
-    
+    return [self parseSSHConfig:configFile];
+}
+
+- (NSDictionary<NSString *, NSDictionary *> *)parseSSHConfig:(NSString *)filepath {
     // Get file contents into fh.
-    NSString *fh = [NSString stringWithContentsOfFile:configFile encoding:NSUTF8StringEncoding error:nil];
+    NSString *fh = [NSString stringWithContentsOfFile:filepath encoding:NSUTF8StringEncoding error:nil];
     
     // build the regex for matching
     NSError* error = NULL;
@@ -141,20 +143,32 @@
         NSTextCheckingResult* matches = [rx firstMatchInString:trimmed
                                                        options:0
                                                          range:NSMakeRange(0, [trimmed length])];
-        if ([matches numberOfRanges] != 4)
+        if ([matches numberOfRanges] != 4) {
             continue;
+        }
         
         BOOL isComment = [[trimmed substringWithRange:[matches rangeAtIndex:1]] isEqualToString:@"#"];
         NSString* first = [trimmed substringWithRange:[matches rangeAtIndex:2]];
         NSString* second = [trimmed substringWithRange:[matches rangeAtIndex:3]];
         
         // check for special comment key/value pairs
-        if (isComment && key && [first hasPrefix:@"shuttle."])
+        if (isComment && key && [first hasPrefix:@"shuttle."]) {
             servers[key][[first substringFromIndex:8]] = second;
+        }
         
         // other comments must be skipped
-        if (isComment)
+        if (isComment) {
             continue;
+        }
+        
+        if ([first isEqualToString:@"Include"]) {
+            // Support for ssh_config Include directive.
+            NSString *includePath = ([second isAbsolutePath])
+                ? [second stringByExpandingTildeInPath]
+                : [[filepath stringByDeletingLastPathComponent] stringByAppendingPathComponent:second];
+            
+            [servers addEntriesFromDictionary:[self parseSSHConfig:includePath]];
+        }
         
         if ([first isEqualToString:@"Host"]) {
             // a new host section
@@ -170,10 +184,6 @@
     return servers;
 }
 
-// Replaces Underscores with Spaces for better readable names
-- (NSString*) humanize: (NSString*) val{
-    return [val stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-}
 
 - (void) loadMenu {
     // Clear out the hosts so we can start over
