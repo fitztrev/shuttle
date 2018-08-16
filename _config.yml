@@ -1,8 +1,0 @@
-tagline: A simple SSH shortcut menu for OS X
-shuttle_version: v1.2.0
-
-exclude:
-  - "*.jade"
-  - "*.less"
-  - "bootstrap"
-  - "Makefile"

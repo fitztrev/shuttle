@@ -1,50 +1,69 @@
----
-layout: none
----
-
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta property="og:image" content="http://fitztrev.github.io/img/shuttle-logo.png">
-    <link rel="stylesheet" type="text/css" href="css/shuttle.css">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Francois+One">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-    <title>Shuttle | {{ site.tagline }}</title>
-  </head>
-  <body>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/shuttle.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Francois+One">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+
+
+
+    <title>Shuttle | A simple SSH shortcut menu for OS X</title>
+</head>
+<body>
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6 col-sm-6">
-          <h1>Shuttle</h1>
-          <p class="lead">{{ site.tagline }}</p><br><br>
-          <div class="text-center">
-            <p><a href="https://github.com/fitztrev/shuttle/releases" class="btn btn-block btn-success btn-lg"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Download Shuttle</a></p>
-            <p class="text-muted"><em>&mdash; or &mdash;</em></p>
-            <p><a href="https://github.com/fitztrev/shuttle">View on Github</a></p>
-          </div>
+        <div class="row">
+            <div class="col-lg-6 col-sm-6">
+                <h1>Shuttle</h1>
+                <p class="lead">A simple SSH shortcut menu for OS X</p>
+                <br><br>
+                <div class="text-center">
+                    <p>
+                        <a href="https://github.com/fitztrev/shuttle/releases" class="btn btn-block btn-success btn-lg">
+                            <i class="fas fa-download"></i>
+                            &nbsp;
+                            Download Shuttle
+                        </a>
+                    </p>
+
+                    <p class="text-muted"><em>&mdash; or &mdash;</em></p>
+                    <p><a href="https://github.com/fitztrev/shuttle">View on Github</a></p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6">
+                <img src="img/shuttle-logo.png" alt="Shuttle" class="pull-right img-responsive hidden-xs">
+            </div>
         </div>
-        <div class="col-lg-6 col-sm-6"><img src="img/shuttle-logo.png" alt="Shuttle" class="pull-right img-responsive hidden-xs"></div>
-      </div>
-      <hr>
-      <div class="animation"><img src="img/how-shuttle-works.gif" alt="How Shuttle works" class="img-responsive"></div>
-      <hr>
-      <div class="row">
-        <div class="col-lg-6 col-sm-6">
-          <h3>About</h3>
-          <p>Shuttle was created by <a href="http://trevorfitzgerald.com">Trevor Fitzgerald</a>.</p>
-          <p>It does exactly what you see above and nothing more.</p>
+
+        <hr>
+
+        <div class="animation">
+            <img src="img/how-shuttle-works.gif" alt="How Shuttle works" class="img-responsive">
         </div>
-        <div class="col-lg-6 col-sm-6">
-          <h3>Configuration</h3>
-          <ol>
-            <li>Open the app and choose Configure to edit <code>~/.shuttle.json</code></li>
-            <li>Define the menu items and the actions that are run when clicked</li>
-            <li>Read <a href="https://github.com/fitztrev/shuttle">more configuration options</a>.</li>
-          </ol>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-6">
+                <h3>About</h3>
+                <p>Shuttle was created by <a href="http://trevorfitzgerald.com">Trevor Fitzgerald</a>.</p>
+                <p>It does exactly what you see above and nothing more.</p>
+            </div>
+            <div class="col-lg-6 col-sm-6">
+                <h3>Configuration</h3>
+                <ol>
+                    <li>Open the app and choose Configure to edit <code>~/.shuttle.json</code></li>
+                    <li>Define the menu items and the actions that are run when clicked</li>
+                    <li>Read <a href="https://github.com/fitztrev/shuttle">more configuration options</a>.</li>
+                </ol>
+            </div>
         </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>
