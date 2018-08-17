@@ -1,6 +1,5 @@
 body {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding: 50px 0;
 }
 
 h1 {
@@ -9,16 +8,7 @@ h1 {
     text-transform: uppercase;
 }
 
-.lead {
-    color: #666;
-}
-
-.animation img {
-    margin: 0 auto;
-}
-
 code {
     background-color: #F2F9F5;
-    border-radius: 0;
     color: #1BA622;
 }

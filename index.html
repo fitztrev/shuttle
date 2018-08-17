@@ -4,26 +4,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta property="og:image" content="http://fitztrev.github.io/img/shuttle-logo.png">
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta property="og:image" content="http://fitztrev.github.io/images/shuttle-logo.png">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/shuttle.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Francois+One">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
-
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Francois+One">
+    <link rel="stylesheet" href="css/style.css">
 
     <title>Shuttle | A simple SSH shortcut menu for macOS</title>
 </head>
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-lg-6 col-sm-6">
+            <div class="col">
                 <h1>Shuttle</h1>
-                <p class="lead">A simple SSH shortcut menu for macOS</p>
-                <br><br>
-                <div class="text-center">
+                <p class="lead text-secondary">A simple SSH shortcut menu for macOS</p>
+
+                <img src="images/how-shuttle-works.gif" alt="How Shuttle works" class="img-fluid">
+
+                <div class="my-4 text-center">
                     <p>
                         <a href="https://github.com/fitztrev/shuttle/releases" class="btn btn-block btn-success btn-lg">
                             <i class="fas fa-download"></i>
@@ -32,36 +32,27 @@
                         </a>
                     </p>
 
-                    <p class="text-muted"><em>&mdash; or &mdash;</em></p>
-                    <p><a href="https://github.com/fitztrev/shuttle">View on Github</a></p>
+                    <p>
+                        <a href="https://github.com/fitztrev/shuttle">
+                            <i class="fab fa-github"></i>
+                            View on Github
+                        </a>
+                    </p>
                 </div>
-            </div>
-            <div class="col-lg-6 col-sm-6">
-                <img src="img/shuttle-logo.png" alt="Shuttle" class="pull-right img-responsive hidden-xs">
-            </div>
-        </div>
 
-        <hr>
-
-        <div class="animation">
-            <img src="img/how-shuttle-works.gif" alt="How Shuttle works" class="img-responsive">
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="col-lg-6 col-sm-6">
-                <h3>About</h3>
-                <p>Shuttle was created by <a href="http://trevorfitzgerald.com">Trevor Fitzgerald</a>.</p>
+                <h4>About</h4>
                 <p>It does exactly what you see above and nothing more.</p>
-            </div>
-            <div class="col-lg-6 col-sm-6">
-                <h3>Configuration</h3>
+
+                <h4>Configuration</h4>
                 <ol>
                     <li>Open the app and choose Configure to edit <code>~/.shuttle.json</code></li>
                     <li>Define the menu items and the actions that are run when clicked</li>
                     <li>Read <a href="https://github.com/fitztrev/shuttle">more configuration options</a>.</li>
                 </ol>
+            </div>
+
+            <div class="col d-none d-lg-block">
+                <img src="images/shuttle-logo.png" alt="Shuttle" class="img-fluid">
             </div>
         </div>
     </div>
