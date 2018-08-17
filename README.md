@@ -6,7 +6,7 @@ A simple SSH shortcut menu for macOS
 
 [http://fitztrev.github.io/shuttle/](http://fitztrev.github.io/shuttle/)
 
-![How Shuttle works](https://raw.github.com/fitztrev/shuttle/gh-pages/img/how-shuttle-works.gif)
+![How Shuttle works](https://raw.githubusercontent.com/fitztrev/shuttle/gh-pages/images/how-shuttle-works.gif)
 
 **Sidenote**: *Many people ask, so here's how I have [my terminal setup](https://github.com/fitztrev/shuttle/wiki/My-Terminal-Prompt).*
 
