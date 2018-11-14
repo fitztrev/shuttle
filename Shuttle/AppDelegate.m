@@ -486,7 +486,7 @@
     }else{
         //inTerminal is not null and overrides the default values of open_in
         terminalWindow = [objectsFromJSON objectAtIndex:3];
-        if( ![terminalWindow isEqualToString:@"new"] && ![terminalWindow isEqualToString:@"current"] && ![terminalWindow isEqualToString:@"tab"])
+        if( ![terminalWindow isEqualToString:@"new"] && ![terminalWindow isEqualToString:@"current"] && ![terminalWindow isEqualToString:@"tab"] && ![terminalWindow isEqualToString:@"virtual"])
         {
             errorMessage = [NSString stringWithFormat:@"%@%@%@ %@",@"'",terminalWindow,@"'", NSLocalizedString(@"is not a valid value for inTerminal. Please fix this in the JSON file",nil)];
             errorInfo = NSLocalizedString(@"bad \"inTerminal\":\"VALUE\" in the JSON settings",nil);
@@ -508,6 +508,9 @@
     NSString *terminalNewWindow =  [[NSBundle mainBundle] pathForResource:@"terminal-new-window" ofType:@"scpt"];
     NSString *terminalCurrentWindow = [[NSBundle mainBundle] pathForResource:@"terminal-current-window" ofType:@"scpt"];
     NSString *terminalNewTabDefault = [[NSBundle mainBundle] pathForResource:@"terminal-new-tab-default" ofType:@"scpt"];
+    
+    //Set Path to virtual with screen AppleScripts
+    NSString *terminalVirtualWithScreen = [[NSBundle mainBundle] pathForResource:@"virtual-with-screen" ofType:@"scpt"];
     
     //Set the name of the handler that we are passing parameters too in the apple script
     NSString *handlerName = @"scriptRun";
@@ -555,6 +558,10 @@
             if ( [terminalWindow isEqualToString:@"tab"] ) {
                 [self runScript:iTermStableNewTabDefault handler:handlerName parameters:passParameters];
             }
+            //don't spawn a terminal run the command in the background using screen
+            if ( [terminalWindow isEqualToString:@"virtual"] ) {
+                [self runScript:terminalVirtualWithScreen handler:handlerName parameters:passParameters];
+            }
         }
         //iTermVersion is not set to "stable" using applescripts Configured for Nightly
         if( [iTermVersionPref isEqualToString:@"nightly"]) {
@@ -570,6 +577,10 @@
             if ( [terminalWindow isEqualToString:@"tab"] ) {
                 [self runScript:iTerm2NightlyNewTabDefault handler:handlerName parameters:passParameters];
             }
+            //don't spawn a terminal run the command in the background using screen
+            if ( [terminalWindow isEqualToString:@"virtual"] ) {
+                [self runScript:terminalVirtualWithScreen handler:handlerName parameters:passParameters];
+            }
         }
     }
     //If JSON settings are set to use Terminal.app
@@ -578,15 +589,17 @@
         if ( [terminalWindow isEqualToString:@"new"] ) {
             [self runScript:terminalNewWindow handler:handlerName parameters:passParameters];
         }
-        
         //if we are running in the current terminal Window
         if ( [terminalWindow isEqualToString:@"current"] ) {
             [self runScript:terminalCurrentWindow handler:handlerName parameters:passParameters];
         }
-        
         //we are using the default action of shuttle... The active window in a new tab
         if ( [terminalWindow isEqualToString:@"tab"] ) {
             [self runScript:terminalNewTabDefault handler:handlerName parameters:passParameters];
+        }
+        //don't spawn a terminal run the command in the background using screen
+        if ( [terminalWindow isEqualToString:@"virtual"] ) {
+            [self runScript:terminalVirtualWithScreen handler:handlerName parameters:passParameters];
         }
     }
 }
