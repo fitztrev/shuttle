@@ -12,6 +12,7 @@
 		0ADB3B0E178EF8DB004E9BB9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0A178EF8DB004E9BB9 /* StatusIcon@2x.png */; };
 		0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */; };
 		0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		24399FE6219CD0F700C8658F /* virtual-with-screen.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 24399FE5219CD0F700C8658F /* virtual-with-screen.scpt */; };
 		6FC541A31D45CF7F00A896E3 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FC541A51D45CF7F00A896E3 /* AboutWindowController.xib */; };
 		7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */; };
 		A124BA191D45572B00218F2F /* iTerm2-stable-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */; };
@@ -41,6 +42,7 @@
 		0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StatusIconAlt@2x.png"; sourceTree = "<group>"; };
 		0ADB3B11178F3DE4004E9BB9 /* LaunchAtLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchAtLoginController.h; sourceTree = "<group>"; };
 		0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
+		24399FE5219CD0F700C8658F /* virtual-with-screen.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "virtual-with-screen.scpt"; sourceTree = "<group>"; };
 		7E72D21E178003ED00A6389C /* Shuttle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Shuttle.entitlements; sourceTree = "<group>"; };
 		7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shuttle.default.json; sourceTree = "<group>"; };
 		A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-stable-current-window.scpt"; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 		A12D9BE61BCF2C72004F52A6 /* apple-scpt */ = {
 			isa = PBXGroup;
 			children = (
+				24399FE5219CD0F700C8658F /* virtual-with-screen.scpt */,
 				A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */,
 				A124BA171D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt */,
 				A124BA181D45572B00218F2F /* iTerm2-stable-new-window.scpt */,
@@ -257,6 +260,7 @@
 				A1B7B9DD1DB53ED200809327 /* Localizable.strings in Resources */,
 				A12D9BF51BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt in Resources */,
 				0ADB3B0D178EF8DB004E9BB9 /* StatusIcon.png in Resources */,
+				24399FE6219CD0F700C8658F /* virtual-with-screen.scpt in Resources */,
 				0ADB3B0C178EF8DB004E9BB9 /* StatusIconAlt.png in Resources */,
 				C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */,
 				6FC541A31D45CF7F00A896E3 /* AboutWindowController.xib in Resources */,

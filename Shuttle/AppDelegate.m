@@ -515,15 +515,22 @@
     //Set the name of the handler that we are passing parameters too in the apple script
     NSString *handlerName = @"scriptRun";
     
-    //script expects the following order: Command, Theme, Title
-    NSArray *passParameters = @[escapedObject, terminalTheme, terminalTitle];
-    
-    // Check if Url
-    NSURL* url = [NSURL URLWithString:escapedObject];
-    if(url)
-    {
-        [[NSWorkspace sharedWorkspace] openURL:url];
+    //script expects the following order: Command, Theme, Title unless its virtual which bypasses the url check and expects Command, Title
+    NSArray *passParameters;
+    NSURL *url;
+    if ( ![terminalWindow isEqualToString:@"virtual"] ) {
+        passParameters = @[escapedObject, terminalTheme, terminalTitle];
+        url = [NSURL URLWithString:escapedObject];
     }
+    else {
+        passParameters = @[escapedObject, terminalTitle];
+    }
+    // Check if Url
+    if (url)
+        {
+            [[NSWorkspace sharedWorkspace] openURL:url];
+            
+        }
     //If the JSON file is set to use iTerm
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
         
