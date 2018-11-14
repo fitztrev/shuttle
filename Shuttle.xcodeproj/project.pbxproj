@@ -12,14 +12,12 @@
 		0ADB3B0E178EF8DB004E9BB9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0A178EF8DB004E9BB9 /* StatusIcon@2x.png */; };
 		0ADB3B0F178EF8DB004E9BB9 /* StatusIconAlt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */; };
 		0ADB3B13178F3DE4004E9BB9 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		24399FE6219CD0F700C8658F /* virtual-with-screen.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 24399FE5219CD0F700C8658F /* virtual-with-screen.scpt */; };
 		6FC541A31D45CF7F00A896E3 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FC541A51D45CF7F00A896E3 /* AboutWindowController.xib */; };
 		7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */ = {isa = PBXBuildFile; fileRef = 7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */; };
 		A124BA191D45572B00218F2F /* iTerm2-stable-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */; };
 		A124BA1A1D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA171D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt */; };
 		A124BA1B1D45572B00218F2F /* iTerm2-stable-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA181D45572B00218F2F /* iTerm2-stable-new-window.scpt */; };
-		A124BA1F1D4558E500218F2F /* iTerm-legacy-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA1C1D4558E500218F2F /* iTerm-legacy-current-window.scpt */; };
-		A124BA201D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA1D1D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt */; };
-		A124BA211D4558E500218F2F /* iTerm-legacy-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA1E1D4558E500218F2F /* iTerm-legacy-new-window.scpt */; };
 		A12D9BF31BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEA1BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt */; };
 		A12D9BF41BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEB1BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt */; };
 		A12D9BF51BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEC1BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt */; };
@@ -44,14 +42,12 @@
 		0ADB3B0B178EF8DB004E9BB9 /* StatusIconAlt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StatusIconAlt@2x.png"; sourceTree = "<group>"; };
 		0ADB3B11178F3DE4004E9BB9 /* LaunchAtLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchAtLoginController.h; sourceTree = "<group>"; };
 		0ADB3B12178F3DE4004E9BB9 /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
+		24399FE5219CD0F700C8658F /* virtual-with-screen.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "virtual-with-screen.scpt"; sourceTree = "<group>"; };
 		7E72D21E178003ED00A6389C /* Shuttle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Shuttle.entitlements; sourceTree = "<group>"; };
 		7E74A7C51789CE2F0079E0D2 /* shuttle.default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shuttle.default.json; sourceTree = "<group>"; };
 		A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-stable-current-window.scpt"; sourceTree = "<group>"; };
 		A124BA171D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-stable-new-tab-default.scpt"; sourceTree = "<group>"; };
 		A124BA181D45572B00218F2F /* iTerm2-stable-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-stable-new-window.scpt"; sourceTree = "<group>"; };
-		A124BA1C1D4558E500218F2F /* iTerm-legacy-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-legacy-current-window.scpt"; sourceTree = "<group>"; };
-		A124BA1D1D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-legacy-new-tab-default.scpt"; sourceTree = "<group>"; };
-		A124BA1E1D4558E500218F2F /* iTerm-legacy-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-legacy-new-window.scpt"; sourceTree = "<group>"; };
 		A12D9BEA1BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-current-window.scpt"; sourceTree = "<group>"; };
 		A12D9BEB1BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-new-tab-default.scpt"; sourceTree = "<group>"; };
 		A12D9BEC1BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-new-window.scpt"; sourceTree = "<group>"; };
@@ -120,9 +116,7 @@
 		A12D9BE61BCF2C72004F52A6 /* apple-scpt */ = {
 			isa = PBXGroup;
 			children = (
-				A124BA1C1D4558E500218F2F /* iTerm-legacy-current-window.scpt */,
-				A124BA1D1D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt */,
-				A124BA1E1D4558E500218F2F /* iTerm-legacy-new-window.scpt */,
+				24399FE5219CD0F700C8658F /* virtual-with-screen.scpt */,
 				A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */,
 				A124BA171D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt */,
 				A124BA181D45572B00218F2F /* iTerm2-stable-new-window.scpt */,
@@ -232,7 +226,7 @@
 		C149EBF015D5214600B1F558 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = fitztrev;
 			};
 			buildConfigurationList = C149EBF315D5214600B1F558 /* Build configuration list for PBXProject "Shuttle" */;
@@ -266,7 +260,7 @@
 				A1B7B9DD1DB53ED200809327 /* Localizable.strings in Resources */,
 				A12D9BF51BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt in Resources */,
 				0ADB3B0D178EF8DB004E9BB9 /* StatusIcon.png in Resources */,
-				A124BA1F1D4558E500218F2F /* iTerm-legacy-current-window.scpt in Resources */,
+				24399FE6219CD0F700C8658F /* virtual-with-screen.scpt in Resources */,
 				0ADB3B0C178EF8DB004E9BB9 /* StatusIconAlt.png in Resources */,
 				C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */,
 				6FC541A31D45CF7F00A896E3 /* AboutWindowController.xib in Resources */,
@@ -282,8 +276,6 @@
 				C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */,
 				A12D9BF81BCF2C73004F52A6 /* terminal-new-window.scpt in Resources */,
 				7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */,
-				A124BA201D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt in Resources */,
-				A124BA211D4558E500218F2F /* iTerm-legacy-new-window.scpt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,14 +359,33 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -383,7 +394,9 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
@@ -395,16 +408,37 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
