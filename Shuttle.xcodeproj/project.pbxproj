@@ -17,9 +17,6 @@
 		A124BA191D45572B00218F2F /* iTerm2-stable-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */; };
 		A124BA1A1D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA171D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt */; };
 		A124BA1B1D45572B00218F2F /* iTerm2-stable-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA181D45572B00218F2F /* iTerm2-stable-new-window.scpt */; };
-		A124BA1F1D4558E500218F2F /* iTerm-legacy-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA1C1D4558E500218F2F /* iTerm-legacy-current-window.scpt */; };
-		A124BA201D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA1D1D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt */; };
-		A124BA211D4558E500218F2F /* iTerm-legacy-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A124BA1E1D4558E500218F2F /* iTerm-legacy-new-window.scpt */; };
 		A12D9BF31BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEA1BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt */; };
 		A12D9BF41BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEB1BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt */; };
 		A12D9BF51BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt in Resources */ = {isa = PBXBuildFile; fileRef = A12D9BEC1BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt */; };
@@ -49,9 +46,6 @@
 		A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-stable-current-window.scpt"; sourceTree = "<group>"; };
 		A124BA171D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-stable-new-tab-default.scpt"; sourceTree = "<group>"; };
 		A124BA181D45572B00218F2F /* iTerm2-stable-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-stable-new-window.scpt"; sourceTree = "<group>"; };
-		A124BA1C1D4558E500218F2F /* iTerm-legacy-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-legacy-current-window.scpt"; sourceTree = "<group>"; };
-		A124BA1D1D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-legacy-new-tab-default.scpt"; sourceTree = "<group>"; };
-		A124BA1E1D4558E500218F2F /* iTerm-legacy-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm-legacy-new-window.scpt"; sourceTree = "<group>"; };
 		A12D9BEA1BCF2C73004F52A6 /* iTerm2-nightly-current-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-current-window.scpt"; sourceTree = "<group>"; };
 		A12D9BEB1BCF2C73004F52A6 /* iTerm2-nightly-new-tab-default.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-new-tab-default.scpt"; sourceTree = "<group>"; };
 		A12D9BEC1BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTerm2-nightly-new-window.scpt"; sourceTree = "<group>"; };
@@ -120,9 +114,6 @@
 		A12D9BE61BCF2C72004F52A6 /* apple-scpt */ = {
 			isa = PBXGroup;
 			children = (
-				A124BA1C1D4558E500218F2F /* iTerm-legacy-current-window.scpt */,
-				A124BA1D1D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt */,
-				A124BA1E1D4558E500218F2F /* iTerm-legacy-new-window.scpt */,
 				A124BA161D45572B00218F2F /* iTerm2-stable-current-window.scpt */,
 				A124BA171D45572B00218F2F /* iTerm2-stable-new-tab-default.scpt */,
 				A124BA181D45572B00218F2F /* iTerm2-stable-new-window.scpt */,
@@ -266,7 +257,6 @@
 				A1B7B9DD1DB53ED200809327 /* Localizable.strings in Resources */,
 				A12D9BF51BCF2C73004F52A6 /* iTerm2-nightly-new-window.scpt in Resources */,
 				0ADB3B0D178EF8DB004E9BB9 /* StatusIcon.png in Resources */,
-				A124BA1F1D4558E500218F2F /* iTerm-legacy-current-window.scpt in Resources */,
 				0ADB3B0C178EF8DB004E9BB9 /* StatusIconAlt.png in Resources */,
 				C149EC0815D5214600B1F558 /* InfoPlist.strings in Resources */,
 				6FC541A31D45CF7F00A896E3 /* AboutWindowController.xib in Resources */,
@@ -282,8 +272,6 @@
 				C159DC2815D5DE8000F5DE24 /* shuttle.icns in Resources */,
 				A12D9BF81BCF2C73004F52A6 /* terminal-new-window.scpt in Resources */,
 				7E74A7C61789CE2F0079E0D2 /* shuttle.default.json in Resources */,
-				A124BA201D4558E500218F2F /* iTerm-legacy-new-tab-default.scpt in Resources */,
-				A124BA211D4558E500218F2F /* iTerm-legacy-new-window.scpt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
