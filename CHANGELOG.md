@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- The ability to open multiple, or same command(s) off one menu item. https://github.com/fitztrev/shuttle/issues/236
 - The ability to add a second json.config file 
 - The ability to add ```[---]``` in the name of a command to add a line seperator 
 - Adding a new apple script which will allow running commands in the background with screen
