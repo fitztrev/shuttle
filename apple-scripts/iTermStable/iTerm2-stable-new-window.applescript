@@ -18,10 +18,10 @@ on CommandRun(withCmd, withTheme, theTitle)
 		if it is not running then
 			activate
 			if (count windows) is 0 then
-				NewWin(withTheme) of me
+				my NewWin(withTheme)
 			end if
 		else
-			NewWin(withTheme) of me
+			my NewWin(withTheme)
 		end if
 		tell the current window
 			tell the current session

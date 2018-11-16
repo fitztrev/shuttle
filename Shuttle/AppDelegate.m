@@ -12,6 +12,7 @@
     
     // The location for the JSON path file. This is a simple file that contains the hard path to the *.json settings file.
     shuttleJSONPathPref = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.path"];
+    shuttleJSONPathAlt = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle-alt.path"];
     
     //if file shuttle.path exists in ~/.shuttle.path then read this file as it should contain the custom path to *.json
     if( [[NSFileManager defaultManager] fileExistsAtPath:shuttleJSONPathPref] ) {
@@ -31,6 +32,33 @@
         if ( ![[NSFileManager defaultManager] fileExistsAtPath:shuttleConfigFile] ) {
             NSString *cgFileInResource = [[NSBundle mainBundle] pathForResource:@"shuttle.default" ofType:@"json"];
             [[NSFileManager defaultManager] copyItemAtPath:cgFileInResource toPath:shuttleConfigFile error:nil];
+        }
+    }
+    
+    // if the custom alternate json file exists then read the file and use set the output as the alt path.
+    if ( [[NSFileManager defaultManager] fileExistsAtPath:shuttleJSONPathAlt] ) {
+        
+        //Read shuttle-alt.path file which contains the custom path to the alternate json file
+        NSString *jsonConfigAltPath = [NSString stringWithContentsOfFile:shuttleJSONPathAlt encoding:NSUTF8StringEncoding error:NULL];
+        
+        //Remove whitespace if any
+        jsonConfigAltPath = [ jsonConfigAltPath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        //set the global var that contains the alternate path
+        shuttleAltConfigFile = jsonConfigAltPath;
+        
+        //flag the bool for later parsing
+        parseAltJSON = YES;
+    }else{
+        //the custom alt path does not exist. Assume the default for alt path; if existing flag for later parsing
+        shuttleAltConfigFile = [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle-alt.json"];
+        
+        if ( [[NSFileManager defaultManager] fileExistsAtPath:shuttleAltConfigFile] ){
+            //the default path exists. Flag for later parsing
+            parseAltJSON = YES;
+        }else{
+            //The user does not want to parse an additional json file.
+            parseAltJSON = NO;
         }
     }
     
@@ -84,10 +112,12 @@
 - (void)menuWillOpen:(NSMenu *)menu {
     // Check when the config was last modified
     if ( [self needUpdateFor:shuttleConfigFile with:configModified] ||
+        [self needUpdateFor:shuttleAltConfigFile with:configModified2] ||
         [self needUpdateFor: @"/etc/ssh/ssh_config" with:sshConfigSystem] ||
         [self needUpdateFor: @"~/.ssh/config" with:sshConfigUser]) {
         
         configModified = [self getMTimeFor:shuttleConfigFile];
+        configModified2 = [self getMTimeFor:shuttleAltConfigFile];
         sshConfigSystem = [self getMTimeFor: @"/etc/ssh_config"];
         sshConfigUser = [self getMTimeFor: @"~/.ssh/config"];
         
@@ -217,6 +247,14 @@
     shuttleHosts = json[@"hosts"];
     ignoreHosts = json[@"ssh_config_ignore_hosts"];
     ignoreKeywords = json[@"ssh_config_ignore_keywords"];
+    
+    //add hosts from the alternate json config
+    if (parseAltJSON) {
+        NSData *dataAlt = [NSData dataWithContentsOfFile:shuttleAltConfigFile];
+        id jsonAlt = [NSJSONSerialization JSONObjectWithData:dataAlt options:NSJSONReadingMutableContainers error:nil];
+        shuttleHostsAlt = jsonAlt[@"hosts"];
+        [shuttleHosts addObjectsFromArray:shuttleHostsAlt];
+    }
     
     // Should we merge ssh config hosts?
     BOOL showSshConfigHosts = YES;
