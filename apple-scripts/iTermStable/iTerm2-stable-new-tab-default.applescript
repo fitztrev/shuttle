@@ -18,15 +18,15 @@ on CommandRun(withCmd, withTheme, theTitle)
 		if it is not running then
 			activate
 			if (count windows) is 0 then
-				NewWin(withTheme) of me
+				my NewWin(withTheme)
 			end if
-			SetWinParam(theTitle, withCmd) of me
+			my SetWinParam(theTitle, withCmd)
 		else if (count windows) is 0 then
-			NewWin(withTheme) of me
-			SetWinParam(theTitle, withCmd) of me
+			my NewWin(withTheme)
+			my SetWinParam(theTitle, withCmd)
 		else
-			NewTab(withTheme) of me
-			SetTabParam(theTitle, withCmd) of me
+			my NewTab(withTheme)
+			my SetTabParam(theTitle, withCmd)
 		end if
 	end tell
 end CommandRun

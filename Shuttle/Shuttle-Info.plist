@@ -18,8 +18,6 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.3.0</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>NSAppleEventsUsageDescription</string>
 	<key>CFBundleVersion</key>
 	<string>1.3.0</string>
 	<key>LSApplicationCategoryType</key>
@@ -28,6 +26,8 @@
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Shuttle needs Automation privileges in Security &amp; Privacy to run applescripts</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2016 Trevor Fitzgerald. All rights reserved.</string>
 	<key>NSMainNibFile</key>

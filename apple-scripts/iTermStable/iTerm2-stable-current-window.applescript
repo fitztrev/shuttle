@@ -15,7 +15,6 @@ on CommandRun(withCmd)
 		activate
 		tell the current window
 			tell the current session
-				--set name to theTitle
 				write text withCmd
 			end tell
 		end tell
