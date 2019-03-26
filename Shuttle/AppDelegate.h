@@ -44,6 +44,9 @@
     NSMutableArray* ignoreHosts;
     NSMutableArray* ignoreKeywords;
     
+    //Dictionary to hold all Leafs for indexing
+    NSMutableDictionary *spotlightIndex;
+    
     LaunchAtLoginController *launchAtLoginController;
     
 }
