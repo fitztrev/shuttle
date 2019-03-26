@@ -118,7 +118,7 @@
         
         configModified = [self getMTimeFor:shuttleConfigFile];
         configModified2 = [self getMTimeFor:shuttleAltConfigFile];
-        sshConfigSystem = [self getMTimeFor: @"/etc/ssh_config"];
+        sshConfigSystem = [self getMTimeFor: @"/etc/ssh/ssh_config"];
         sshConfigUser = [self getMTimeFor: @"~/.ssh/config"];
         
         [self loadMenu];
