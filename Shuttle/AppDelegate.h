@@ -44,6 +44,8 @@
     NSMutableArray* ignoreHosts;
     NSMutableArray* ignoreKeywords;
     
+    NSMutableDictionary *spotlightIndex;
+    
     LaunchAtLoginController *launchAtLoginController;
     
 }

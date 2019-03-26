@@ -5,8 +5,47 @@
 
 #import "AppDelegate.h"
 #import "AboutWindowController.h"
+#import <CoreSpotlight/CoreSpotlight.h>
 
 @implementation AppDelegate
+
+- (BOOL)application:(NSApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<NSUserActivityRestoring>> * _Nonnull))restorationHandler {
+    NSArray *objectsFromJSON = [userActivity.userInfo[@"kCSSearchableItemActivityIdentifier"] componentsSeparatedByString:(@"¬_¬")];
+    
+    [self openHost:objectsFromJSON];
+    
+    return YES;
+}
+
+- (void)indexForSpotlight {
+    [[CSSearchableIndex defaultSearchableIndex] deleteSearchableItemsWithDomainIdentifiers:[NSArray arrayWithObjects: @"spotlight.shuttle", nil] completionHandler:^(NSError * _Nullable error) {
+        
+        NSMutableArray *items = [[NSMutableArray alloc]init];
+        
+        for(id key in self->spotlightIndex){
+            
+            NSDictionary *cfg = [self->spotlightIndex objectForKey:key];
+            
+            CSSearchableItemAttributeSet *attributeSet =  [[CSSearchableItemAttributeSet alloc] initWithItemContentType:(NSString*)kUTTypeApplication];
+            
+            attributeSet.title = [NSString stringWithFormat:@"%@", cfg[@"title"]];
+            attributeSet.contentDescription = [NSString stringWithFormat:@"%@", cfg[@"cmd"]];
+            //attributeSet.keywords = [NSArray arrayWithObjects:cfg[@"cmd"], nil];
+            attributeSet.creator = @"Arthur B Olsen";
+            
+            CSSearchableItem *item = [[CSSearchableItem alloc] initWithUniqueIdentifier:key domainIdentifier:@"spotlight.shuttle" attributeSet:attributeSet];
+            
+            [items addObject:item];
+        }
+        
+        [[CSSearchableIndex defaultSearchableIndex] indexSearchableItems:items completionHandler:^(NSError * __nullable error){
+            if(error){
+                NSLog(@"Indexing failed: %@", error);
+                return;
+            }
+        }];
+    }];
+}
 
 - (void) awakeFromNib {
     
@@ -89,13 +128,13 @@
     launchAtLoginController = [[LaunchAtLoginController alloc] init];
     // Needed to trigger the menuWillOpen event
     [menu setDelegate:self];
+    
+    [self refresh];
 }
 
 - (BOOL) needUpdateFor: (NSString*) file with: (NSDate*) old {
-    
     if (![[NSFileManager defaultManager] fileExistsAtPath:[file stringByExpandingTildeInPath]])
         return false;
-    
     if (old == NULL)
         return true;
     
@@ -109,7 +148,7 @@
     return [attributes fileModificationDate];
 }
 
-- (void)menuWillOpen:(NSMenu *)menu {
+- (void)refresh {
     // Check when the config was last modified
     if ( [self needUpdateFor:shuttleConfigFile with:configModified] ||
         [self needUpdateFor:shuttleAltConfigFile with:configModified2] ||
@@ -121,8 +160,16 @@
         sshConfigSystem = [self getMTimeFor: @"/etc/ssh/ssh_config"];
         sshConfigUser = [self getMTimeFor: @"~/.ssh/config"];
         
+        spotlightIndex = [[NSMutableDictionary alloc] init];
+        
         [self loadMenu];
+        
+        [self indexForSpotlight];
     }
+}
+
+- (void)menuWillOpen:(NSMenu *)menu {
+    [self refresh];
 }
 
 // Parsing of the SSH Config File
@@ -194,8 +241,8 @@
         if ([first isEqualToString:@"Include"]) {
             // Support for ssh_config Include directive.
             NSString *includePath = ([second isAbsolutePath])
-                ? [second stringByExpandingTildeInPath]
-                : [[filepath stringByDeletingLastPathComponent] stringByAppendingPathComponent:second];
+            ? [second stringByExpandingTildeInPath]
+            : [[filepath stringByDeletingLastPathComponent] stringByAppendingPathComponent:second];
             
             [servers addEntriesFromDictionary:[self parseSSHConfig:includePath]];
         }
@@ -418,9 +465,13 @@
         //Place the terminal command, theme, and title into an comma delimited string
         NSString *menuRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", menuCmd, termTheme, termTitle, termWindow, menuName];
         
+        spotlightIndex[menuRepObj] = cfg;
+        
+        //[self indexTitle: termTitle command: menuCmd theme: termTheme window:termWindow name: menuName menuRepObj: menuRepObj];
+        
         [menuItem setTitle:menuName];
         [menuItem setRepresentedObject:menuRepObj];
-        [menuItem setAction:@selector(openHost:)];
+        [menuItem setAction:@selector(openHostFromMenu:)];
         [m insertItem:menuItem atIndex:pos++];
         if (addSeparator) {
             [m insertItem:[NSMenuItem separatorItem] atIndex:pos++];
@@ -463,7 +514,7 @@
     }
 }
 
-- (void) openHost:(NSMenuItem *) sender {
+- (void) openHost:(NSArray *) objectsFromJSON {
     //NSLog(@"sender: %@", sender);
     //NSLog(@"Command: %@",[sender representedObject]);
     
@@ -472,7 +523,7 @@
     
     
     //Place the comma delimited string of menu item settings into an array
-    NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@"¬_¬")];
+    //NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@"¬_¬")];
     
     //This is our command that will be run in the terminal window
     NSString *escapedObject;
@@ -565,10 +616,10 @@
     }
     // Check if Url
     if (url)
-        {
-            [[NSWorkspace sharedWorkspace] openURL:url];
-            
-        }
+    {
+        [[NSWorkspace sharedWorkspace] openURL:url];
+        
+    }
     //If the JSON file is set to use iTerm
     else if ( [terminalPref rangeOfString: @"iterm"].location !=NSNotFound ) {
         
@@ -649,6 +700,13 @@
     }
 }
 
+- (void) openHostFromMenu:(NSMenuItem *) sender {
+    
+    NSArray *objectsFromJSON = [[sender representedObject] componentsSeparatedByString:(@"¬_¬")];
+    
+    [self openHost:objectsFromJSON];
+}
+
 - (void) runScript:(NSString *)scriptPath handler:(NSString*)handlerName parameters:(NSArray*)parametersInArray {
     //special thanks to stackoverflow.com/users/316866/leandro for pointing me the right direction.
     //see http://goo.gl/olcpaX
@@ -699,14 +757,24 @@
             
             [containerEvent setParamDescriptor:arguments forKeyword:keyDirectObject];
         }
+        NSDictionary * executionError = nil;
         //Execute the event
-        [appleScript executeAppleEvent:containerEvent error:nil];
+        NSAppleEventDescriptor *result = [appleScript executeAppleEvent:containerEvent error:&executionError];
+        
+        if (executionError != nil) {
+            NSLog(@"error while executing script. Error %@", executionError);
+            
+        } else {
+            NSLog(@"Script execution has succeed. Result(%@)", result);
+            
+        }
+        
     }
 }
 
 - (IBAction)showImportPanel:(id)sender {
-    NSOpenPanel * openPanelObj	= [NSOpenPanel openPanel];
-    NSInteger tvarNSInteger	= [openPanelObj runModal];
+    NSOpenPanel * openPanelObj    = [NSOpenPanel openPanel];
+    NSInteger tvarNSInteger    = [openPanelObj runModal];
     if(tvarNSInteger == NSOKButton){
         //Backup the current configuration
         [[NSFileManager defaultManager] moveItemAtPath:shuttleConfigFile toPath: [NSHomeDirectory() stringByAppendingPathComponent:@".shuttle.json.backup"] error: nil];
@@ -743,9 +811,9 @@
 }
 
 - (IBAction)showExportPanel:(id)sender {
-    NSSavePanel * savePanelObj	= [NSSavePanel savePanel];
+    NSSavePanel * savePanelObj    = [NSSavePanel savePanel];
     //Display the Save Panel
-    NSInteger result	= [savePanelObj runModal];
+    NSInteger result    = [savePanelObj runModal];
     if (result == NSFileHandlingPanelOKButton) {
         NSURL *saveURL = [savePanelObj URL];
         // then copy a previous file to the new location
@@ -767,14 +835,14 @@
         //build the reprensented object. It's expecting menuCmd, termTheme, termTitle, termWindow, menuName
         NSString *editorRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", editorCommand, nil, @"Editing shuttle JSON", nil, nil];
         
-        //make a menu item for the command selector(openHost:) runs in a new terminal window.
-        NSMenuItem *editorMenu = [[NSMenuItem alloc] initWithTitle:@"editJSONconfig" action:@selector(openHost:) keyEquivalent:(@"")];
+        //make a menu item for the command selector(openHostFromMenu:) runs in a new terminal window.
+        NSMenuItem *editorMenu = [[NSMenuItem alloc] initWithTitle:@"editJSONconfig" action:@selector(openHostFromMenu:) keyEquivalent:(@"")];
         
         //set the command for the menu item
         [editorMenu setRepresentedObject:editorRepObj];
         
         //open the JSON file in the terminal editor.
-        [self openHost:editorMenu];
+        [self openHostFromMenu:editorMenu];
     }
 }
 
