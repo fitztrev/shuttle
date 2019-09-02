@@ -149,6 +149,24 @@
     return [self parseSSHConfig:configFile];
 }
 
+- (NSArray *)searchFiles:(NSString *)directoryPath {
+
+    NSMutableArray *filePaths = [NSMutableArray array];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSArray *contents = [fileManager contentsOfDirectoryAtPath:directoryPath error:nil];
+    for (NSString *item in contents)
+    {
+        NSString *path = [directoryPath stringByAppendingPathComponent:item];
+        BOOL isDir;
+        if ([fileManager fileExistsAtPath:path isDirectory:&isDir] && !isDir) {
+            [filePaths addObject:path];
+        }
+    }
+    
+    return filePaths;
+}
+
 - (NSDictionary<NSString *, NSDictionary *> *)parseSSHConfig:(NSString *)filepath {
     // Get file contents into fh.
     NSString *fh = [NSString stringWithContentsOfFile:filepath encoding:NSUTF8StringEncoding error:nil];
@@ -197,7 +215,15 @@
                 ? [second stringByExpandingTildeInPath]
                 : [[filepath stringByDeletingLastPathComponent] stringByAppendingPathComponent:second];
             
-            [servers addEntriesFromDictionary:[self parseSSHConfig:includePath]];
+           NSString *fileName = [includePath lastPathComponent];
+           if ([fileName isEqualToString:@"*"]) {
+                NSArray *includePaths = [self searchFiles:[includePath stringByDeletingLastPathComponent]];
+                for (includePath in includePaths) {
+                    [servers addEntriesFromDictionary:[self parseSSHConfig:includePath]];
+                }
+            } else {
+                [servers addEntriesFromDictionary:[self parseSSHConfig:includePath]];
+            }
         }
         
         if ([first isEqualToString:@"Host"]) {
@@ -208,6 +234,10 @@
             hostAliases = [hostAliases filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
             key = [hostAliases firstObject];
             servers[key] = [[NSMutableDictionary alloc] init];
+            NSString *fileName = [filepath lastPathComponent];
+            if (![fileName isEqualToString:@"ssh_config"] && ![fileName isEqualToString:@"config"]) {
+                servers[key][@"name"] = [fileName stringByAppendingPathComponent:key];
+            }
         }
     }
     
