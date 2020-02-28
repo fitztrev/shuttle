@@ -1,0 +1,10 @@
+/*
+ Localizable.strings
+ Shuttle
+ Translations done by Nick Böcker <kontakt@nick-hat-boecker.de>
+*/
+
+"About " = "Über ";
+"Version: " = "Version: ";
+" - A simple SSH shortcut menu." = " - Ein simples SSH Shortcut Menü.";
+"Error parsing config" = "Fehler in der Konfigurationsdatei";

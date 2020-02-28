@@ -49,6 +49,7 @@ This project was created by [Trevor Fitzgerald](https://github.com/fitztrev). I 
 * [Matt Turner](https://github.com/thshdw)
 * [Michael Davis](https://github.com/mpdavis)
 * [Morton Fox](https://github.com/mortonfox)
+* [Nick Böcker](https://github.com/nickhatboecker)
 * [Pluwen](https://github.com/pluwen)
 * Rebecca Dominguez
 * [Rui Rodrigues](https://github.com/rmrodrigues)
