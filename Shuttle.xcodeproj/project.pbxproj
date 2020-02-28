@@ -70,6 +70,11 @@
 		A1B7B9F21DB54D9000809327 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AboutWindowController.strings; sourceTree = "<group>"; };
 		A1D700051A5DCDF4003563E4 /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
 		A1D700061A5DCE8D003563E4 /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AboutWindowController.m; sourceTree = "<group>"; };
+		AA5D48F024091E640056B323 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AA5D48F124091F4A0056B323 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		AA5D48F224091F870056B323 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AA5D48F324091F8E0056B323 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/Credits.rtf; sourceTree = "<group>"; };
+		AA5D48F424091FCD0056B323 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BDCFF1521E4E890A00B365C9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		BDCFF1531E4E890A00B365C9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AboutWindowController.strings; sourceTree = "<group>"; };
 		BDCFF1541E4E890A00B365C9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -237,6 +242,7 @@
 				en,
 				"zh-Hans",
 				Base,
+				de,
 				es,
 				fr,
 			);
@@ -304,6 +310,7 @@
 				A1B7B9F11DB54D8C00809327 /* zh-Hans */,
 				A1B7B9F21DB54D9000809327 /* es */,
 				BDCFF1531E4E890A00B365C9 /* fr */,
+				AA5D48F024091E640056B323 /* de */,
 			);
 			name = AboutWindowController.xib;
 			sourceTree = "<group>";
@@ -316,6 +323,7 @@
 				A1B7B9E11DB53EDA00809327 /* zh-Hans */,
 				A1B7B9E61DB5436700809327 /* es */,
 				BDCFF1561E4E890A00B365C9 /* fr */,
+				AA5D48F424091FCD0056B323 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -326,6 +334,7 @@
 				C149EC0715D5214600B1F558 /* en */,
 				A1B7B9E41DB5436700809327 /* es */,
 				BDCFF1541E4E890A00B365C9 /* fr */,
+				AA5D48F224091F870056B323 /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -336,6 +345,7 @@
 				C149EC0D15D5214600B1F558 /* en */,
 				A1B7B9E51DB5436700809327 /* es */,
 				BDCFF1551E4E890A00B365C9 /* fr */,
+				AA5D48F324091F8E0056B323 /* de */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -348,6 +358,7 @@
 				A1B7B9EE1DB54D7B00809327 /* zh-Hans */,
 				A1B7B9EF1DB54D7F00809327 /* en */,
 				BDCFF1521E4E890A00B365C9 /* fr */,
+				AA5D48F124091F4A0056B323 /* de */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
