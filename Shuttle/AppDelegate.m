@@ -370,7 +370,6 @@
     for (NSDictionary* item in data) {
         if (item[@"cmd"] && item[@"name"]) {
             // this is a leaf
-//            [leafs setObject:item forKey:item[@"name"]];
             [menus setObject:item forKey:item[@"name"]];
         } else {
             // must be a menu - add all instances
@@ -381,7 +380,6 @@
     }
     
     NSArray* menuKeys = [[menus allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-//    NSArray* leafKeys = [[leafs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     NSInteger pos = 0;
     
