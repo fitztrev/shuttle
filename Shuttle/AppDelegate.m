@@ -365,12 +365,13 @@
     // go through the array and sort out the menus and the leafs into
     // separate bucks so we can sort them independently.
     NSMutableDictionary* menus = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary* leafs = [[NSMutableDictionary alloc] init];
+//    NSMutableDictionary* leafs = [[NSMutableDictionary alloc] init];
     
     for (NSDictionary* item in data) {
         if (item[@"cmd"] && item[@"name"]) {
             // this is a leaf
-            [leafs setObject:item forKey:item[@"name"]];
+//            [leafs setObject:item forKey:item[@"name"]];
+            [menus setObject:item forKey:item[@"name"]];
         } else {
             // must be a menu - add all instances
             for (NSString* key in item) {
@@ -380,50 +381,48 @@
     }
     
     NSArray* menuKeys = [[menus allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    NSArray* leafKeys = [[leafs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+//    NSArray* leafKeys = [[leafs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     NSInteger pos = 0;
     
     // create menus first
     for (NSString* key in menuKeys) {
-        NSMenu* subMenu = [[NSMenu alloc] init];
-        NSMenuItem* menuItem = [[NSMenuItem alloc] init];
-        [self separatorSortRemoval:key];
-        [menuItem setTitle:menuName];
-        [menuItem setSubmenu:subMenu];
-        [m insertItem:menuItem atIndex:pos++];
-        if (addSeparator) {
-            [m insertItem:[NSMenuItem separatorItem] atIndex:pos++];
-        }
-        // build submenu
-        [self buildMenu:menus[key] addToMenu:subMenu];
-    }
-    
-    // now create leafs
-    for (NSString *key in leafKeys) {
-        NSDictionary* cfg = leafs[key];
-        NSMenuItem* menuItem = [[NSMenuItem alloc] init];
-        
-        //Get the command we are going to run in termainal
-        NSString *menuCmd = cfg[@"cmd"];
-        //Get the theme for this terminal session
-        NSString *termTheme = cfg[@"theme"];
-        //Get the name for the terminal session
-        NSString *termTitle = cfg[@"title"];
-        //Get the value of setting inTerminal
-        NSString *termWindow = cfg[@"inTerminal"];
-        //Get the menu name will will use this as the title if title is null.
-        [self separatorSortRemoval:cfg[@"name"]];
-        
-        //Place the terminal command, theme, and title into an comma delimited string
-        NSString *menuRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", menuCmd, termTheme, termTitle, termWindow, menuName];
-        
-        [menuItem setTitle:menuName];
-        [menuItem setRepresentedObject:menuRepObj];
-        [menuItem setAction:@selector(openHost:)];
-        [m insertItem:menuItem atIndex:pos++];
-        if (addSeparator) {
-            [m insertItem:[NSMenuItem separatorItem] atIndex:pos++];
+        if([menus[key] isKindOfClass:[NSDictionary class]]){
+            NSDictionary* cfg = menus[key];
+            //Get the command we are going to run in termainal
+            NSString *menuCmd = cfg[@"cmd"];
+            //Get the theme for this terminal session
+            NSString *termTheme = cfg[@"theme"];
+            //Get the name for the terminal session
+            NSString *termTitle = cfg[@"title"];
+            //Get the value of setting inTerminal
+            NSString *termWindow = cfg[@"inTerminal"];
+            //Get the menu name will will use this as the title if title is null.
+            [self separatorSortRemoval:cfg[@"name"]];
+            
+            //Place the terminal command, theme, and title into an comma delimited string
+            NSString *menuRepObj = [NSString stringWithFormat:@"%@¬_¬%@¬_¬%@¬_¬%@¬_¬%@", menuCmd, termTheme, termTitle, termWindow, menuName];
+            
+            NSMenuItem* menuItem = [[NSMenuItem alloc] init];
+            [menuItem setTitle:menuName];
+            [menuItem setRepresentedObject:menuRepObj];
+            [menuItem setAction:@selector(openHost:)];
+            [m insertItem:menuItem atIndex:pos++];
+            if (addSeparator) {
+                [m insertItem:[NSMenuItem separatorItem] atIndex:pos++];
+            }
+        }else{
+            NSMenuItem* menuItem = [[NSMenuItem alloc] init];
+            NSMenu* subMenu = [[NSMenu alloc] init];
+            [self separatorSortRemoval:key];
+            [menuItem setTitle:menuName];
+            [menuItem setSubmenu:subMenu];
+            [m insertItem:menuItem atIndex:pos++];
+            if (addSeparator) {
+                [m insertItem:[NSMenuItem separatorItem] atIndex:pos++];
+            }
+            // build submenu
+            [self buildMenu:menus[key] addToMenu:subMenu];
         }
     }
 }
