@@ -365,7 +365,6 @@
     // go through the array and sort out the menus and the leafs into
     // separate bucks so we can sort them independently.
     NSMutableDictionary* menus = [[NSMutableDictionary alloc] init];
-//    NSMutableDictionary* leafs = [[NSMutableDictionary alloc] init];
     
     for (NSDictionary* item in data) {
         if (item[@"cmd"] && item[@"name"]) {
